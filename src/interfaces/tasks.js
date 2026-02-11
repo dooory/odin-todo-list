@@ -1,3 +1,5 @@
+const maxPriority = 3;
+
 class Task {
     #title;
     #id;
@@ -5,6 +7,10 @@ class Task {
     #priority;
 
     constructor(id, title, description, priority) {
+        if (priority > maxPriority) {
+            throw new Error(`Max priority for tasks is ${maxPriority}`);
+        }
+
         this.#title = title;
         this.#description = description;
         this.#id = id;
@@ -28,6 +34,10 @@ class Task {
     }
 
     set priority(newPriority) {
+        if (newPriority > maxPriority) {
+            throw new Error(`Max priority for tasks is ${maxPriority}`);
+        }
+
         this.#priority = newPriority;
     }
 
