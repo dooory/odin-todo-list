@@ -24,5 +24,8 @@
     },
     "prettier": {
         "tabWidth": 4
+    },
+    "dependencies": {
+        "date-fns": "^4.1.0"
     }
 }
