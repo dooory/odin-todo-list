@@ -1,3 +1,8 @@
-import "./style.css";
+import TaskInterface from "./interfaces/tasks";
 
-console.log("My Webpack template!");
+TaskInterface.createTask(
+    "Test Task",
+    "This is a task to test my taskinterface",
+);
+
+console.log(TaskInterface.getTasks());
