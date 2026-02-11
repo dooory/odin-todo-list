@@ -2,11 +2,13 @@ class Task {
     #title;
     #id;
     #description;
+    #priority;
 
-    constructor(id, title, description) {
+    constructor(id, title, description, priority) {
         this.#title = title;
         this.#description = description;
         this.#id = id;
+        this.#priority = priority;
     }
 
     set title(newTitle) {
@@ -24,6 +26,14 @@ class Task {
     get description() {
         return this.#description;
     }
+
+    set priority(newPriority) {
+        this.#priority = newPriority;
+    }
+
+    get priority() {
+        return this.#priority;
+    }
 }
 
 class TaskInterface {
@@ -31,9 +41,9 @@ class TaskInterface {
 
     constructor() {}
 
-    createTask(title, description) {
+    createTask(title, description, priority) {
         const id = crypto.randomUUID();
-        let task = new Task(id, title, description);
+        let task = new Task(id, title, description, priority);
 
         this.#tasks[id] = task;
     }
