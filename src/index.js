@@ -1,9 +1,17 @@
 import TaskInterface from "./interfaces/tasks";
+import { add } from "date-fns";
 
-TaskInterface.createTask(
+const currentDate = new Date();
+
+let task = TaskInterface.createTask(
     "Test Task",
     "This is a task to test my taskinterface",
-    4,
+    // create task that is due in a weeks time
+    add(currentDate, {
+        weeks: 1,
+    }),
+    3,
 );
 
-console.log(TaskInterface.getTasks());
+console.log(task);
+console.log(task.dueDate);
