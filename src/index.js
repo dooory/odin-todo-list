@@ -13,6 +13,9 @@ let task = TaskInterface.createTask(
     3,
 );
 
-console.log(TaskInterface.getTasks());
-TaskInterface.deleteTask(task.id);
-console.log(TaskInterface.getTasks());
+task.complete();
+
+let dupeTask = TaskInterface.duplicateTask(task.id);
+
+console.log(task);
+console.log(dupeTask);

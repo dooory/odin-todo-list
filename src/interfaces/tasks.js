@@ -8,7 +8,7 @@ class Task {
     #dueDate;
     #state = "ongoing";
 
-    constructor(id, title, description, dueDate, priority) {
+    constructor(id, title, description, dueDate, priority, state) {
         if (priority > maxPriority) {
             throw new Error(
                 `Error while creating task: Max priority for tasks is ${maxPriority}`,
@@ -26,6 +26,8 @@ class Task {
         this.#id = id;
         this.#priority = priority;
         this.#dueDate = dueDate;
+
+        this.#setState(state);
     }
 
     set title(newTitle) {
@@ -81,7 +83,7 @@ class Task {
     }
 
     #setState(newState) {
-        this.#state = newState;
+        this.#state = newState ? newState : this.#state;
 
         return this.#state;
     }
@@ -126,9 +128,9 @@ class TaskInterface {
 
     constructor() {}
 
-    createTask(title, description, dueDate, priority) {
+    createTask(title, description, dueDate, priority, state) {
         const id = crypto.randomUUID();
-        let task = new Task(id, title, description, dueDate, priority);
+        let task = new Task(id, title, description, dueDate, priority, state);
 
         this.#tasks[id] = task;
 
@@ -144,6 +146,26 @@ class TaskInterface {
 
         this.#tasks[id]._delete();
         delete this.#tasks[id];
+    }
+
+    duplicateTask(id) {
+        const originalTask = this.#tasks[id];
+
+        if (!this.#tasks[id]) {
+            throw new Error(
+                `Error when attempting to duplicate task with id <${id}>, unable to find such task`,
+            );
+        }
+
+        let dupeTask = this.createTask(
+            originalTask.title,
+            originalTask.description,
+            originalTask.dueDate,
+            originalTask.priority,
+            originalTask.state,
+        );
+
+        return dupeTask;
     }
 
     getTasks() {
