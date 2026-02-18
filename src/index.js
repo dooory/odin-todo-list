@@ -12,3 +12,11 @@ let task = TaskInterface.createTask(
     }),
     3,
 );
+
+console.log(task.state);
+task.complete();
+console.log(task.state);
+task.uncomplete();
+console.log(task.state);
+task.markAsDue();
+console.log(task.state);
