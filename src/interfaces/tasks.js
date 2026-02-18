@@ -9,11 +9,15 @@ class Task {
 
     constructor(id, title, description, dueDate, priority) {
         if (priority > maxPriority) {
-            throw new Error(`Max priority for tasks is ${maxPriority}`);
+            throw new Error(
+                `Error while creating task: Max priority for tasks is ${maxPriority}`,
+            );
         }
 
         if (dueDate < new Date()) {
-            throw new Error("Due date must be in future");
+            throw new Error(
+                "Error while creating task: Due date must be in future",
+            );
         }
 
         this.#title = title;
@@ -41,7 +45,9 @@ class Task {
 
     set priority(newPriority) {
         if (newPriority > maxPriority) {
-            throw new Error(`Max priority for tasks is ${maxPriority}`);
+            throw new Error(
+                `Error For Task ${this.#title}: Max priority for tasks is ${maxPriority}`,
+            );
         }
 
         this.#priority = newPriority;
@@ -53,7 +59,9 @@ class Task {
 
     set dueDate(newDate) {
         if (newDate < new Date()) {
-            throw new Error("Due date must be in future");
+            throw new Error(
+                `Error For Task ${this.#title}: Due date must be in future`,
+            );
         }
 
         this.#dueDate = newDate;
