@@ -6,6 +6,7 @@ class Task {
     #description;
     #priority;
     #dueDate;
+    #state = "ongoing";
 
     constructor(id, title, description, dueDate, priority) {
         if (priority > maxPriority) {
@@ -69,6 +70,46 @@ class Task {
 
     get dueDate() {
         return this.#dueDate;
+    }
+
+    get state() {
+        return this.#state;
+    }
+
+    #setState(newState) {
+        this.#state = newState;
+
+        return this.#state;
+    }
+
+    complete() {
+        if (this.#state === "completed") {
+            throw new Error(
+                `Error For Task ${this.#title}: Already marked as completed`,
+            );
+        }
+
+        this.#setState("completed");
+    }
+
+    uncomplete() {
+        if (this.#state !== "completed") {
+            throw new Error(
+                `Error For Task ${this.#title}: Task State isn't completed`,
+            );
+        }
+
+        const currentTime = new Date();
+
+        if (currentTime > this.#dueDate) {
+            this.#setState("due");
+        } else {
+            this.#setState("ongoing");
+        }
+    }
+
+    markAsDue() {
+        this.#setState("due");
     }
 }
 

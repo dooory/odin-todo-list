@@ -13,5 +13,10 @@ let task = TaskInterface.createTask(
     3,
 );
 
-console.log(task);
-console.log(task.dueDate);
+console.log(task.status);
+task.complete();
+console.log(task.status);
+task.uncomplete();
+console.log(task.status);
+task.markAsDue();
+console.log(task.status);
