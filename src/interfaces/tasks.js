@@ -47,7 +47,7 @@ class Task {
     set priority(newPriority) {
         if (newPriority > maxPriority) {
             throw new Error(
-                `Error For Task ${this.#title}: Max priority for tasks is ${maxPriority}`,
+                `Error For Task <${this.#title}>: Max priority for tasks is ${maxPriority}`,
             );
         }
 
@@ -61,7 +61,7 @@ class Task {
     set dueDate(newDate) {
         if (newDate < new Date()) {
             throw new Error(
-                `Error For Task ${this.#title}: Due date must be in future`,
+                `Error For Task <${this.#title}>: Due date must be in future`,
             );
         }
 
@@ -85,7 +85,7 @@ class Task {
     complete() {
         if (this.#state === "completed") {
             throw new Error(
-                `Error For Task ${this.#title}: Already marked as completed`,
+                `Error For Task <${this.#title}>: Already marked as completed`,
             );
         }
 
@@ -95,7 +95,7 @@ class Task {
     uncomplete() {
         if (this.#state !== "completed") {
             throw new Error(
-                `Error For Task ${this.#title}: Task State isn't completed`,
+                `Error For Task <${this.#title}>: Task State isn't completed`,
             );
         }
 
