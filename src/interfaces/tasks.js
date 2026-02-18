@@ -36,6 +36,10 @@ class Task {
         return this.#title;
     }
 
+    get id() {
+        return this.#id;
+    }
+
     set description(newDescription) {
         this.#description = newDescription;
     }
@@ -111,6 +115,10 @@ class Task {
     markAsDue() {
         this.#setState("due");
     }
+
+    _delete() {
+        console.log(`Task with id <${this.#id}> deleted!`);
+    }
 }
 
 class TaskInterface {
@@ -125,6 +133,17 @@ class TaskInterface {
         this.#tasks[id] = task;
 
         return task;
+    }
+
+    deleteTask(id) {
+        if (!this.#tasks[id]) {
+            throw new Error(
+                `Error when attempting to delete task with id <${id}>, unable to find such task`,
+            );
+        }
+
+        this.#tasks[id]._delete();
+        delete this.#tasks[id];
     }
 
     getTasks() {
