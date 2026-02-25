@@ -15,6 +15,10 @@ class Renderer {
         div.dataset.taskId = task.id;
         div.classList.add("task", `prio-${task.priority}`);
 
+        if (task.isDue()) {
+            div.classList.add("due-task");
+        }
+
         let title = document.createElement("h2");
         title.textContent = task.title;
         title.classList.add("task-title");

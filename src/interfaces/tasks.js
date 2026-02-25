@@ -89,6 +89,10 @@ class Task {
         return this.#dueDate;
     }
 
+    isDue() {
+        return this.#dueDate < new Date();
+    }
+
     get state() {
         return this.#state;
     }
