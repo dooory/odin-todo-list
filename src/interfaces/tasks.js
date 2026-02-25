@@ -1,3 +1,5 @@
+import renderer from "./renderer";
+
 const maxPriority = 3;
 
 class Task {
@@ -29,10 +31,14 @@ class Task {
         this.#dueDate = dueDate;
 
         this.#setState(state);
+
+        renderer.updateScreen();
     }
 
     set title(newTitle) {
         this.#title = newTitle;
+
+        renderer.updateScreen();
     }
 
     get title() {
@@ -45,6 +51,8 @@ class Task {
 
     set description(newDescription) {
         this.#description = newDescription;
+
+        renderer.updateScreen();
     }
 
     get description() {
@@ -59,6 +67,8 @@ class Task {
         }
 
         this.#priority = newPriority;
+
+        renderer.updateScreen();
     }
 
     get priority() {
@@ -73,6 +83,8 @@ class Task {
         }
 
         this.#dueDate = newDate;
+
+        renderer.updateScreen();
     }
 
     get dueDate() {
@@ -85,6 +97,8 @@ class Task {
 
     #setState(newState) {
         this.#state = newState ? newState : this.#state;
+
+        renderer.updateScreen();
 
         return this.#state;
     }
@@ -128,9 +142,17 @@ class Task {
     }
 
     addTag(tag) {
+        if (this.#tags[tag.id]) {
+            throw new Error(
+                `Error for Task <${this.#title}>, task already has tag with id <${tag.id}>`,
+            );
+        }
+
         this.#tags[tag.id] = tag;
 
         tag.addTask(this);
+
+        renderer.updateScreen();
     }
 
     removeTag(tagId) {
@@ -141,6 +163,8 @@ class Task {
         }
 
         delete this.#tags[tagId];
+
+        renderer.updateScreen();
     }
 }
 

@@ -3,9 +3,26 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Template</title>
+        <title>Odin Todo List</title>
     </head>
     <body>
-        <h1>This is a webpack template!</h1>
+        <div id="root">
+            <div id="filter-sidebar">
+                <div class="filter by-tag"></div>
+                <div class="filter by-name"></div>
+                <div class="filter by-priority"></div>
+            </div>
+            <div id="todo-list">
+                <div class="task">
+                    <h2 class="task-title">This is my task</h2>
+                    <p class="task-description">This is a premade task</p>
+                    <p class="task-duedate">10 minutes</p>
+                    <div class="task-tags">
+                        <div class="task-tag">Work</div>
+                        <div class="task-tag">Important</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

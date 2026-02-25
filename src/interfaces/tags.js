@@ -24,6 +24,14 @@ class Tag {
         return this.#tasks;
     }
 
+    get title() {
+        return this.#title;
+    }
+
+    set title(newTitle) {
+        this.#title = newTitle;
+    }
+
     addTask(task) {
         this.#tasks[task.id] = task;
     }
