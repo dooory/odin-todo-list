@@ -12,7 +12,8 @@ class Renderer {
 
     #createTaskDiv(task) {
         let div = document.createElement("div");
-        div.classList.add("task");
+        div.dataset.taskId = task.id;
+        div.classList.add("task", `prio-${task.priority}`);
 
         let title = document.createElement("h2");
         title.textContent = task.title;
