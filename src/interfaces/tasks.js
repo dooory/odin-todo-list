@@ -186,6 +186,12 @@ class TaskInterface {
             originalTask.state,
         );
 
+        for (const tagId in originalTask.tags) {
+            const tag = originalTask.tags[tagId];
+
+            dupeTask.addTag(tag);
+        }
+
         return dupeTask;
     }
 

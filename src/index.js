@@ -20,6 +20,4 @@ task.addTag(myTag);
 
 console.log(task.tags);
 
-TagInterface.deleteTag(myTag.id);
-
-console.log(task.tags);
+let dupeTask = TaskInterface.duplicateTask(task.id);
