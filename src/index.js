@@ -28,5 +28,3 @@ let task2 = TaskInterface.createTask(
     }),
     2,
 );
-
-Renderer.updateScreen();

@@ -55,6 +55,7 @@ class Renderer {
         this.#clearScreen();
 
         const tasks = TaskInterface.getTasks();
+
         const tags = TagInterface.tags;
 
         for (const id in tasks) {

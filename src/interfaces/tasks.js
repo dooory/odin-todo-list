@@ -31,8 +31,6 @@ class Task {
         this.#dueDate = dueDate;
 
         this.#setState(state);
-
-        renderer.updateScreen();
     }
 
     set title(newTitle) {
@@ -179,6 +177,8 @@ class TaskInterface {
 
         this.#tasks[id] = task;
 
+        renderer.updateScreen();
+
         return task;
     }
 
@@ -191,6 +191,8 @@ class TaskInterface {
 
         this.#tasks[id]._delete();
         delete this.#tasks[id];
+
+        renderer.updateScreen();
     }
 
     duplicateTask(id) {
