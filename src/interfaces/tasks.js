@@ -7,6 +7,7 @@ class Task {
     #priority;
     #dueDate;
     #state = "ongoing";
+    #tags = [];
 
     constructor(id, title, description, dueDate, priority, state) {
         if (priority > maxPriority) {
@@ -120,6 +121,26 @@ class Task {
 
     _delete() {
         console.log(`Task with id <${this.#id}> deleted!`);
+    }
+
+    get tags() {
+        return this.#tags;
+    }
+
+    addTag(tag) {
+        this.#tags[tag.id] = tag;
+
+        tag.addTask(this);
+    }
+
+    removeTag(tagId) {
+        if (!this.#tags[tagId]) {
+            throw new Error(
+                `Error for Task <${this.#title}>, task does not have tag with id <${tagId}>`,
+            );
+        }
+
+        delete this.#tags[tagId];
     }
 }
 

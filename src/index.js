@@ -1,7 +1,10 @@
 import TaskInterface from "./interfaces/tasks";
+import TagInterface from "./interfaces/tags";
 import { add } from "date-fns";
 
 const currentDate = new Date();
+
+let myTag = TagInterface.createTag("My Tag", {});
 
 let task = TaskInterface.createTask(
     "Test Task",
@@ -13,9 +16,10 @@ let task = TaskInterface.createTask(
     3,
 );
 
-task.complete();
+task.addTag(myTag);
 
-let dupeTask = TaskInterface.duplicateTask(task.id);
+console.log(task.tags);
 
-console.log(task);
-console.log(dupeTask);
+TagInterface.deleteTag(myTag.id);
+
+console.log(task.tags);
