@@ -30,7 +30,9 @@ class Task {
         this.#priority = priority;
         this.#dueDate = dueDate;
 
-        this.#setState(state);
+        if (state) {
+            this.#setState(state);
+        }
     }
 
     set title(newTitle) {
@@ -98,7 +100,7 @@ class Task {
     }
 
     #setState(newState) {
-        this.#state = newState ? newState : this.#state;
+        this.#state = newState;
 
         renderer.updateScreen();
 

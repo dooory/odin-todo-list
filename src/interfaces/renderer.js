@@ -3,11 +3,11 @@ import TaskInterface from "./tasks";
 import { formatDistanceToNow } from "date-fns";
 
 const tasksParent = document.getElementById("todo-list");
+const tagsParent = document.getElementById("filter-by-tag");
+
+let currentTagFilter = [];
 
 class Renderer {
-    #taskElements = [];
-    #tagElements = [];
-
     constructor() {}
 
     #createTaskDiv(task) {
@@ -18,6 +18,8 @@ class Renderer {
         if (task.isDue()) {
             div.classList.add("due-task");
         }
+
+        let top = document.createElement("div");
 
         let title = document.createElement("h2");
         title.textContent = task.title;
@@ -44,7 +46,14 @@ class Renderer {
             tags.appendChild(tagDiv);
         }
 
-        div.appendChild(title);
+        let editButton = document.createElement("button");
+        editButton.classList.add("edit-task");
+        editButton.textContent = "Edit";
+
+        top.appendChild(title);
+        top.appendChild(editButton);
+
+        div.appendChild(top);
         div.appendChild(description);
         div.appendChild(dueTime);
         div.appendChild(tags);
@@ -52,8 +61,42 @@ class Renderer {
         tasksParent.appendChild(div);
     }
 
+    #createTagFilter(tag) {
+        let containerDiv = document.createElement("div");
+        containerDiv.classList.add("tag-filter");
+        containerDiv.dataset.tagTitle = tag.title;
+
+        if (currentTagFilter.includes(tag.id)) {
+            containerDiv.classList.add("activated");
+        }
+
+        let filterButton = document.createElement("button");
+        filterButton.textContent = tag.title;
+        filterButton.type = "button";
+        filterButton.addEventListener("click", () => {
+            console.log(`${tag.title}`);
+
+            let tagIndex = currentTagFilter.indexOf(tag.id);
+
+            if (tagIndex >= 0) {
+                currentTagFilter.splice(tagIndex, 1);
+            } else {
+                currentTagFilter.push(tag.id);
+            }
+
+            console.log(currentTagFilter);
+
+            this.updateScreen();
+        });
+
+        containerDiv.appendChild(filterButton);
+
+        tagsParent.appendChild(containerDiv);
+    }
+
     #clearScreen() {
         tasksParent.textContent = "";
+        tagsParent.textContent = "";
     }
 
     updateScreen() {
@@ -61,10 +104,36 @@ class Renderer {
 
         const tasks = TaskInterface.getTasks();
 
+        for (const id in tasks) {
+            const task = tasks[id];
+
+            let isTaskFiltered;
+
+            if (currentTagFilter.length > 0) {
+                for (const index in currentTagFilter) {
+                    const tagId = currentTagFilter[index];
+
+                    if (!task.tags[tagId]) {
+                        isTaskFiltered = true;
+
+                        break;
+                    } else {
+                        isTaskFiltered = false;
+                    }
+                }
+            } else {
+                isTaskFiltered = false;
+            }
+
+            if (!isTaskFiltered) {
+                this.#createTaskDiv(task);
+            }
+        }
+
         const tags = TagInterface.tags;
 
-        for (const id in tasks) {
-            this.#createTaskDiv(tasks[id]);
+        for (const id in tags) {
+            this.#createTagFilter(tags[id]);
         }
     }
 }

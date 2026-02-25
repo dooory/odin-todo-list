@@ -19,6 +19,7 @@ let task = TaskInterface.createTask(
 );
 
 task.addTag(importantTag);
+task.addTag(workTag);
 
 let task2 = TaskInterface.createTask(
     "Task 2",
@@ -28,3 +29,5 @@ let task2 = TaskInterface.createTask(
     }),
     2,
 );
+
+task2.addTag(workTag);
