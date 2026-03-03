@@ -2,6 +2,7 @@ import TaskInterface from "./interfaces/tasks";
 import TagInterface from "./interfaces/tags";
 import Renderer from "./interfaces/renderer";
 import { add } from "date-fns";
+import "./style.css";
 
 const currentDate = new Date();
 
