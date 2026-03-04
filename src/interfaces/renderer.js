@@ -1,3 +1,4 @@
+import { ka } from "date-fns/locale";
 import TagInterface from "./tags";
 import TaskInterface from "./tasks";
 import { formatDistanceToNow } from "date-fns";
@@ -19,7 +20,30 @@ class Renderer {
             div.classList.add("due-task");
         }
 
-        let top = document.createElement("div");
+        let header = document.createElement("div");
+        header.classList.add("task-header");
+
+        let taskCheckbox = document.createElement("input");
+        taskCheckbox.type = "checkbox";
+        taskCheckbox.name = "task-checkbox";
+
+        if (task.state === "completed") {
+            taskCheckbox.checked = true;
+        }
+
+        taskCheckbox.addEventListener("click", (event) => {
+            const isChecked = event.target.checked;
+
+            if (isChecked) {
+                task.complete();
+            } else if (!isChecked) {
+                task.uncomplete();
+            }
+        });
+
+        let editButton = document.createElement("button");
+        editButton.classList.add("edit-task");
+        editButton.textContent = "Edit";
 
         let title = document.createElement("h2");
         title.textContent = task.title;
@@ -46,14 +70,11 @@ class Renderer {
             tags.appendChild(tagDiv);
         }
 
-        let editButton = document.createElement("button");
-        editButton.classList.add("edit-task");
-        editButton.textContent = "Edit";
+        header.appendChild(title);
+        header.appendChild(editButton);
+        header.appendChild(taskCheckbox);
 
-        top.appendChild(title);
-        top.appendChild(editButton);
-
-        div.appendChild(top);
+        div.appendChild(header);
         div.appendChild(description);
         div.appendChild(dueTime);
         div.appendChild(tags);
