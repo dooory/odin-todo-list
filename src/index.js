@@ -62,16 +62,20 @@ taskDateInput.addEventListener("click", (e) => {
     taskDateInput.showPicker();
 });
 
+function resetDropdown() {
+    selectedTags.clear();
+    selectedItems.innerHTML = "";
+    tagsDropdown.innerHTML = "";
+}
+
 function resetForm() {
-    const inputs = addTaskForm.querySelectorAll("input, textarea");
+    const inputs = addTaskForm.querySelectorAll("input, textarea, select");
 
     inputs.forEach((input) => {
         input.disabled = true;
     });
 
-    selectedTags.clear();
-    selectedItems.innerHTML = "";
-    tagsDropdown.innerHTML = "";
+    resetDropdown();
 
     addTaskForm.reset();
 }
@@ -89,7 +93,7 @@ function showForm() {
     showAddTaskButton.classList.add("activated");
     addTaskDialog.classList.add("activated");
 
-    const inputs = addTaskForm.querySelectorAll("input, textarea");
+    const inputs = addTaskForm.querySelectorAll("input, textarea, select");
 
     inputs.forEach((input) => {
         input.disabled = false;
@@ -138,5 +142,7 @@ document.addEventListener("click", (e) => {
     if (!taskGroups.contains(e.target)) {
         showAddTaskButton.classList.remove("activated");
         addTaskDialog.classList.remove("activated");
+
+        resetDropdown();
     }
 });
