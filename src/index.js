@@ -58,6 +58,10 @@ const showAddTaskButton = document.getElementById("add-task-button");
 const submitNewTaskButton = document.getElementById("submitNewTask");
 const taskDateInput = document.getElementById("taskDate");
 
+taskDateInput.addEventListener("click", (e) => {
+    taskDateInput.showPicker();
+});
+
 function resetForm() {
     const inputs = addTaskForm.querySelectorAll("input, textarea");
 
