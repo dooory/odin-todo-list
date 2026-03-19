@@ -7,17 +7,111 @@
     </head>
     <body>
         <div id="root">
-            <div id="filter-sidebar">
-                <div id="filter-by-tag"></div>
-            </div>
-            <div id="todo-list">
-                <div class="task">
-                    <h2 class="task-title">This is my task</h2>
-                    <p class="task-description">This is a premade task</p>
-                    <p class="task-duedate">10 minutes</p>
-                    <div class="task-tags">
-                        <div class="task-tag">Work</div>
-                        <div class="task-tag">Important</div>
+            <div id="sidebar"></div>
+            <div id="content">
+                <div id="task-groups">
+                    <div id="all-tasks" class="tasks-container">
+                        <h3>Tasks</h3>
+                        <div class="task">
+                            <div class="state">
+                                <input
+                                    type="checkbox"
+                                    name="task-checkbox"
+                                    class="task-checkbox"
+                                />
+                            </div>
+                            <div class="body">
+                                <div class="top">
+                                    <div class="title">Do Washing</div>
+                                    <div class="edit-task">
+                                        <button
+                                            class="edit-button"
+                                            type="button"
+                                        >
+                                            Edit
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="bottom">
+                                    <div class="due-date">Today 1 PM</div>
+                                    <div class="tags">Chores</div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="add-task">
+                        <button id="add-task-button" type="button">
+                            <i>+</i> Add Task
+                        </button>
+                        <div id="add-task-dialog">
+                            <h2>Add new task</h2>
+                            <form id="addTaskForm">
+                                <div class="title-container">
+                                    <label for="taskTitle">Title</label>
+                                    <input
+                                        required
+                                        disabled
+                                        type="text"
+                                        name="task-title"
+                                        id="taskTitle"
+                                    />
+                                </div>
+
+                                <div class="description-container">
+                                    <label for="taskDescription"
+                                        >Description</label
+                                    >
+                                    <textarea
+                                        required
+                                        disabled
+                                        name="task-description"
+                                        id="taskDescription"
+                                    ></textarea>
+                                </div>
+
+                                <div class="date-container">
+                                    <label for="taskDate">Due Date</label>
+                                    <input
+                                        required
+                                        disabled
+                                        type="datetime-local"
+                                        name="task-date"
+                                        id="taskDate"
+                                    />
+                                </div>
+
+                                <div class="priority-container">
+                                    <label for="taskPriority">Priority</label>
+                                    <input
+                                        type="number"
+                                        disabled
+                                        name="task-priority"
+                                        id="taskPriority"
+                                        max="3"
+                                        min="1"
+                                        placeholder="1-3"
+                                    />
+                                </div>
+
+                                <div class="tags-dropdown" id="tagsDropdown">
+                                    Tags
+                                    <div
+                                        class="selected-items"
+                                        id="selectedItems"
+                                    ></div>
+                                    <div class="dropdown" id="dropdown"></div>
+                                </div>
+
+                                <div class="submit-container">
+                                    <input
+                                        type="submit"
+                                        id="submitNewTask"
+                                        value="Submit New Task"
+                                    />
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,160 +1,95 @@
-import { ka } from "date-fns/locale";
 import TagInterface from "./tags";
 import TaskInterface from "./tasks";
 import { formatDistanceToNow } from "date-fns";
 
-const tasksParent = document.getElementById("todo-list");
-const tagsParent = document.getElementById("filter-by-tag");
+const tasksParent = document.getElementById("all-tasks");
 
 let currentTagFilter = [];
+
+function createTaskElement(task) {
+    const container = document.createElement("div");
+    container.classList.add("task");
+    tasksParent.appendChild(container);
+
+    const stateContainer = document.createElement("div");
+    stateContainer.classList.add("state");
+    container.appendChild(stateContainer);
+
+    const stateCheckbox = document.createElement("input");
+    stateCheckbox.type = "checkbox";
+    stateCheckbox.name = "task-checkbox";
+    stateCheckbox.classList.add("task-checkbox");
+    stateCheckbox.checked = task.state === "completed" ? true : false;
+    stateContainer.appendChild(stateCheckbox);
+
+    const body = document.createElement("div");
+    body.classList.add("body");
+    container.appendChild(body);
+
+    const top = document.createElement("div");
+    top.classList.add("top");
+    body.appendChild(top);
+
+    const title = document.createElement("div");
+    title.classList.add("title");
+    title.textContent = task.title;
+    top.appendChild(title);
+
+    const editTaskContainer = document.createElement("div");
+    editTaskContainer.classList.add("edit-task");
+    top.appendChild(editTaskContainer);
+
+    const editTaskButton = document.createElement("button");
+    editTaskButton.classList.add("edit-button");
+    editTaskButton.type = "button";
+    editTaskButton.textContent = "Edit";
+    editTaskContainer.appendChild(editTaskButton);
+
+    const bottom = document.createElement("div");
+    bottom.classList.add("bottom");
+    body.appendChild(bottom);
+
+    const dueDate = document.createElement("div");
+    dueDate.classList.add("due-date");
+    dueDate.textContent = formatDistanceToNow(task.dueDate);
+    bottom.appendChild(dueDate);
+
+    const tags = document.createElement("div");
+    tags.classList.add("tags");
+    bottom.appendChild(tags);
+
+    for (const tagId in task.tags) {
+        if (!Object.hasOwn(task.tags, tagId)) continue;
+
+        const tag = task.tags[tagId];
+
+        const tagElement = document.createElement("span");
+        tagElement.textContent = tag.title;
+        tags.appendChild(tagElement);
+    }
+
+    const divider = document.createElement("hr");
+    tasksParent.appendChild(divider);
+}
 
 class Renderer {
     constructor() {}
 
-    #createTaskDiv(task) {
-        let div = document.createElement("div");
-        div.dataset.taskId = task.id;
-        div.classList.add("task", `prio-${task.priority}`);
-
-        if (task.isDue()) {
-            div.classList.add("due-task");
-        }
-
-        let header = document.createElement("div");
-        header.classList.add("task-header");
-
-        let taskCheckbox = document.createElement("input");
-        taskCheckbox.type = "checkbox";
-        taskCheckbox.name = "task-checkbox";
-
-        if (task.state === "completed") {
-            taskCheckbox.checked = true;
-        }
-
-        taskCheckbox.addEventListener("click", (event) => {
-            const isChecked = event.target.checked;
-
-            if (isChecked) {
-                task.complete();
-            } else if (!isChecked) {
-                task.uncomplete();
-            }
-        });
-
-        let editButton = document.createElement("button");
-        editButton.classList.add("edit-task");
-        editButton.textContent = "Edit";
-
-        let title = document.createElement("h2");
-        title.textContent = task.title;
-        title.classList.add("task-title");
-
-        let description = document.createElement("p");
-        description.textContent = task.description;
-        description.classList.add("task-description");
-
-        let dueTime = document.createElement("p");
-        dueTime.textContent = formatDistanceToNow(task.dueDate);
-        dueTime.classList.add("task-duedate");
-
-        let tags = document.createElement("div");
-        tags.classList.add("task-tags");
-
-        for (const id in task.tags) {
-            const tag = task.tags[id];
-
-            let tagDiv = document.createElement("div");
-            tagDiv.textContent = tag.title;
-            tagDiv.classList.add("task-tag");
-
-            tags.appendChild(tagDiv);
-        }
-
-        header.appendChild(title);
-        header.appendChild(editButton);
-        header.appendChild(taskCheckbox);
-
-        div.appendChild(header);
-        div.appendChild(description);
-        div.appendChild(dueTime);
-        div.appendChild(tags);
-
-        tasksParent.appendChild(div);
-    }
-
-    #createTagFilter(tag) {
-        let containerDiv = document.createElement("div");
-        containerDiv.classList.add("tag-filter");
-        containerDiv.dataset.tagTitle = tag.title;
-
-        if (currentTagFilter.includes(tag.id)) {
-            containerDiv.classList.add("activated");
-        }
-
-        let filterButton = document.createElement("button");
-        filterButton.textContent = tag.title;
-        filterButton.type = "button";
-        filterButton.addEventListener("click", () => {
-            console.log(`${tag.title}`);
-
-            let tagIndex = currentTagFilter.indexOf(tag.id);
-
-            if (tagIndex >= 0) {
-                currentTagFilter.splice(tagIndex, 1);
-            } else {
-                currentTagFilter.push(tag.id);
-            }
-
-            console.log(currentTagFilter);
-
-            this.updateScreen();
-        });
-
-        containerDiv.appendChild(filterButton);
-
-        tagsParent.appendChild(containerDiv);
-    }
-
-    #clearScreen() {
-        tasksParent.textContent = "";
-        tagsParent.textContent = "";
-    }
-
     updateScreen() {
-        this.#clearScreen();
+        tasksParent.innerHTML = "";
+
+        const title = document.createElement("h3");
+        title.textContent = "Tasks";
+        tasksParent.appendChild(title);
 
         const tasks = TaskInterface.getTasks();
 
-        for (const id in tasks) {
-            const task = tasks[id];
+        for (const taskId in tasks) {
+            if (!Object.hasOwn(tasks, taskId)) continue;
 
-            let isTaskFiltered;
+            const task = tasks[taskId];
 
-            if (currentTagFilter.length > 0) {
-                for (const index in currentTagFilter) {
-                    const tagId = currentTagFilter[index];
-
-                    if (!task.tags[tagId]) {
-                        isTaskFiltered = true;
-
-                        break;
-                    } else {
-                        isTaskFiltered = false;
-                    }
-                }
-            } else {
-                isTaskFiltered = false;
-            }
-
-            if (!isTaskFiltered) {
-                this.#createTaskDiv(task);
-            }
-        }
-
-        const tags = TagInterface.tags;
-
-        for (const id in tags) {
-            this.#createTagFilter(tags[id]);
+            createTaskElement(task);
         }
     }
 }

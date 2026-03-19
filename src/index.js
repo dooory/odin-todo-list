@@ -1,34 +1,138 @@
 import TaskInterface from "./interfaces/tasks";
 import TagInterface from "./interfaces/tags";
-import Renderer from "./interfaces/renderer";
-import { add } from "date-fns";
 import "./style.css";
+import renderer from "./interfaces/renderer";
+import { format } from "date-fns";
 
-const currentDate = new Date();
+let myTag = TagInterface.createTag("Work");
 
-let workTag = TagInterface.createTag("Work");
-let importantTag = TagInterface.createTag("Important");
+renderer.updateScreen();
 
-let task = TaskInterface.createTask(
-    "Test Task",
-    "This is a task to test my task interface",
-    // create task that is due in a weeks time
-    add(currentDate, {
-        weeks: 1,
-    }),
-    3,
-);
+const taskGroups = document.getElementById("task-groups");
+const addTaskDialog = document.getElementById("add-task-dialog");
 
-task.addTag(importantTag);
-task.addTag(workTag);
+const dropdownContainer = document.getElementById("tagsDropdown");
+const tagsDropdown = document.getElementById("dropdown");
+const selectedItems = document.getElementById("selectedItems");
 
-let task2 = TaskInterface.createTask(
-    "Task 2",
-    "YESSS",
-    add(currentDate, {
-        minutes: 3,
-    }),
-    2,
-);
+let selectedTags = new Set();
 
-task2.addTag(workTag);
+dropdownContainer.addEventListener("click", (e) => {
+    dropdownContainer.classList.toggle("active");
+});
+
+tagsDropdown.addEventListener("click", (e) => {
+    const target = e.target;
+
+    if (target.classList.contains("dropdown")) {
+        return;
+    }
+
+    const value = target.getAttribute("data-id");
+    const label = e.target.textContent;
+
+    if (!selectedTags.has(value)) {
+        selectedTags.add(value);
+
+        const tag = document.createElement("span");
+        tag.textContent = `${label} `;
+        const xElement = document.createElement("i");
+        xElement.textContent = "x";
+        xElement.dataset.remove = value;
+
+        tag.appendChild(xElement);
+        selectedItems.appendChild(tag);
+    }
+});
+
+selectedItems.addEventListener("click", (e) => {
+    if (e.target.dataset.remove) {
+        const valueToRemove = e.target.dataset.remove;
+        selectedTags.delete(valueToRemove);
+        e.target.parentElement.remove();
+    }
+});
+
+const addTaskForm = document.getElementById("addTaskForm");
+const showAddTaskButton = document.getElementById("add-task-button");
+const submitNewTaskButton = document.getElementById("submitNewTask");
+const taskDateInput = document.getElementById("taskDate");
+
+function resetForm() {
+    const inputs = addTaskForm.querySelectorAll("input, textarea");
+
+    inputs.forEach((input) => {
+        input.disabled = true;
+    });
+
+    selectedTags.clear();
+    selectedItems.innerHTML = "";
+    tagsDropdown.innerHTML = "";
+
+    addTaskForm.reset();
+}
+
+function showForm() {
+    Object.entries(TagInterface.tags).forEach(([id, tag]) => {
+        const tagDiv = document.createElement("div");
+        tagDiv.dataset.value = tag.title.toLowerCase();
+        tagDiv.dataset.id = id;
+        tagDiv.textContent = tag.title;
+
+        tagsDropdown.appendChild(tagDiv);
+    });
+
+    showAddTaskButton.classList.add("activated");
+    addTaskDialog.classList.add("activated");
+
+    const inputs = addTaskForm.querySelectorAll("input, textarea");
+
+    inputs.forEach((input) => {
+        input.disabled = false;
+    });
+}
+
+function submitNewTask() {
+    const data = new FormData(addTaskForm);
+    const title = data.get("task-title");
+    const dueDate = data.get("task-date");
+    const priority =
+        data.get("task-priority") === ""
+            ? 1
+            : Number(data.get("task-priority"));
+
+    const task = TaskInterface.createTask(
+        title,
+        "Description",
+        dueDate,
+        priority,
+    );
+
+    selectedTags.forEach((id) => {
+        task.addTag(TagInterface.getTagById(id));
+    });
+}
+
+submitNewTaskButton.addEventListener("click", (e) => {
+    if (addTaskForm.checkValidity()) {
+        submitNewTask();
+
+        showAddTaskButton.classList.remove("activated");
+        addTaskDialog.classList.remove("activated");
+
+        resetForm();
+    }
+});
+
+showAddTaskButton.addEventListener("click", showForm);
+
+document.addEventListener("click", (e) => {
+    if (!dropdownContainer.contains(e.target)) {
+        dropdownContainer.classList.remove("active");
+    }
+
+    if (!taskGroups.contains(e.target)) {
+        showAddTaskButton.classList.remove("activated");
+        addTaskDialog.classList.remove("activated");
+    }
+});
