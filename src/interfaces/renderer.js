@@ -7,103 +7,61 @@ const tasksParent = document.getElementById("all-tasks");
 let currentTagFilter = [];
 
 function createTaskElement(task) {
-    const container = document.createElement("div");
-    container.classList.add("task");
-    tasksParent.appendChild(container);
+    const taskTemplate = document.getElementById("task-template");
 
-    const stateContainer = document.createElement("div");
-    stateContainer.classList.add("state");
-    container.appendChild(stateContainer);
+    let taskContainer = document.importNode(taskTemplate.content, true);
 
-    const stateCheckbox = document.createElement("input");
-    stateCheckbox.type = "checkbox";
-    stateCheckbox.name = "task-checkbox";
-    stateCheckbox.classList.add("task-checkbox");
+    const stateCheckbox = taskContainer.querySelector(".task-checkbox");
     stateCheckbox.checked = task.state === "completed" ? true : false;
-    stateContainer.appendChild(stateCheckbox);
 
-    const body = document.createElement("div");
-    body.classList.add("body");
-    container.appendChild(body);
-
-    const top = document.createElement("div");
-    top.classList.add("top");
-    body.appendChild(top);
-
-    const title = document.createElement("div");
-    title.classList.add("title");
+    const title = taskContainer.querySelector(".title");
     title.textContent = task.title;
-    top.appendChild(title);
 
-    const editTitle = document.createElement("input");
-    editTitle.type = "text";
-    editTitle.value = task.title;
-    editTitle.name = "edit-task-title";
-    editTitle.classList.add("edit-task-title");
-    editTitle.dataset.property = "title";
-    top.appendChild(editTitle);
+    const editingTitle = taskContainer.querySelector(".edit-task-title");
+    editingTitle.value = task.title;
 
-    const editTaskContainer = document.createElement("div");
-    editTaskContainer.classList.add("edit-task");
-    top.appendChild(editTaskContainer);
-
-    const saveButton = document.createElement("button");
-    saveButton.classList.add("save-button");
-    saveButton.type = "button";
-    saveButton.textContent = "Save";
-    editTaskContainer.appendChild(saveButton);
-
-    const bottom = document.createElement("div");
-    bottom.classList.add("bottom");
-    body.appendChild(bottom);
-
-    const dueDate = document.createElement("div");
-    dueDate.classList.add("due-date");
+    const dueDate = taskContainer.querySelector(".due-date");
     dueDate.textContent = formatDate(task.dueDate, "dd-MM-yyyy");
-    bottom.appendChild(dueDate);
 
-    const editDueDate = document.createElement("input");
-    editDueDate.classList.add("edit-due-date");
-    editDueDate.name = "edit-due-date";
-    editDueDate.type = "date";
-    editDueDate.valueAsDate = task.dueDate;
-    editDueDate.dataset.property = "dueDate";
-    bottom.appendChild(editDueDate);
+    const editingDate = taskContainer.querySelector(".edit-due-date");
+    editingDate.valueAsDate = task.dueDate;
 
-    const tags = document.createElement("div");
-    tags.classList.add("tags");
-    bottom.appendChild(tags);
+    const taskTagsContainer = taskContainer.querySelector(".tags");
 
     for (const tagId in task.tags) {
         if (!Object.hasOwn(task.tags, tagId)) continue;
 
         const tag = task.tags[tagId];
 
-        const tagElement = document.createElement("span");
-        tagElement.textContent = tag.title;
-        tags.appendChild(tagElement);
-    }
+        const tagTemplate = document.getElementById("task-tag-template");
+        const tagContainer = tagTemplate.content.cloneNode(true);
 
-    const divider = document.createElement("hr");
-    tasksParent.appendChild(divider);
+        const tagTitle = tagContainer.querySelector(".tag-title");
+        tagTitle.textContent = tag.title;
+
+        taskTagsContainer.appendChild(tagContainer);
+    }
 
     title.addEventListener("click", () => {
         if (!title.classList.contains("activated")) {
             title.classList.add("activated");
-            editTitle.classList.add("activated");
+            editingTitle.classList.add("activated");
             saveButton.classList.add("activated");
-            editTitle.focus();
+            editingTitle.focus();
         }
     });
 
     dueDate.addEventListener("click", () => {
         if (!dueDate.classList.contains("activated")) {
             dueDate.classList.add("activated");
-            editDueDate.classList.add("activated");
+            editingDate.classList.add("activated");
             saveButton.classList.add("activated");
-            editDueDate.focus();
+            editingDate.focus();
         }
     });
+
+    const saveButton = taskContainer.querySelector(".save-button");
+    const body = taskContainer.querySelector(".body");
 
     saveButton.addEventListener("click", () => {
         body.querySelectorAll("div, input, button").forEach((element) => {
@@ -121,6 +79,8 @@ function createTaskElement(task) {
             }
         });
     });
+
+    tasksParent.appendChild(taskContainer);
 }
 
 class Renderer {
