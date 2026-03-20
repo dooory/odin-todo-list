@@ -2,9 +2,18 @@ import TaskInterface from "./interfaces/tasks";
 import TagInterface from "./interfaces/tags";
 import "./style.css";
 import renderer from "./interfaces/renderer";
-import { format } from "date-fns";
+import { add } from "date-fns";
 
-let myTag = TagInterface.createTag("Work");
+let myTask = TaskInterface.createTask(
+    "This is my task",
+    "This is a description",
+    add(new Date(), {
+        days: 1,
+    }),
+);
+
+let workTag = TagInterface.createTag("Work");
+myTask.addTag(workTag);
 
 renderer.updateScreen();
 
@@ -109,7 +118,7 @@ function submitNewTask() {
     const task = TaskInterface.createTask(
         title,
         "Description",
-        dueDate,
+        new Date(dueDate),
         Number(priority),
     );
 

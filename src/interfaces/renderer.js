@@ -1,6 +1,6 @@
 import TagInterface from "./tags";
 import TaskInterface from "./tasks";
-import { formatDistanceToNow } from "date-fns";
+import { formatDate } from "date-fns";
 
 const tasksParent = document.getElementById("all-tasks");
 
@@ -35,15 +35,23 @@ function createTaskElement(task) {
     title.textContent = task.title;
     top.appendChild(title);
 
+    const editTitle = document.createElement("input");
+    editTitle.type = "text";
+    editTitle.value = task.title;
+    editTitle.name = "edit-task-title";
+    editTitle.classList.add("edit-task-title");
+    editTitle.dataset.property = "title";
+    top.appendChild(editTitle);
+
     const editTaskContainer = document.createElement("div");
     editTaskContainer.classList.add("edit-task");
     top.appendChild(editTaskContainer);
 
-    const editTaskButton = document.createElement("button");
-    editTaskButton.classList.add("edit-button");
-    editTaskButton.type = "button";
-    editTaskButton.textContent = "Edit";
-    editTaskContainer.appendChild(editTaskButton);
+    const saveButton = document.createElement("button");
+    saveButton.classList.add("save-button");
+    saveButton.type = "button";
+    saveButton.textContent = "Save";
+    editTaskContainer.appendChild(saveButton);
 
     const bottom = document.createElement("div");
     bottom.classList.add("bottom");
@@ -51,8 +59,16 @@ function createTaskElement(task) {
 
     const dueDate = document.createElement("div");
     dueDate.classList.add("due-date");
-    dueDate.textContent = formatDistanceToNow(task.dueDate);
+    dueDate.textContent = formatDate(task.dueDate, "dd-MM-yyyy");
     bottom.appendChild(dueDate);
+
+    const editDueDate = document.createElement("input");
+    editDueDate.classList.add("edit-due-date");
+    editDueDate.name = "edit-due-date";
+    editDueDate.type = "date";
+    editDueDate.valueAsDate = task.dueDate;
+    editDueDate.dataset.property = "dueDate";
+    bottom.appendChild(editDueDate);
 
     const tags = document.createElement("div");
     tags.classList.add("tags");
@@ -70,6 +86,41 @@ function createTaskElement(task) {
 
     const divider = document.createElement("hr");
     tasksParent.appendChild(divider);
+
+    title.addEventListener("click", () => {
+        if (!title.classList.contains("activated")) {
+            title.classList.add("activated");
+            editTitle.classList.add("activated");
+            saveButton.classList.add("activated");
+            editTitle.focus();
+        }
+    });
+
+    dueDate.addEventListener("click", () => {
+        if (!dueDate.classList.contains("activated")) {
+            dueDate.classList.add("activated");
+            editDueDate.classList.add("activated");
+            saveButton.classList.add("activated");
+            editDueDate.focus();
+        }
+    });
+
+    saveButton.addEventListener("click", () => {
+        body.querySelectorAll("div, input, button").forEach((element) => {
+            element.classList.remove("activated");
+        });
+
+        body.querySelectorAll("input[data-property]").forEach((element) => {
+            let propName = element.dataset.property;
+            let value = element.value;
+
+            if (propName === "dueDate") {
+                task.dueDate = new Date(value);
+            } else if (propName === "title") {
+                task.title = value;
+            }
+        });
+    });
 }
 
 class Renderer {

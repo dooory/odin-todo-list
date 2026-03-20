@@ -18,11 +18,11 @@ class Task {
             );
         }
 
-        if (dueDate < new Date()) {
-            throw new Error(
-                "Error while creating task: Due date must be in future",
-            );
-        }
+        // if (dueDate < new Date()) {
+        //     throw new Error(
+        //         "Error while creating task: Due date must be in future",
+        //     );
+        // }
 
         this.#title = title;
         this.#description = description;
@@ -76,11 +76,11 @@ class Task {
     }
 
     set dueDate(newDate) {
-        if (newDate < new Date()) {
-            throw new Error(
-                `Error For Task <${this.#title}>: Due date must be in future`,
-            );
-        }
+        // if (newDate < new Date()) {
+        //     throw new Error(
+        //         `Error For Task <${this.#title}>: Due date must be in future`,
+        //     );
+        // }
 
         this.#dueDate = newDate;
 

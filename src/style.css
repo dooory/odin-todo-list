@@ -72,10 +72,34 @@ body {
                     flex-direction: column;
                     gap: 0.5rem;
 
+                    div.activated {
+                        display: none;
+                    }
+
+                    input[type="text"] {
+                        font-size: 1rem;
+                    }
+
+                    input.activated {
+                        display: block;
+                    }
+
+                    input:not(.activated),
+                    button:not(.activated) {
+                        display: none;
+                    }
+
+                    .title,
+                    .due-date,
+                    .tags {
+                        cursor: pointer;
+                    }
+
                     .top {
                         display: flex;
                         align-items: center;
-                        justify-content: space-between
+                        justify-content: space-between;
+
                     }
 
                     .bottom {
