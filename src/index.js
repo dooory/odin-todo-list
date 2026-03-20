@@ -104,16 +104,13 @@ function submitNewTask() {
     const data = new FormData(addTaskForm);
     const title = data.get("task-title");
     const dueDate = data.get("task-date");
-    const priority =
-        data.get("task-priority") === ""
-            ? 1
-            : Number(data.get("task-priority"));
+    const priority = data.get("task-priority");
 
     const task = TaskInterface.createTask(
         title,
         "Description",
         dueDate,
-        priority,
+        Number(priority),
     );
 
     selectedTags.forEach((id) => {
