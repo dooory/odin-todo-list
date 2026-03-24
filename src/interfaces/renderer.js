@@ -26,7 +26,7 @@ function createTaskElement(task) {
     const editingDate = taskContainer.querySelector(".edit-due-date");
     editingDate.valueAsDate = task.dueDate;
 
-    const taskTagsContainer = taskContainer.querySelector(".tags");
+    const tagsContainer = taskContainer.querySelector(".tags-container");
 
     for (const tagId in task.tags) {
         if (!Object.hasOwn(task.tags, tagId)) continue;
@@ -35,11 +35,17 @@ function createTaskElement(task) {
 
         const tagTemplate = document.getElementById("task-tag-template");
         const tagContainer = tagTemplate.content.cloneNode(true);
+        const tagTitle = tagContainer.querySelector(".tag");
+        tagTitle.textContent = tag.title + ",";
+        tagTitle.dataset.title = tag.title;
 
-        const tagTitle = tagContainer.querySelector(".tag-title");
-        tagTitle.textContent = tag.title;
+        tagsContainer.appendChild(tagContainer);
+    }
 
-        taskTagsContainer.appendChild(tagContainer);
+    // Remove "," from last tag element
+    if (tagsContainer.lastElementChild) {
+        tagsContainer.lastElementChild.textContent =
+            tagsContainer.lastElementChild.dataset.title;
     }
 
     title.addEventListener("click", () => {

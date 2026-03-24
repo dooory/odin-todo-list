@@ -15,7 +15,8 @@ let myTask = TaskInterface.createTask(
 let workTag = TagInterface.createTag("Work");
 myTask.addTag(workTag);
 
-renderer.updateScreen();
+let testTag = TagInterface.createTag("Test");
+myTask.addTag(testTag);
 
 const taskGroups = document.getElementById("task-groups");
 const addTaskDialog = document.getElementById("add-task-dialog");
