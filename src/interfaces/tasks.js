@@ -3,26 +3,17 @@ import renderer from "./renderer";
 const maxPriority = 3;
 
 class Task {
-    #title;
-    #id;
-    #description;
-    #priority;
-    #dueDate;
-    #state = "ongoing";
-    #tags = [];
-
+    #properties;
     constructor(id, title, description, dueDate, priority, state) {
-        if (priority > maxPriority) {
-            throw new Error(
-                `Error while creating task: Max priority for tasks is ${maxPriority}`,
-            );
-        }
-
-        this.#title = title;
-        this.#description = description;
-        this.#id = id;
-        this.#priority = priority;
-        this.#dueDate = dueDate;
+        this.#properties = {
+            id,
+            title,
+            description,
+            dueDate,
+            priority,
+            state: state ? state : "ongoing",
+            tags: [],
+        };
 
         if (state) {
             this.#setState(state);
@@ -30,65 +21,59 @@ class Task {
     }
 
     set title(newTitle) {
-        this.#title = newTitle;
+        this.#properties.title = newTitle;
     }
 
     get title() {
-        return this.#title;
+        return this.#properties.title;
     }
 
     get id() {
-        return this.#id;
+        return this.#properties.id;
     }
 
     set description(newDescription) {
-        this.#description = newDescription;
+        this.#properties.description = newDescription;
     }
 
     get description() {
-        return this.#description;
+        return this.#properties.description;
     }
 
     set priority(newPriority) {
-        if (newPriority > maxPriority) {
-            throw new Error(
-                `Error For Task <${this.#title}>: Max priority for tasks is ${maxPriority}`,
-            );
-        }
-
-        this.#priority = newPriority;
+        this.#properties.priority = newPriority;
     }
 
     get priority() {
-        return this.#priority;
+        return this.#properties.priority;
     }
 
     set dueDate(newDate) {
-        this.#dueDate = newDate;
+        this.#properties.dueDate = newDate;
     }
 
     get dueDate() {
-        return this.#dueDate;
+        return this.#properties.dueDate;
     }
 
     isDue() {
-        return this.#dueDate < new Date();
+        return this.#properties.dueDate < new Date();
     }
 
     get state() {
-        return this.#state;
+        return this.#properties.state;
     }
 
     #setState(newState) {
-        this.#state = newState;
+        this.#properties.state = newState;
 
-        return this.#state;
+        return this.#properties.state;
     }
 
     complete() {
-        if (this.#state === "completed") {
+        if (this.#properties.state === "completed") {
             throw new Error(
-                `Error For Task <${this.#title}>: Already marked as completed`,
+                `Error For Task <${this.#properties.title}>: Already marked as completed`,
             );
         }
 
@@ -96,15 +81,15 @@ class Task {
     }
 
     uncomplete() {
-        if (this.#state !== "completed") {
+        if (this.#properties.state !== "completed") {
             throw new Error(
-                `Error For Task <${this.#title}>: Task State isn't completed`,
+                `Error For Task <${this.#properties.title}>: Task State isn't completed`,
             );
         }
 
         const currentTime = new Date();
 
-        if (currentTime > this.#dueDate) {
+        if (currentTime > this.#properties.dueDate) {
             this.#setState("due");
         } else {
             this.#setState("ongoing");
@@ -116,29 +101,29 @@ class Task {
     }
 
     get tags() {
-        return this.#tags;
+        return this.#properties.tags;
     }
 
     addTag(tag) {
-        if (this.#tags[tag.id]) {
+        if (this.#properties.tags[tag.id]) {
             throw new Error(
-                `Error for Task <${this.#title}>, task already has tag with id <${tag.id}>`,
+                `Error for Task <${this.#properties.title}>, task already has tag with id <${tag.id}>`,
             );
         }
 
-        this.#tags[tag.id] = tag;
+        this.#properties.tags[tag.id] = tag;
         tag.addTask(this);
     }
 
     removeTag(tag) {
-        if (!this.#tags[tag.id]) {
+        if (!this.#properties.tags[tag.id]) {
             throw new Error(
-                `Error for Task <${this.#title}>, task does not have tag with id <${tag.id}>`,
+                `Error for Task <${this.#properties.title}>, task does not have tag with id <${tag.id}>`,
             );
         }
 
-        delete this.#tags[tag.id];
-        tag.removeTask(this.id);
+        delete this.#properties.tags[tag.id];
+        tag.removeTask(this.#properties.id);
     }
 }
 

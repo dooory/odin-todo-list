@@ -4,14 +4,6 @@ import "./style.css";
 import renderer from "./interfaces/renderer";
 import { add } from "date-fns";
 
-// let WorkTask = TaskInterface.createTask(
-//     "This is my work task",
-//     "This is a description",
-//     add(new Date(), {
-//         days: 2,
-//     }),
-// );
-
 let myTask = TaskInterface.createTask(
     "This is my task",
     "This is a description",
@@ -24,9 +16,6 @@ let workTag = TagInterface.createTag("Work");
 myTask.addTag(workTag);
 
 renderer.createAllTaskElements();
-
-// let testTag = TagInterface.createTag("Test");
-// myTask.addTag(testTag);
 
 const taskGroups = document.getElementById("task-groups");
 const addTaskDialog = document.getElementById("add-task-dialog");
