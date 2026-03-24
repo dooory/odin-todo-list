@@ -53,6 +53,7 @@ function createTaskElement(task) {
             title.classList.add("activated");
             editingTitle.classList.add("activated");
             saveButton.classList.add("activated");
+            cancelButton.classList.add("activated");
             editingTitle.focus();
         }
     });
@@ -62,6 +63,7 @@ function createTaskElement(task) {
             dueDate.classList.add("activated");
             editingDate.classList.add("activated");
             saveButton.classList.add("activated");
+            cancelButton.classList.add("activated");
             editingDate.focus();
         }
     });
@@ -84,6 +86,17 @@ function createTaskElement(task) {
                 task.title = value;
             }
         });
+    });
+
+    const cancelButton = taskContainer.querySelector(".cancel-button");
+
+    cancelButton.addEventListener("click", () => {
+        body.querySelectorAll("div, input, button").forEach((element) => {
+            element.classList.remove("activated");
+        });
+
+        editingTitle.value = task.title;
+        editingDate.valueAsDate = task.dueDate;
     });
 
     tasksParent.appendChild(taskContainer);
