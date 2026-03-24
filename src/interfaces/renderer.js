@@ -26,7 +26,13 @@ function createTaskElement(task) {
     const editingDate = taskContainer.querySelector(".edit-due-date");
     editingDate.valueAsDate = task.dueDate;
 
-    const tagsContainer = taskContainer.querySelector(".tags-container");
+    const tagsSection = taskContainer.querySelector(".tags");
+    const tagsContainer = tagsSection.querySelector(".tags-container");
+
+    if (Object.entries(task.tags).length <= 0) {
+        tagsContainer.textContent = "No tags...";
+        tagsContainer.classList.add("no-tags");
+    }
 
     for (const tagId in task.tags) {
         if (!Object.hasOwn(task.tags, tagId)) continue;
@@ -47,6 +53,70 @@ function createTaskElement(task) {
         tagsContainer.lastElementChild.textContent =
             tagsContainer.lastElementChild.dataset.title;
     }
+
+    // Prevent selecting tag section text when double/triple clicking
+    tagsSection.addEventListener(
+        "mousedown",
+        (event) => {
+            if (event.detail > 1) {
+                event.preventDefault();
+            }
+        },
+        false,
+    );
+
+    const dropdownEntries = taskContainer.querySelector(".dropdown");
+
+    tagsContainer.addEventListener("click", () => {
+        dropdownEntries.classList.toggle("activated");
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!tagsSection.contains(e.target)) {
+            dropdownEntries.classList.remove("activated");
+        }
+    });
+
+    for (const tagId in TagInterface.tags) {
+        const tag = TagInterface.tags[tagId];
+
+        let dropdownEntry = document.createElement("div");
+        dropdownEntry.classList.add("dropdown-entry");
+        dropdownEntry.dataset.id = tagId;
+        dropdownEntry.textContent = tag.title;
+
+        const taskHasTag = Object.hasOwn(task.tags, tagId);
+
+        if (taskHasTag) {
+            dropdownEntry.classList.add("tagged");
+        }
+
+        dropdownEntries.appendChild(dropdownEntry);
+    }
+
+    let createTagEntry = document.createElement("div");
+    createTagEntry.classList.add("dropdown-entry");
+    createTagEntry.textContent = "Create Tag...";
+
+    dropdownEntries.appendChild(createTagEntry);
+    dropdownEntries.addEventListener("click", (e) => {
+        const entry = e.target;
+
+        if (!entry.classList.contains("dropdown-entry") || !entry.dataset.id) {
+            return;
+        }
+
+        const tagId = entry.dataset.id;
+        const tag = TagInterface.getTagById(tagId);
+
+        const taskHasTag = Object.hasOwn(task.tags, tagId);
+
+        if (!taskHasTag) {
+            task.addTag(tag);
+        } else if (taskHasTag) {
+            task.removeTag(tag);
+        }
+    });
 
     title.addEventListener("click", () => {
         if (!title.classList.contains("activated")) {

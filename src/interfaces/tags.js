@@ -1,3 +1,5 @@
+import renderer from "./renderer";
+
 class Tag {
     #title;
     #tasks = [];

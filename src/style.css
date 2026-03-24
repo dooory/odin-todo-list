@@ -115,6 +115,51 @@ body {
                     }
 
                     .bottom {
+                        .tags {
+                            min-width: 10rem;
+                            position: relative;
+
+                            .tags-container {
+                                text-align: right;
+                                min-height: 1rem;
+
+                                &.no-tags {
+                                    color: #ccc;
+                                }
+                            }
+
+                            .dropdown {
+                                display: none;
+                                position: absolute;
+                                top: 140%;
+                                left: 0;
+                                right: 0;
+                                border: 1px solid #bbb;
+                                background-color: #eee;
+                                overflow-y: auto;
+                                z-index: 100;
+                                font-size: 0.9rem;
+
+                                .dropdown-entry:hover {
+                                    background-color: #ccc;
+                                }
+
+                                .dropdown-entry {
+                                    padding: 5px;
+
+                                    &.tagged {
+                                        background-color: var(--steel-blue);
+                                        color: #fff;
+                                    }
+                                }
+                            }
+
+                            .dropdown.activated {
+                                display: block;
+
+                            }
+                        }
+
                         display: flex;
                         justify-content: space-between;
                         align-items: center;

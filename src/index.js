@@ -15,8 +15,8 @@ let myTask = TaskInterface.createTask(
 let workTag = TagInterface.createTag("Work");
 myTask.addTag(workTag);
 
-let testTag = TagInterface.createTag("Test");
-myTask.addTag(testTag);
+// let testTag = TagInterface.createTag("Test");
+// myTask.addTag(testTag);
 
 const taskGroups = document.getElementById("task-groups");
 const addTaskDialog = document.getElementById("add-task-dialog");
@@ -34,7 +34,7 @@ dropdownContainer.addEventListener("click", (e) => {
 tagsDropdown.addEventListener("click", (e) => {
     const target = e.target;
 
-    if (target.classList.contains("dropdown")) {
+    if (target.classList.contains("dropdown") || !target.dataset.value) {
         return;
     }
 
@@ -99,6 +99,11 @@ function showForm() {
 
         tagsDropdown.appendChild(tagDiv);
     });
+
+    const createTagDiv = document.createElement("div");
+    createTagDiv.textContent = "Create Tag...";
+
+    tagsDropdown.appendChild(createTagDiv);
 
     showAddTaskButton.classList.add("activated");
     addTaskDialog.classList.add("activated");

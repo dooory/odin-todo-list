@@ -153,20 +153,20 @@ class Task {
         }
 
         this.#tags[tag.id] = tag;
-
         tag.addTask(this);
 
         renderer.updateScreen();
     }
 
-    removeTag(tagId) {
-        if (!this.#tags[tagId]) {
+    removeTag(tag) {
+        if (!this.#tags[tag.id]) {
             throw new Error(
-                `Error for Task <${this.#title}>, task does not have tag with id <${tagId}>`,
+                `Error for Task <${this.#title}>, task does not have tag with id <${tag.id}>`,
             );
         }
 
-        delete this.#tags[tagId];
+        delete this.#tags[tag.id];
+        tag.removeTask(this.id);
 
         renderer.updateScreen();
     }
