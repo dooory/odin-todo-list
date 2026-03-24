@@ -2,14 +2,36 @@ import TagInterface from "./tags";
 import TaskInterface from "./tasks";
 import { formatDate } from "date-fns";
 
-const tasksParent = document.getElementById("all-tasks");
+const allTasksContainer = document.getElementById("all-tasks");
 
 let currentTagFilter = [];
+let elementControllers = {};
+
+function deleteTaskElement(task) {
+    const taskElement = getTaskElement(task);
+
+    const controller = elementControllers[task.id];
+
+    controller.abort();
+    taskElement.remove();
+}
+
+function createTaskElementInDom(task) {
+    let newTaskElement = createTaskElement(task);
+
+    allTasksContainer.appendChild(newTaskElement);
+
+    return newTaskElement;
+}
 
 function createTaskElement(task) {
     const taskTemplate = document.getElementById("task-template");
 
-    let taskContainer = document.importNode(taskTemplate.content, true);
+    let taskFragment = document.importNode(taskTemplate.content, true);
+    let taskElement = taskFragment.querySelector(".task");
+    taskElement.dataset.id = task.id;
+
+    let taskContainer = taskFragment.querySelector(".task-container");
 
     const stateCheckbox = taskContainer.querySelector(".task-checkbox");
     stateCheckbox.checked = task.state === "completed" ? true : false;
@@ -71,11 +93,24 @@ function createTaskElement(task) {
         dropdownEntries.classList.toggle("activated");
     });
 
-    document.addEventListener("click", (e) => {
-        if (!tagsSection.contains(e.target)) {
-            dropdownEntries.classList.remove("activated");
-        }
-    });
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    elementControllers[task.id] = controller;
+
+    setTimeout(() => {
+        document.addEventListener(
+            "click",
+            (event) => {
+                if (taskContainer.contains(event.target)) {
+                    return;
+                }
+
+                dropdownEntries.classList.remove("activated");
+            },
+            { signal },
+        );
+    }, 1);
 
     for (const tagId in TagInterface.tags) {
         const tag = TagInterface.tags[tagId];
@@ -102,7 +137,7 @@ function createTaskElement(task) {
     dropdownEntries.addEventListener("click", (e) => {
         const entry = e.target;
 
-        if (!entry.classList.contains("dropdown-entry") || !entry.dataset.id) {
+        if (!entry.dataset.id) {
             return;
         }
 
@@ -116,6 +151,8 @@ function createTaskElement(task) {
         } else if (taskHasTag) {
             task.removeTag(tag);
         }
+
+        refreshTaskElement(task);
     });
 
     title.addEventListener("click", () => {
@@ -156,6 +193,8 @@ function createTaskElement(task) {
                 task.title = value;
             }
         });
+
+        refreshTaskElement(task);
     });
 
     const cancelButton = taskContainer.querySelector(".cancel-button");
@@ -172,32 +211,99 @@ function createTaskElement(task) {
     const deleteButton = taskContainer.querySelector(".delete-button");
 
     deleteButton.addEventListener("click", () => {
+        deleteTaskElement(task);
         TaskInterface.deleteTask(task.id);
     });
 
-    tasksParent.appendChild(taskContainer);
+    return taskElement;
+}
+
+function createAllTaskElements() {
+    clearAllTaskElements();
+
+    const title = document.createElement("h3");
+    title.textContent = "Tasks";
+    allTasksContainer.appendChild(title);
+
+    for (const id in TaskInterface.getTasks()) {
+        const task = TaskInterface.getTasks()[id];
+
+        const newTaskElement = createTaskElementInDom(task);
+    }
+}
+
+function refreshTaskElement(task) {
+    const id = task.id;
+    const currentTaskElement = getTaskElement(task);
+    const nextTaskElement = currentTaskElement.nextSibling;
+
+    const activatedElements = currentTaskElement.querySelectorAll(".activated");
+    const activatedClassNames = [];
+
+    activatedElements.forEach((element) => {
+        let classNames = "";
+
+        element.classList.forEach((name) => {
+            if (name === "activated") {
+                return;
+            }
+
+            classNames = `${classNames}.${name}`;
+        });
+
+        activatedClassNames.push(classNames);
+    });
+
+    const oldInputValues = {
+        "edit-task-title":
+            currentTaskElement.querySelector(".edit-task-title").value,
+        "edit-due-date":
+            currentTaskElement.querySelector(".edit-due-date").value,
+    };
+
+    deleteTaskElement(task);
+
+    let newTaskElement = createTaskElement(task);
+
+    activatedClassNames.forEach((rule) => {
+        const element = newTaskElement.querySelector(rule);
+
+        element.classList.add("activated");
+    });
+
+    for (const className in oldInputValues) {
+        if (!Object.hasOwn(oldInputValues, className)) continue;
+
+        const element = newTaskElement.querySelector(`.${className}`);
+
+        element.value = oldInputValues[className];
+    }
+
+    if (nextTaskElement) {
+        allTasksContainer.insertBefore(newTaskElement, nextTaskElement);
+
+        return newTaskElement;
+    } else {
+        allTasksContainer.appendChild(newTaskElement);
+
+        return newTaskElement;
+    }
+}
+
+function clearAllTaskElements() {
+    allTasksContainer.innerHTML = "";
+}
+
+function getTaskElement(task) {
+    return allTasksContainer.querySelector(`.task[data-id='${task.id}']`);
 }
 
 class Renderer {
     constructor() {}
 
-    updateScreen() {
-        tasksParent.innerHTML = "";
-
-        const title = document.createElement("h3");
-        title.textContent = "Tasks";
-        tasksParent.appendChild(title);
-
-        const tasks = TaskInterface.getTasks();
-
-        for (const taskId in tasks) {
-            if (!Object.hasOwn(tasks, taskId)) continue;
-
-            const task = tasks[taskId];
-
-            createTaskElement(task);
-        }
-    }
+    createTaskElementInDom = createTaskElementInDom;
+    createAllTaskElements = createAllTaskElements;
+    refreshTaskElement = refreshTaskElement;
 }
 
 export default new Renderer();

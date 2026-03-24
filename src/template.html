@@ -8,50 +8,52 @@
     <body>
         <template id="task-template">
             <div class="task">
-                <div class="state">
-                    <input
-                        type="checkbox"
-                        name="task-checkbox"
-                        class="task-checkbox"
-                    />
-                </div>
-                <div class="body">
-                    <div class="top">
-                        <div class="title">Task Title</div>
+                <div class="task-container">
+                    <div class="state">
                         <input
-                            type="text"
-                            name="edit-task-title"
-                            class="edit-task-title"
-                            data-property="title"
+                            type="checkbox"
+                            name="task-checkbox"
+                            class="task-checkbox"
                         />
-                        <div class="edit-task-buttons">
-                            <button class="cancel-button" type="button">
-                                Cancel
-                            </button>
-                            <button class="save-button" type="button">
-                                Save
-                            </button>
-                            <button class="delete-button" type="button">
-                                X
-                            </button>
+                    </div>
+                    <div class="body">
+                        <div class="top">
+                            <div class="title">Task Title</div>
+                            <input
+                                type="text"
+                                name="edit-task-title"
+                                class="edit-task-title"
+                                data-property="title"
+                            />
+                            <div class="edit-task-buttons">
+                                <button class="cancel-button" type="button">
+                                    Cancel
+                                </button>
+                                <button class="save-button" type="button">
+                                    Save
+                                </button>
+                                <button class="delete-button" type="button">
+                                    X
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <div class="due-date">Today 1 PM</div>
+                            <input
+                                type="date"
+                                name="edit-due-date"
+                                data-property="dueDate"
+                                class="edit-due-date"
+                            />
+                            <div class="tags">
+                                <div class="tags-container"></div>
+                                <div class="dropdown"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="bottom">
-                        <div class="due-date">Today 1 PM</div>
-                        <input
-                            type="date"
-                            name="edit-due-date"
-                            data-property="dueDate"
-                            class="edit-due-date"
-                        />
-                        <div class="tags">
-                            <div class="tags-container"></div>
-                            <div class="dropdown"></div>
-                        </div>
-                    </div>
                 </div>
+                <hr />
             </div>
-            <hr />
         </template>
 
         <template id="task-tag-template">

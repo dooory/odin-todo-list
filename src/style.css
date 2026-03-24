@@ -55,7 +55,7 @@ body {
                 min-width: 100%;
             }
 
-            .task {
+            .task-container {
                 display: flex;
                 gap: 0.5rem;
 

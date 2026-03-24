@@ -4,6 +4,14 @@ import "./style.css";
 import renderer from "./interfaces/renderer";
 import { add } from "date-fns";
 
+// let WorkTask = TaskInterface.createTask(
+//     "This is my work task",
+//     "This is a description",
+//     add(new Date(), {
+//         days: 2,
+//     }),
+// );
+
 let myTask = TaskInterface.createTask(
     "This is my task",
     "This is a description",
@@ -14,6 +22,8 @@ let myTask = TaskInterface.createTask(
 
 let workTag = TagInterface.createTag("Work");
 myTask.addTag(workTag);
+
+renderer.createAllTaskElements();
 
 // let testTag = TagInterface.createTag("Test");
 // myTask.addTag(testTag);
@@ -33,10 +43,6 @@ dropdownContainer.addEventListener("click", (e) => {
 
 tagsDropdown.addEventListener("click", (e) => {
     const target = e.target;
-
-    if (target.classList.contains("dropdown") || !target.dataset.value) {
-        return;
-    }
 
     const value = target.getAttribute("data-id");
     const label = e.target.textContent;
@@ -131,6 +137,8 @@ function submitNewTask() {
     selectedTags.forEach((id) => {
         task.addTag(TagInterface.getTagById(id));
     });
+
+    renderer.createTaskElementInDom(task);
 }
 
 submitNewTaskButton.addEventListener("click", (e) => {

@@ -37,8 +37,6 @@ class Task {
 
     set title(newTitle) {
         this.#title = newTitle;
-
-        renderer.updateScreen();
     }
 
     get title() {
@@ -51,8 +49,6 @@ class Task {
 
     set description(newDescription) {
         this.#description = newDescription;
-
-        renderer.updateScreen();
     }
 
     get description() {
@@ -67,8 +63,6 @@ class Task {
         }
 
         this.#priority = newPriority;
-
-        renderer.updateScreen();
     }
 
     get priority() {
@@ -83,8 +77,6 @@ class Task {
         // }
 
         this.#dueDate = newDate;
-
-        renderer.updateScreen();
     }
 
     get dueDate() {
@@ -101,8 +93,6 @@ class Task {
 
     #setState(newState) {
         this.#state = newState;
-
-        renderer.updateScreen();
 
         return this.#state;
     }
@@ -137,10 +127,6 @@ class Task {
         this.#setState("due");
     }
 
-    _delete() {
-        console.log(`Task with id <${this.#id}> deleted!`);
-    }
-
     get tags() {
         return this.#tags;
     }
@@ -154,8 +140,6 @@ class Task {
 
         this.#tags[tag.id] = tag;
         tag.addTask(this);
-
-        renderer.updateScreen();
     }
 
     removeTag(tag) {
@@ -167,8 +151,6 @@ class Task {
 
         delete this.#tags[tag.id];
         tag.removeTask(this.id);
-
-        renderer.updateScreen();
     }
 }
 
@@ -182,8 +164,6 @@ class TaskInterface {
         let task = new Task(id, title, description, dueDate, priority, state);
 
         this.#tasks[id] = task;
-
-        renderer.updateScreen();
 
         return task;
     }
@@ -201,14 +181,9 @@ class TaskInterface {
             let tag = tags[tagId];
 
             tag.removeTask(id);
-
-            console.log(tag);
         }
 
-        this.#tasks[id]._delete();
         delete this.#tasks[id];
-
-        renderer.updateScreen();
     }
 
     duplicateTask(id) {
