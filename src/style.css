@@ -85,13 +85,14 @@ body {
                     }
 
                     input:not(.activated),
-                    button:not(.activated) {
+                    button:not(.activated):not(.delete-button) {
                         display: none;
                     }
 
                     .title,
                     .due-date,
-                    .tags {
+                    .tags,
+                    button[type="button"] {
                         cursor: pointer;
                     }
 
@@ -100,6 +101,17 @@ body {
                         align-items: center;
                         justify-content: space-between;
 
+                        .edit-task-buttons {
+                            display: flex;
+                            gap: 0.5rem;
+
+                            .delete-button {
+                                border: 1px solid #ccc;
+                                background-color: #fff;
+                                aspect-ratio: 1;
+                                border-radius: 100%;
+                            }
+                        }
                     }
 
                     .bottom {

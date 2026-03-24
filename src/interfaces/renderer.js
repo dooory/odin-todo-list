@@ -99,6 +99,12 @@ function createTaskElement(task) {
         editingDate.valueAsDate = task.dueDate;
     });
 
+    const deleteButton = taskContainer.querySelector(".delete-button");
+
+    deleteButton.addEventListener("click", () => {
+        TaskInterface.deleteTask(task.id);
+    });
+
     tasksParent.appendChild(taskContainer);
 }
 

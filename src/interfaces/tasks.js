@@ -195,6 +195,16 @@ class TaskInterface {
             );
         }
 
+        const tags = this.#tasks[id].tags;
+
+        for (const tagId in tags) {
+            let tag = tags[tagId];
+
+            tag.removeTask(id);
+
+            console.log(tag);
+        }
+
         this.#tasks[id]._delete();
         delete this.#tasks[id];
 
