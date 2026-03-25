@@ -1,4 +1,5 @@
 import renderer from "./renderer";
+import TagInterface from "./tags";
 
 const maxPriority = 3;
 
@@ -104,65 +105,72 @@ class Task {
         return this.#properties.tags;
     }
 
-    addTag(tag) {
-        if (this.#properties.tags[tag.id]) {
+    addTag(tagId) {
+        const tagIdIndex = this.#properties.tags.indexOf(tagId);
+
+        if (tagIdIndex >= 0) {
             throw new Error(
-                `Error for Task <${this.#properties.title}>, task already has tag with id <${tag.id}>`,
+                `Error for Task <${this.#properties.title}>, task already has tag with id <${tagId}>`,
             );
         }
 
-        this.#properties.tags[tag.id] = tag;
-        tag.addTask(this);
+        this.#properties.tags.push(tagId);
+        TagInterface.getTagById(tagId).addTask(this.#properties.id);
     }
 
-    removeTag(tag) {
-        if (!this.#properties.tags[tag.id]) {
+    removeTag(tagId, callRemoveTask) {
+        const tagIdIndex = this.#properties.tags.indexOf(tagId);
+
+        if (tagIdIndex === -1) {
             throw new Error(
-                `Error for Task <${this.#properties.title}>, task does not have tag with id <${tag.id}>`,
+                `Error for Task <${this.#properties.title}>, task does not have tag with id <${tagId}>`,
             );
         }
 
-        delete this.#properties.tags[tag.id];
-        tag.removeTask(this.#properties.id);
+        this.#properties.tags.splice(tagIdIndex, 1);
+
+        if (callRemoveTask) {
+            TagInterface.getTagById(tagId).removeTask(this.#properties.id);
+        }
     }
 }
 
 class TaskInterface {
-    #tasks = {};
+    #tasks;
 
-    constructor() {}
+    constructor() {
+        this.#tasks = [];
+    }
 
     createTask(title, description, dueDate, priority, state) {
         const id = crypto.randomUUID();
         let task = new Task(id, title, description, dueDate, priority, state);
 
-        this.#tasks[id] = task;
+        this.#tasks.push(task);
 
         return task;
     }
 
     deleteTask(id) {
-        if (!this.#tasks[id]) {
+        let task = this.getTaskById(id);
+
+        if (!task) {
             throw new Error(
                 `Error when attempting to delete task with id <${id}>, unable to find such task`,
             );
         }
 
-        const tags = this.#tasks[id].tags;
+        task.tags.forEach((tagId) => {
+            task.removeTag(tagId, true);
+        });
 
-        for (const tagId in tags) {
-            let tag = tags[tagId];
-
-            tag.removeTask(id);
-        }
-
-        delete this.#tasks[id];
+        this.#tasks.splice(this.#tasks.indexOf(task), 1);
     }
 
     duplicateTask(id) {
-        const originalTask = this.#tasks[id];
+        const originalTask = this.getTaskById(id);
 
-        if (!this.#tasks[id]) {
+        if (!this.getTaskById(id)) {
             throw new Error(
                 `Error when attempting to duplicate task with id <${id}>, unable to find such task`,
             );
@@ -176,13 +184,15 @@ class TaskInterface {
             originalTask.state,
         );
 
-        for (const tagId in originalTask.tags) {
-            const tag = originalTask.tags[tagId];
-
-            dupeTask.addTag(tag);
-        }
+        originalTask.tags.forEach((tag) => {
+            dupeTask.addTag(tag.id);
+        });
 
         return dupeTask;
+    }
+
+    getTaskById(id) {
+        return this.#tasks.find((task) => task.id === id);
     }
 
     getTasks() {

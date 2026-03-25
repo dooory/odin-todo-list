@@ -13,7 +13,7 @@ let myTask = TaskInterface.createTask(
 );
 
 let workTag = TagInterface.createTag("Work");
-myTask.addTag(workTag);
+myTask.addTag(workTag.id);
 
 renderer.createAllTaskElements();
 
@@ -86,10 +86,12 @@ function resetForm() {
 }
 
 function showForm() {
-    Object.entries(TagInterface.tags).forEach(([id, tag]) => {
+    console.log(TagInterface.tags);
+
+    TagInterface.tags.forEach((tag) => {
         const tagDiv = document.createElement("div");
         tagDiv.dataset.value = tag.title.toLowerCase();
-        tagDiv.dataset.id = id;
+        tagDiv.dataset.id = tag.id;
         tagDiv.textContent = tag.title;
 
         tagsDropdown.appendChild(tagDiv);
@@ -124,7 +126,7 @@ function submitNewTask() {
     );
 
     selectedTags.forEach((id) => {
-        task.addTag(TagInterface.getTagById(id));
+        task.addTag(id);
     });
 
     renderer.createTaskElementInDom(task);

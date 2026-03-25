@@ -56,10 +56,8 @@ function createTaskElement(task) {
         tagsContainer.classList.add("no-tags");
     }
 
-    for (const tagId in task.tags) {
-        if (!Object.hasOwn(task.tags, tagId)) continue;
-
-        const tag = task.tags[tagId];
+    task.tags.forEach((tagId) => {
+        let tag = TagInterface.getTagById(tagId);
 
         const tagTemplate = document.getElementById("task-tag-template");
         const tagContainer = tagTemplate.content.cloneNode(true);
@@ -68,7 +66,7 @@ function createTaskElement(task) {
         tagTitle.dataset.title = tag.title;
 
         tagsContainer.appendChild(tagContainer);
-    }
+    });
 
     // Remove "," from last tag element
     if (tagsContainer.lastElementChild) {
@@ -112,22 +110,20 @@ function createTaskElement(task) {
         );
     }, 1);
 
-    for (const tagId in TagInterface.tags) {
-        const tag = TagInterface.tags[tagId];
-
+    TagInterface.tags.forEach((tag) => {
         let dropdownEntry = document.createElement("div");
         dropdownEntry.classList.add("dropdown-entry");
-        dropdownEntry.dataset.id = tagId;
+        dropdownEntry.dataset.id = tag.id;
         dropdownEntry.textContent = tag.title;
 
-        const taskHasTag = Object.hasOwn(task.tags, tagId);
+        const taskHasTag = task.tags.indexOf(tag.id) !== -1;
 
         if (taskHasTag) {
             dropdownEntry.classList.add("tagged");
         }
 
         dropdownEntries.appendChild(dropdownEntry);
-    }
+    });
 
     let createTagEntry = document.createElement("div");
     createTagEntry.classList.add("dropdown-entry");
@@ -142,14 +138,13 @@ function createTaskElement(task) {
         }
 
         const tagId = entry.dataset.id;
-        const tag = TagInterface.getTagById(tagId);
 
-        const taskHasTag = Object.hasOwn(task.tags, tagId);
+        const taskHasTag = task.tags.indexOf(tagId) !== -1;
 
         if (!taskHasTag) {
-            task.addTag(tag);
+            task.addTag(tagId);
         } else if (taskHasTag) {
-            task.removeTag(tag);
+            task.removeTag(tagId, true);
         }
 
         refreshTaskElement(task);
@@ -225,11 +220,9 @@ function createAllTaskElements() {
     title.textContent = "Tasks";
     allTasksContainer.appendChild(title);
 
-    for (const id in TaskInterface.getTasks()) {
-        const task = TaskInterface.getTasks()[id];
-
-        const newTaskElement = createTaskElementInDom(task);
-    }
+    TaskInterface.getTasks().forEach((task) => {
+        createTaskElementInDom(task);
+    });
 }
 
 function refreshTaskElement(task) {
