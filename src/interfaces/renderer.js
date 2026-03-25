@@ -7,6 +7,8 @@ const allTasksContainer = document.getElementById("all-tasks");
 let currentTagFilter = [];
 let elementControllers = {};
 
+const createTagDialog = document.getElementById("createTagDialog");
+
 function deleteTaskElement(task) {
     const taskElement = getTaskElement(task);
 
@@ -87,7 +89,7 @@ function createTaskElement(task) {
 
     const dropdownEntries = taskContainer.querySelector(".dropdown");
 
-    tagsContainer.addEventListener("click", () => {
+    tagsContainer.addEventListener("click", (e) => {
         dropdownEntries.classList.toggle("activated");
     });
 
@@ -100,7 +102,10 @@ function createTaskElement(task) {
         document.addEventListener(
             "click",
             (event) => {
-                if (taskContainer.contains(event.target)) {
+                if (
+                    taskContainer.contains(event.target) ||
+                    createTagDialog.contains(event.target)
+                ) {
                     return;
                 }
 
@@ -128,10 +133,19 @@ function createTaskElement(task) {
     let createTagEntry = document.createElement("div");
     createTagEntry.classList.add("dropdown-entry");
     createTagEntry.textContent = "Create Tag...";
+    createTagEntry.classList.add("create-tag-entry");
 
     dropdownEntries.appendChild(createTagEntry);
+    dropdownEntries.dataset.taskId = task.id;
+
     dropdownEntries.addEventListener("click", (e) => {
         const entry = e.target;
+
+        if (entry === createTagEntry) {
+            createTagDialog.showModal();
+
+            return;
+        }
 
         if (!entry.dataset.id) {
             return;

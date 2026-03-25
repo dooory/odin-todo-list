@@ -64,8 +64,41 @@
             <div class="entry"></div>
         </template>
 
+        <dialog id="createTagDialog" closedby="any">
+            <div class="dialog-container">
+                <h3>Create New Tag</h3>
+                <form id="createTagForm" name="new-tag-form">
+                    <div class="title-container">
+                        <label for="newTagTitle">New Tag Title</label>
+                        <input
+                            required
+                            type="text"
+                            name="new-tag-title"
+                            id="newTagTitle"
+                        />
+                    </div>
+                    <div class="submit-container">
+                        <input
+                            type="submit"
+                            value="Submit new tag"
+                            id="submitTagButton"
+                        />
+                    </div>
+                </form>
+            </div>
+        </dialog>
         <div id="root">
-            <div id="sidebar"></div>
+            <div id="sidebar">
+                <button
+                    type="button"
+                    onclick="
+                        localStorage.clear();
+                        location.reload();
+                    "
+                >
+                    Wipe Storage
+                </button>
+            </div>
             <div id="content">
                 <div id="task-groups">
                     <div id="all-tasks" class="tasks-container">
@@ -135,7 +168,11 @@
                                         class="selected-items"
                                         id="selectedItems"
                                     ></div>
-                                    <div class="dropdown" id="dropdown"></div>
+                                    <div class="dropdown" id="dropdown">
+                                        <div id="openCreateTagButton">
+                                            Create Tag...
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="submit-container">

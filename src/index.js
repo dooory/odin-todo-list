@@ -37,11 +37,68 @@ const dropdownContainer = document.getElementById("tagsDropdown");
 const tagsDropdown = document.getElementById("dropdown");
 const selectedItems = document.getElementById("selectedItems");
 
+const createTagDialog = document.getElementById("createTagDialog");
+const createTagForm = document.getElementById("createTagForm");
+const submitTagButton = document.getElementById("submitTagButton");
+
+createTagDialog.addEventListener("close", (event) => {
+    createTagForm.reset();
+});
+
+createTagForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(createTagForm);
+
+    const newTagTitle = formData.get("new-tag-title");
+
+    const newTag = TagInterface.createTag(newTagTitle);
+
+    if (dropdownContainer.classList.contains("active")) {
+        selectedTags.add(newTag.id);
+
+        const tag = document.createElement("span");
+        tag.textContent = `${newTagTitle} `;
+        tag.classList.add("selected-tag");
+        const xElement = document.createElement("i");
+        xElement.textContent = "x";
+        xElement.dataset.remove = newTag.id;
+        xElement.classList.add("x-element");
+
+        tag.appendChild(xElement);
+        selectedItems.appendChild(tag);
+
+        let dropdownEntry = createDropdownEntry(newTag);
+        dropdownEntry.classList.add("tagged");
+    }
+
+    const openTaskTagDropdowns = taskGroups.querySelectorAll(
+        ".task .dropdown.activated",
+    );
+
+    openTaskTagDropdowns.forEach((dropdown) => {
+        let dropdownEntry = document.createElement("div");
+        dropdownEntry.classList.add("dropdown-entry");
+        dropdownEntry.dataset.id = newTag.id;
+        dropdownEntry.textContent = newTag.title;
+        dropdownEntry.classList.add("tagged");
+
+        dropdown.insertBefore(dropdownEntry, dropdown.lastElementChild);
+        dropdownEntry.click();
+    });
+
+    createTagForm.reset();
+    createTagDialog.close();
+});
+
 let selectedTags = new Set();
 
 dropdownContainer.addEventListener("click", (e) => {
     // Prevent dropdown from closing when clicking create tag option
     if (e.target.parentElement === tagsDropdown && !e.target.dataset.id) {
+        return;
+    }
+
+    if (createTagDialog.contains(e.target)) {
         return;
     }
 
@@ -55,6 +112,8 @@ tagsDropdown.addEventListener("click", (e) => {
     const label = e.target.textContent;
 
     if (!selectedTags.has(value) && target.dataset.id) {
+        target.classList.add("tagged");
+
         selectedTags.add(value);
 
         const tag = document.createElement("span");
@@ -67,6 +126,8 @@ tagsDropdown.addEventListener("click", (e) => {
 
         tag.appendChild(xElement);
         selectedItems.appendChild(tag);
+    } else if (target.id === "openCreateTagButton") {
+        createTagDialog.showModal();
     }
 });
 
@@ -75,6 +136,11 @@ selectedItems.addEventListener("click", (e) => {
         const valueToRemove = e.target.dataset.remove;
         selectedTags.delete(valueToRemove);
         e.target.parentElement.remove();
+
+        let dropdownEntry = tagsDropdown.querySelector([
+            `.tagged[data-id='${valueToRemove}']`,
+        ]);
+        dropdownEntry.classList.remove("tagged");
     }
 });
 
@@ -90,7 +156,8 @@ taskDateInput.addEventListener("click", (e) => {
 function resetDropdown() {
     selectedTags.clear();
     selectedItems.innerHTML = "";
-    tagsDropdown.innerHTML = "";
+    tagsDropdown.innerHTML =
+        "<div id='openCreateTagButton'>Create Tag...</div>";
 }
 
 function resetForm() {
@@ -105,20 +172,21 @@ function resetForm() {
     addTaskForm.reset();
 }
 
+function createDropdownEntry(tag) {
+    const tagDiv = document.createElement("div");
+    tagDiv.dataset.value = tag.title.toLowerCase();
+    tagDiv.dataset.id = tag.id;
+    tagDiv.textContent = tag.title;
+
+    tagsDropdown.insertBefore(tagDiv, tagsDropdown.lastElementChild);
+
+    return tagDiv;
+}
+
 function showForm() {
     TagInterface.tags.forEach((tag) => {
-        const tagDiv = document.createElement("div");
-        tagDiv.dataset.value = tag.title.toLowerCase();
-        tagDiv.dataset.id = tag.id;
-        tagDiv.textContent = tag.title;
-
-        tagsDropdown.appendChild(tagDiv);
+        createDropdownEntry(tag);
     });
-
-    const createTagDiv = document.createElement("div");
-    createTagDiv.textContent = "Create Tag...";
-
-    tagsDropdown.appendChild(createTagDiv);
 
     showAddTaskButton.classList.add("activated");
     addTaskDialog.classList.add("activated");
@@ -164,11 +232,14 @@ submitNewTaskButton.addEventListener("click", (e) => {
 showAddTaskButton.addEventListener("click", showForm);
 
 document.addEventListener("click", (e) => {
-    if (!dropdownContainer.contains(e.target)) {
+    if (
+        !dropdownContainer.contains(e.target) &&
+        !createTagDialog.contains(e.target)
+    ) {
         dropdownContainer.classList.remove("active");
     }
 
-    if (!taskGroups.contains(e.target)) {
+    if (!taskGroups.contains(e.target) && !createTagDialog.contains(e.target)) {
         if (
             e.target.classList.contains("x-element") ||
             e.target.classList.contains("selected-tag")

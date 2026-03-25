@@ -16,6 +16,38 @@ body {
     margin: 0;
 }
 
+#createTagDialog {
+    border-radius: 1rem;
+    border: none;
+    padding: 1rem;
+
+    min-width: fit-content;
+
+    &::backdrop {
+        background-color: rgba(20, 20, 20, 0.8);
+        backdrop-filter: blur(5px);
+    }
+
+    .dialog-container {
+        h3 {
+            text-align: center;
+        }
+
+        #createTagForm {
+            display: flex;
+            gap: 1rem;
+            flex-direction: column;
+
+            div {
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    }
+}
+
 #root {
     display: grid;
     grid-template-columns: 1fr 5.5fr;
@@ -249,12 +281,17 @@ body {
                             font-size: 0.9rem;
 
                             div:hover {
-                                background-color: #ccc;
+                                background-color: #eee;
                             }
 
                             div {
                                 padding: 10px;
                             }
+
+                            div.tagged {
+                                background-color: #ddd;
+                            }
+
                         }
 
                         &.active {
