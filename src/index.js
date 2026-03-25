@@ -59,9 +59,11 @@ tagsDropdown.addEventListener("click", (e) => {
 
         const tag = document.createElement("span");
         tag.textContent = `${label} `;
+        tag.classList.add("selected-tag");
         const xElement = document.createElement("i");
         xElement.textContent = "x";
         xElement.dataset.remove = value;
+        xElement.classList.add("x-element");
 
         tag.appendChild(xElement);
         selectedItems.appendChild(tag);
@@ -104,8 +106,6 @@ function resetForm() {
 }
 
 function showForm() {
-    console.log(TagInterface.tags);
-
     TagInterface.tags.forEach((tag) => {
         const tagDiv = document.createElement("div");
         tagDiv.dataset.value = tag.title.toLowerCase();
@@ -169,6 +169,12 @@ document.addEventListener("click", (e) => {
     }
 
     if (!taskGroups.contains(e.target)) {
+        if (
+            e.target.classList.contains("x-element") ||
+            e.target.classList.contains("selected-tag")
+        ) {
+            return;
+        }
         showAddTaskButton.classList.remove("activated");
         addTaskDialog.classList.remove("activated");
 
