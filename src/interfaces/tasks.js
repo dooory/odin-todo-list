@@ -23,6 +23,8 @@ class Task {
 
     set title(newTitle) {
         this.#properties.title = newTitle;
+
+        currentTaskInterface.saveTasks();
     }
 
     get title() {
@@ -35,6 +37,8 @@ class Task {
 
     set description(newDescription) {
         this.#properties.description = newDescription;
+
+        currentTaskInterface.saveTasks();
     }
 
     get description() {
@@ -43,6 +47,8 @@ class Task {
 
     set priority(newPriority) {
         this.#properties.priority = newPriority;
+
+        currentTaskInterface.saveTasks();
     }
 
     get priority() {
@@ -51,6 +57,8 @@ class Task {
 
     set dueDate(newDate) {
         this.#properties.dueDate = newDate;
+
+        currentTaskInterface.saveTasks();
     }
 
     get dueDate() {
@@ -67,6 +75,8 @@ class Task {
 
     #setState(newState) {
         this.#properties.state = newState;
+
+        currentTaskInterface.saveTasks();
 
         return this.#properties.state;
     }
@@ -116,6 +126,8 @@ class Task {
 
         this.#properties.tags.push(tagId);
         TagInterface.getTagById(tagId).addTask(this.#properties.id);
+
+        currentTaskInterface.saveTasks();
     }
 
     removeTag(tagId, callRemoveTask) {
@@ -132,6 +144,8 @@ class Task {
         if (callRemoveTask) {
             TagInterface.getTagById(tagId).removeTask(this.#properties.id);
         }
+
+        currentTaskInterface.saveTasks();
     }
 
     serialize() {
@@ -154,10 +168,22 @@ class TaskInterface {
         );
     }
 
-    serialize() {
+    #serialize() {
         let serializedTasks = this.#tasks.map((task) => task.serialize());
 
         return JSON.stringify(serializedTasks);
+    }
+
+    saveTasks() {
+        let serializedTaskInterface = this.#serialize();
+
+        localStorage.setItem("tasks", serializedTaskInterface);
+    }
+
+    loadSavedTasks() {
+        let savedTasks = localStorage.getItem("tasks");
+
+        this.deserialize(savedTasks);
     }
 
     createTask(title, description, dueDate, priority, state) {
@@ -165,6 +191,8 @@ class TaskInterface {
         let task = new Task(id, title, description, dueDate, priority, state);
 
         this.#tasks.push(task);
+
+        this.saveTasks();
 
         return task;
     }
@@ -206,6 +234,8 @@ class TaskInterface {
         });
 
         this.#tasks.splice(this.#tasks.indexOf(task), 1);
+
+        currentTaskInterface.saveTasks();
     }
 
     duplicateTask(id) {
@@ -229,6 +259,8 @@ class TaskInterface {
             dupeTask.addTag(tag.id);
         });
 
+        currentTaskInterface.saveTasks();
+
         return dupeTask;
     }
 
@@ -245,4 +277,6 @@ class TaskInterface {
     }
 }
 
-export default new TaskInterface();
+let currentTaskInterface = new TaskInterface();
+
+export default currentTaskInterface;

@@ -25,6 +25,8 @@ class Tag {
 
     set title(newTitle) {
         this.#properties.title = newTitle;
+
+        currentTagInterface.saveTags();
     }
 
     addTask(taskId) {
@@ -37,6 +39,8 @@ class Tag {
         }
 
         this.#properties.tasks.push(taskId);
+
+        currentTagInterface.saveTags();
     }
 
     removeTask(taskId) {
@@ -49,6 +53,8 @@ class Tag {
         }
 
         this.#properties.tasks.splice(taskIdIndex, 1);
+
+        currentTagInterface.saveTags();
     }
 
     removeAllTasks() {
@@ -79,6 +85,8 @@ class TagInterface {
 
         this.#tags.push(newTag);
 
+        this.saveTags();
+
         return newTag;
     }
 
@@ -96,6 +104,18 @@ class TagInterface {
         return newTag;
     }
 
+    saveTags() {
+        let serializedTagsInterface = this.serialize();
+
+        localStorage.setItem("tags", serializedTagsInterface);
+    }
+
+    loadSavedTags() {
+        let savedtags = localStorage.getItem("tags");
+
+        this.deserialize(savedtags);
+    }
+
     deleteTag(tagId) {
         const tagIndex = this.#tags.findIndex((tag) => tag.id === tagId);
 
@@ -109,6 +129,8 @@ class TagInterface {
 
         tag.removeAllTasks();
         this.#tags.splice(tagIndex, 1);
+
+        currentTagInterface.saveTags();
     }
 
     deleteAllTags() {
@@ -136,4 +158,6 @@ class TagInterface {
     }
 }
 
-export default new TagInterface();
+let currentTagInterface = new TagInterface();
+
+export default currentTagInterface;

@@ -4,26 +4,29 @@ import "./style.css";
 import renderer from "./interfaces/renderer";
 import { add } from "date-fns";
 
-let myTask = TaskInterface.createTask(
-    "This is my task",
-    "This is a description",
-    add(new Date(), {
-        days: 1,
-    }),
-    1,
-);
+if (localStorage.getItem("tags")) {
+    TagInterface.loadSavedTags();
+} else {
+    TagInterface.createTag("Example Tag");
+}
 
-let workTag = TagInterface.createTag("Work");
-myTask.addTag(workTag.id);
+if (localStorage.getItem("tasks")) {
+    TaskInterface.loadSavedTasks();
+} else {
+    let myTask = TaskInterface.createTask(
+        "Example task",
+        "Example description",
+        add(new Date(), {
+            days: 1,
+        }),
+        1,
+    );
 
-let savedTags = TagInterface.serialize();
-let savedTasks = TaskInterface.serialize();
+    myTask.addTag(TagInterface.tags[0].id);
+}
 
-TaskInterface.deleteAllTasks();
-TagInterface.deleteAllTags();
-
-TagInterface.deserialize(savedTags);
-TaskInterface.deserialize(savedTasks);
+TagInterface.saveTags();
+TaskInterface.saveTasks();
 
 renderer.createAllTaskElements();
 
