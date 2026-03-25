@@ -216,10 +216,6 @@ function createTaskElement(task) {
 function createAllTaskElements() {
     clearAllTaskElements();
 
-    const title = document.createElement("h3");
-    title.textContent = "Tasks";
-    allTasksContainer.appendChild(title);
-
     TaskInterface.getTasks().forEach((task) => {
         createTaskElementInDom(task);
     });
@@ -284,7 +280,7 @@ function refreshTaskElement(task) {
 }
 
 function clearAllTaskElements() {
-    allTasksContainer.innerHTML = "";
+    allTasksContainer.innerHTML = "<h3>Tasks</h3>";
 }
 
 function getTaskElement(task) {
