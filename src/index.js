@@ -54,21 +54,7 @@ createTagForm.addEventListener("submit", (e) => {
     const newTag = TagInterface.createTag(newTagTitle);
 
     if (dropdownContainer.classList.contains("active")) {
-        selectedTags.add(newTag.id);
-
-        const tag = document.createElement("span");
-        tag.textContent = `${newTagTitle} `;
-        tag.classList.add("selected-tag");
-        const xElement = document.createElement("i");
-        xElement.textContent = "x";
-        xElement.dataset.remove = newTag.id;
-        xElement.classList.add("x-element");
-
-        tag.appendChild(xElement);
-        selectedItems.appendChild(tag);
-
-        let dropdownEntry = createDropdownEntry(newTag);
-        dropdownEntry.classList.add("tagged");
+        createDropdownEntry(newTag).click();
     }
 
     const openTaskTagDropdowns = taskGroups.querySelectorAll(
