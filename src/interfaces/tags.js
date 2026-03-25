@@ -59,6 +59,10 @@ class Tag {
             this.removeTask(taskId);
         });
     }
+
+    serialize() {
+        return JSON.stringify(this.#properties);
+    }
 }
 
 class TagInterface {
@@ -71,7 +75,21 @@ class TagInterface {
     createTag(title, tasks) {
         const id = crypto.randomUUID();
 
-        const newTag = new Tag(id, title, tasks);
+        const newTag = new Tag(id, title);
+
+        this.#tags.push(newTag);
+
+        return newTag;
+    }
+
+    createTagFromJSON(json) {
+        const parsedJSON = JSON.parse(json);
+
+        if (this.#tags.find((tag) => tag.id === parsedJSON.id)) {
+            throw new Error(`Tag with id <${parsedJSON.id}>, already exists`);
+        }
+
+        const newTag = new Tag(parsedJSON.id, parsedJSON.title);
 
         this.#tags.push(newTag);
 
@@ -93,12 +111,28 @@ class TagInterface {
         this.#tags.splice(tagIndex, 1);
     }
 
+    deleteAllTags() {
+        this.#tags.forEach((tag) => this.deleteTag(tag.id));
+    }
+
     getTagById(tagId) {
         return this.#tags.find((tag) => tag.id === tagId);
     }
 
     get tags() {
         return this.#tags;
+    }
+
+    deserialize(serializedTagInterface) {
+        let serializedTags = JSON.parse(serializedTagInterface);
+
+        serializedTags.forEach((tagJSON) => this.createTagFromJSON(tagJSON));
+    }
+
+    serialize() {
+        let serializedTags = this.#tags.map((tag) => tag.serialize());
+
+        return JSON.stringify(serializedTags);
     }
 }
 

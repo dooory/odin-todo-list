@@ -10,10 +10,20 @@ let myTask = TaskInterface.createTask(
     add(new Date(), {
         days: 1,
     }),
+    1,
 );
 
 let workTag = TagInterface.createTag("Work");
 myTask.addTag(workTag.id);
+
+let savedTags = TagInterface.serialize();
+let savedTasks = TaskInterface.serialize();
+
+TaskInterface.deleteAllTasks();
+TagInterface.deleteAllTags();
+
+TagInterface.deserialize(savedTags);
+TaskInterface.deserialize(savedTasks);
 
 renderer.createAllTaskElements();
 

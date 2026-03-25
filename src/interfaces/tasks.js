@@ -133,6 +133,10 @@ class Task {
             TagInterface.getTagById(tagId).removeTask(this.#properties.id);
         }
     }
+
+    serialize() {
+        return JSON.stringify(this.#properties);
+    }
 }
 
 class TaskInterface {
@@ -142,9 +146,46 @@ class TaskInterface {
         this.#tasks = [];
     }
 
+    deserialize(serializedTaskInterface) {
+        const serializedTasks = JSON.parse(serializedTaskInterface);
+
+        serializedTasks.forEach((taskJSON) =>
+            this.#createTaskFromJSON(taskJSON),
+        );
+    }
+
+    serialize() {
+        let serializedTasks = this.#tasks.map((task) => task.serialize());
+
+        return JSON.stringify(serializedTasks);
+    }
+
     createTask(title, description, dueDate, priority, state) {
         const id = crypto.randomUUID();
         let task = new Task(id, title, description, dueDate, priority, state);
+
+        this.#tasks.push(task);
+
+        return task;
+    }
+
+    #createTaskFromJSON(json) {
+        const parsedJSON = JSON.parse(json);
+
+        if (this.#tasks.find((task) => task.id === parsedJSON.id)) {
+            throw new Error(`Task with id <${parsedJSON.id}>, already exists`);
+        }
+
+        let task = new Task(
+            parsedJSON.id,
+            parsedJSON.title,
+            parsedJSON.description,
+            new Date(parsedJSON.dueDate),
+            parsedJSON.priority,
+            parsedJSON.state,
+        );
+
+        parsedJSON.tags.forEach((tagId) => task.addTag(tagId));
 
         this.#tasks.push(task);
 
@@ -189,6 +230,10 @@ class TaskInterface {
         });
 
         return dupeTask;
+    }
+
+    deleteAllTasks() {
+        this.#tasks.forEach((task) => this.deleteTask(task.id));
     }
 
     getTaskById(id) {
