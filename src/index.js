@@ -40,6 +40,11 @@ const selectedItems = document.getElementById("selectedItems");
 let selectedTags = new Set();
 
 dropdownContainer.addEventListener("click", (e) => {
+    // Prevent dropdown from closing when clicking create tag option
+    if (e.target.parentElement === tagsDropdown && !e.target.dataset.id) {
+        return;
+    }
+
     dropdownContainer.classList.toggle("active");
 });
 
@@ -49,7 +54,7 @@ tagsDropdown.addEventListener("click", (e) => {
     const value = target.getAttribute("data-id");
     const label = e.target.textContent;
 
-    if (!selectedTags.has(value)) {
+    if (!selectedTags.has(value) && target.dataset.id) {
         selectedTags.add(value);
 
         const tag = document.createElement("span");
