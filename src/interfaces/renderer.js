@@ -77,13 +77,12 @@ function createTaskElement(task) {
     task.tags.forEach((tagId) => {
         let tag = TagInterface.getTagById(tagId);
 
-        const tagTemplate = document.getElementById("task-tag-template");
-        const tagContainer = tagTemplate.content.cloneNode(true);
-        const tagTitle = tagContainer.querySelector(".tag");
+        const tagTitle = document.createElement("span");
         tagTitle.textContent = tag.title + ",";
         tagTitle.dataset.title = tag.title;
+        tagTitle.classList.add("entry");
 
-        tagsContainer.appendChild(tagContainer);
+        tagsContainer.appendChild(tagTitle);
     });
 
     // Remove "," from last tag element
