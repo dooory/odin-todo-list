@@ -250,7 +250,7 @@ document.addEventListener("click", (e) => {
         ) {
             return;
         }
-        console.log(e.target);
+
         showAddTaskButton.classList.remove("activated");
         addTaskDialog.classList.remove("activated");
 

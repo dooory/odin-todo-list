@@ -8,6 +8,8 @@ let currentTagFilter = [];
 let elementControllers = {};
 
 const createTagDialog = document.getElementById("createTagDialog");
+const addTaskDialog = document.getElementById("add-task-dialog");
+const addTaskTagsDropdown = document.getElementById("dropdown");
 
 function createDropdownEntry(tag) {
     const entryTemplate = document.getElementById("tagDropdownEntry");
@@ -157,6 +159,7 @@ function createTaskElement(task) {
             TagInterface.deleteTag(tagId);
 
             refreshAllTaskElements(task);
+            refreshTagDropdownEntries(addTaskTagsDropdown);
 
             return;
         }
@@ -171,6 +174,7 @@ function createTaskElement(task) {
 
         refreshTaskElement(task);
     });
+    const addTaskDialog = document.getElementById("add-task-dialog");
 
     title.addEventListener("click", () => {
         if (!title.classList.contains("activated")) {
@@ -329,6 +333,14 @@ function createTagDropdownEntries(dropdown, task) {
     });
 }
 
+function refreshTagDropdownEntries(dropdown, task) {
+    let oldEntries = dropdown.querySelectorAll(".entry[data-id]");
+
+    oldEntries.forEach((element) => element.remove());
+
+    createTagDropdownEntries(dropdown, task);
+}
+
 class Renderer {
     constructor() {}
 
@@ -337,6 +349,7 @@ class Renderer {
     refreshTaskElement = refreshTaskElement;
     refreshAllTaskElements = refreshAllTaskElements;
     createDropdownEntries = createTagDropdownEntries;
+    refreshTagDropdownEntries = refreshTagDropdownEntries;
 }
 
 export default new Renderer();
