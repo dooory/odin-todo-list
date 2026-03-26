@@ -192,26 +192,8 @@ function resetForm() {
     addTaskForm.reset();
 }
 
-function createDropdownEntry(tag) {
-    const entryTemplate = document.getElementById("tagDropdownEntry");
-    const templateClone = document.importNode(entryTemplate.content, true);
-
-    const entry = templateClone.querySelector(".entry");
-    entry.dataset.value = tag.title.toLowerCase();
-    entry.dataset.id = tag.id;
-
-    const tagTitle = entry.querySelector(".title");
-    tagTitle.textContent = tag.title;
-
-    tagsDropdown.insertBefore(entry, tagsDropdown.lastElementChild);
-
-    return entry;
-}
-
 function showForm() {
-    TagInterface.tags.forEach((tag) => {
-        createDropdownEntry(tag);
-    });
+    renderer.createDropdownEntries(tagsDropdown);
 
     showAddTaskButton.classList.add("activated");
     addTaskDialog.classList.add("activated");

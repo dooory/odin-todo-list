@@ -129,17 +129,7 @@ function createTaskElement(task) {
         );
     }, 1);
 
-    TagInterface.tags.forEach((tag) => {
-        let dropdownEntry = createDropdownEntry(tag);
-
-        const taskHasTag = task.tags.indexOf(tag.id) !== -1;
-
-        if (taskHasTag) {
-            dropdownEntry.classList.add("tagged");
-        }
-
-        dropdownEntries.appendChild(dropdownEntry);
-    });
+    createTagDropdownEntries(dropdownEntries, task);
 
     let createTagEntry = document.createElement("div");
     createTagEntry.textContent = "Create Tag...";
@@ -323,6 +313,22 @@ function getTaskElement(task) {
     return allTasksContainer.querySelector(`.task[data-id='${task.id}']`);
 }
 
+function createTagDropdownEntries(dropdown, task) {
+    TagInterface.tags.forEach((tag) => {
+        let entry = createDropdownEntry(tag);
+
+        if (task) {
+            const taskHasTag = task.tags.indexOf(tag.id) !== -1;
+
+            if (taskHasTag) {
+                entry.classList.add("tagged");
+            }
+        }
+
+        dropdown.insertBefore(entry, dropdown.lastElementChild);
+    });
+}
+
 class Renderer {
     constructor() {}
 
@@ -330,6 +336,7 @@ class Renderer {
     createAllTaskElements = createAllTaskElements;
     refreshTaskElement = refreshTaskElement;
     refreshAllTaskElements = refreshAllTaskElements;
+    createDropdownEntries = createTagDropdownEntries;
 }
 
 export default new Renderer();
