@@ -9,6 +9,20 @@ let elementControllers = {};
 
 const createTagDialog = document.getElementById("createTagDialog");
 
+function createDropdownEntry(tag) {
+    const entryTemplate = document.getElementById("tagDropdownEntry");
+    const templateClone = document.importNode(entryTemplate.content, true);
+
+    const entry = templateClone.querySelector(".entry");
+    entry.dataset.value = tag.title.toLowerCase();
+    entry.dataset.id = tag.id;
+
+    const tagTitle = entry.querySelector(".title");
+    tagTitle.textContent = tag.title;
+
+    return entry;
+}
+
 function deleteTaskElement(task) {
     const taskElement = getTaskElement(task);
 
@@ -116,10 +130,7 @@ function createTaskElement(task) {
     }, 1);
 
     TagInterface.tags.forEach((tag) => {
-        let dropdownEntry = document.createElement("div");
-        dropdownEntry.classList.add("dropdown-entry");
-        dropdownEntry.dataset.id = tag.id;
-        dropdownEntry.textContent = tag.title;
+        let dropdownEntry = createDropdownEntry(tag);
 
         const taskHasTag = task.tags.indexOf(tag.id) !== -1;
 
@@ -131,27 +142,34 @@ function createTaskElement(task) {
     });
 
     let createTagEntry = document.createElement("div");
-    createTagEntry.classList.add("dropdown-entry");
     createTagEntry.textContent = "Create Tag...";
-    createTagEntry.classList.add("create-tag-entry");
+    createTagEntry.classList.add("create-tag-entry", "entry");
 
     dropdownEntries.appendChild(createTagEntry);
-    dropdownEntries.dataset.taskId = task.id;
 
     dropdownEntries.addEventListener("click", (e) => {
-        const entry = e.target;
+        const target = e.target;
 
-        if (entry === createTagEntry) {
+        if (target === createTagEntry) {
             createTagDialog.showModal();
 
             return;
         }
 
-        if (!entry.dataset.id) {
+        let tagDiv =
+            target.classList.contains("title") ||
+            target.classList.contains("delete-button")
+                ? target.parentElement
+                : target;
+        const tagId = tagDiv.dataset.id;
+
+        if (target.classList.contains("delete-button")) {
+            TagInterface.deleteTag(tagId);
+
+            refreshAllTaskElements(task);
+
             return;
         }
-
-        const tagId = entry.dataset.id;
 
         const taskHasTag = task.tags.indexOf(tagId) !== -1;
 
@@ -235,6 +253,10 @@ function createAllTaskElements() {
     });
 }
 
+function refreshAllTaskElements() {
+    TaskInterface.getTasks().forEach((task) => refreshTaskElement(task));
+}
+
 function refreshTaskElement(task) {
     const id = task.id;
     const currentTaskElement = getTaskElement(task);
@@ -307,6 +329,7 @@ class Renderer {
     createTaskElementInDom = createTaskElementInDom;
     createAllTaskElements = createAllTaskElements;
     refreshTaskElement = refreshTaskElement;
+    refreshAllTaskElements = refreshAllTaskElements;
 }
 
 export default new Renderer();

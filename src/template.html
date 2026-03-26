@@ -64,6 +64,13 @@
             <div class="entry"></div>
         </template>
 
+        <template id="tagDropdownEntry">
+            <div class="entry">
+                <p class="title">Tag Title</p>
+                <button class="delete-button" type="button">X</button>
+            </div>
+        </template>
+
         <dialog id="createTagDialog" closedby="any">
             <div class="dialog-container">
                 <h3>Create New Tag</h3>
@@ -169,7 +176,10 @@
                                         id="selectedItems"
                                     ></div>
                                     <div class="dropdown" id="dropdown">
-                                        <div id="openCreateTagButton">
+                                        <div
+                                            id="openCreateTagButton"
+                                            class="entry"
+                                        >
                                             Create Tag...
                                         </div>
                                     </div>

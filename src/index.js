@@ -71,6 +71,7 @@ createTagForm.addEventListener("submit", (e) => {
         dropdown.insertBefore(dropdownEntry, dropdown.lastElementChild);
         dropdownEntry.click();
     });
+    renderer.refreshAllTaskElements();
 
     createTagForm.reset();
     createTagDialog.close();
@@ -84,6 +85,10 @@ dropdownContainer.addEventListener("click", (e) => {
         return;
     }
 
+    if (e.target.className === "delete-button") {
+        return;
+    }
+
     if (createTagDialog.contains(e.target)) {
         return;
     }
@@ -94,26 +99,55 @@ dropdownContainer.addEventListener("click", (e) => {
 tagsDropdown.addEventListener("click", (e) => {
     const target = e.target;
 
-    const value = target.getAttribute("data-id");
-    const label = e.target.textContent;
+    if (target.id === "openCreateTagButton") {
+        createTagDialog.showModal();
+        return;
+    }
 
-    if (!selectedTags.has(value) && target.dataset.id) {
-        target.classList.add("tagged");
+    const tagDiv =
+        target.classList.contains("title") ||
+        target.classList.contains("delete-button")
+            ? target.parentElement
+            : target;
+    const tagTitle = target.querySelector(".title");
+    const tagId = tagDiv.dataset.id;
 
-        selectedTags.add(value);
+    if (target.classList.contains("delete-button")) {
+        const selectedTagElement = selectedItems.querySelector(
+            `[data-remove='${tagId}']`,
+        );
+
+        if (selectedTagElement) {
+            selectedTagElement.parentElement.remove();
+            selectedTags.delete(tagId);
+        }
+
+        TagInterface.deleteTag(tagId);
+
+        renderer.refreshAllTaskElements();
+
+        tagDiv.remove();
+
+        return;
+    }
+
+    const label = tagTitle.textContent;
+
+    if (tagId && !selectedTags.has(tagId)) {
+        tagDiv.classList.add("tagged");
+
+        selectedTags.add(tagId);
 
         const tag = document.createElement("span");
         tag.textContent = `${label} `;
         tag.classList.add("selected-tag");
         const xElement = document.createElement("i");
         xElement.textContent = "x";
-        xElement.dataset.remove = value;
+        xElement.dataset.remove = tagId;
         xElement.classList.add("x-element");
 
         tag.appendChild(xElement);
         selectedItems.appendChild(tag);
-    } else if (target.id === "openCreateTagButton") {
-        createTagDialog.showModal();
     }
 });
 
@@ -143,7 +177,7 @@ function resetDropdown() {
     selectedTags.clear();
     selectedItems.innerHTML = "";
     tagsDropdown.innerHTML =
-        "<div id='openCreateTagButton'>Create Tag...</div>";
+        "<div id='openCreateTagButton' class='entry'>Create Tag...</div>";
 }
 
 function resetForm() {
@@ -159,14 +193,19 @@ function resetForm() {
 }
 
 function createDropdownEntry(tag) {
-    const tagDiv = document.createElement("div");
-    tagDiv.dataset.value = tag.title.toLowerCase();
-    tagDiv.dataset.id = tag.id;
-    tagDiv.textContent = tag.title;
+    const entryTemplate = document.getElementById("tagDropdownEntry");
+    const templateClone = document.importNode(entryTemplate.content, true);
 
-    tagsDropdown.insertBefore(tagDiv, tagsDropdown.lastElementChild);
+    const entry = templateClone.querySelector(".entry");
+    entry.dataset.value = tag.title.toLowerCase();
+    entry.dataset.id = tag.id;
 
-    return tagDiv;
+    const tagTitle = entry.querySelector(".title");
+    tagTitle.textContent = tag.title;
+
+    tagsDropdown.insertBefore(entry, tagsDropdown.lastElementChild);
+
+    return entry;
 }
 
 function showForm() {
@@ -218,11 +257,8 @@ submitNewTaskButton.addEventListener("click", (e) => {
 showAddTaskButton.addEventListener("click", showForm);
 
 document.addEventListener("click", (e) => {
-    if (
-        !dropdownContainer.contains(e.target) &&
-        !createTagDialog.contains(e.target)
-    ) {
-        dropdownContainer.classList.remove("active");
+    if (e.target.classList.contains("delete-button")) {
+        return;
     }
 
     if (!taskGroups.contains(e.target) && !createTagDialog.contains(e.target)) {
@@ -232,6 +268,7 @@ document.addEventListener("click", (e) => {
         ) {
             return;
         }
+        console.log(e.target);
         showAddTaskButton.classList.remove("activated");
         addTaskDialog.classList.remove("activated");
 

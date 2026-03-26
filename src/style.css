@@ -117,7 +117,7 @@ body {
                     }
 
                     input:not(.activated),
-                    button:not(.activated):not(.delete-button) {
+                    button:not(.activated):not(.delete-button):not(.delete-button) {
                         display: none;
                     }
 
@@ -161,10 +161,11 @@ body {
                             }
 
                             .dropdown {
+                                width: max-content;
+                                min-width: 10rem;
                                 display: none;
                                 position: absolute;
                                 top: 140%;
-                                left: 0;
                                 right: 0;
                                 border: 1px solid #bbb;
                                 background-color: #eee;
@@ -172,16 +173,24 @@ body {
                                 z-index: 100;
                                 font-size: 0.9rem;
 
-                                .dropdown-entry:hover {
+                                .entry:hover {
                                     background-color: #ccc;
                                 }
 
-                                .dropdown-entry {
+                                .entry {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
                                     padding: 5px;
+                                    gap: 1rem;
 
                                     &.tagged {
                                         background-color: var(--steel-blue);
                                         color: #fff;
+                                    }
+
+                                    .title {
+                                        margin: 0;
                                     }
                                 }
                             }
@@ -244,7 +253,6 @@ body {
                         select {
                             border: 1px solid #ccc;
                             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-
                             font-size: 0.9rem;
                             padding: 0.5rem;
 
@@ -268,6 +276,7 @@ body {
                         position: relative;
 
                         .dropdown {
+                            box-sizing: border-box;
                             display: none;
                             position: absolute;
                             top: 100%;
@@ -280,18 +289,32 @@ body {
                             z-index: 100;
                             font-size: 0.9rem;
 
-                            div:hover {
+                            .entry:hover {
                                 background-color: #eee;
                             }
 
-                            div {
+                            .entry {
+                                border: solid 1px #ccc;
+
                                 padding: 10px;
+                                justify-content: space-between;
+                                align-items: center;
+                                display: flex;
+
+                                .delete-button {
+                                    font-size: 1rem;
+                                    max-width: min-content;
+                                    max-height: min-content;
+                                }
+
+                                .title {
+                                    margin: 0;
+                                }
                             }
 
-                            div.tagged {
+                            .entry.tagged {
                                 background-color: #ddd;
                             }
-
                         }
 
                         &.active {
