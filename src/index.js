@@ -1,5 +1,10 @@
 import TaskInterface from "./interfaces/tasks";
 import TagInterface from "./interfaces/tags";
+import {
+    Dropdown,
+    refreshAllDropdowns,
+    getDropdowns,
+} from "./components/dropdown";
 import "./style.css";
 import renderer from "./interfaces/renderer";
 import { add } from "date-fns";
@@ -32,139 +37,11 @@ renderer.createAllTaskElements();
 
 const taskGroups = document.getElementById("task-groups");
 const addTaskDialog = document.getElementById("add-task-dialog");
-
-const dropdownContainer = document.getElementById("tagsDropdown");
-const tagsDropdown = document.getElementById("dropdown");
-const selectedItems = document.getElementById("selectedItems");
+const addTaskForm = document.getElementById("addTaskForm");
 
 const createTagDialog = document.getElementById("createTagDialog");
 const createTagForm = document.getElementById("createTagForm");
-const submitTagButton = document.getElementById("submitTagButton");
 
-createTagDialog.addEventListener("close", (event) => {
-    createTagForm.reset();
-});
-
-createTagForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const formData = new FormData(createTagForm);
-
-    const newTagTitle = formData.get("new-tag-title");
-
-    const newTag = TagInterface.createTag(newTagTitle);
-
-    if (dropdownContainer.classList.contains("active")) {
-        createDropdownEntry(newTag).click();
-    }
-
-    const openTaskTagDropdowns = taskGroups.querySelectorAll(
-        ".task .dropdown.activated",
-    );
-
-    openTaskTagDropdowns.forEach((dropdown) => {
-        let dropdownEntry = document.createElement("div");
-        dropdownEntry.classList.add("dropdown-entry");
-        dropdownEntry.dataset.id = newTag.id;
-        dropdownEntry.textContent = newTag.title;
-        dropdownEntry.classList.add("tagged");
-
-        dropdown.insertBefore(dropdownEntry, dropdown.lastElementChild);
-        dropdownEntry.click();
-    });
-    renderer.refreshAllTaskElements();
-
-    createTagForm.reset();
-    createTagDialog.close();
-});
-
-let selectedTags = new Set();
-
-dropdownContainer.addEventListener("click", (e) => {
-    // Prevent dropdown from closing when clicking create tag option
-    if (e.target.parentElement === tagsDropdown && !e.target.dataset.id) {
-        return;
-    }
-
-    if (e.target.className === "delete-button") {
-        return;
-    }
-
-    if (createTagDialog.contains(e.target)) {
-        return;
-    }
-
-    dropdownContainer.classList.toggle("active");
-});
-
-tagsDropdown.addEventListener("click", (e) => {
-    const target = e.target;
-
-    if (target.id === "openCreateTagButton") {
-        createTagDialog.showModal();
-        return;
-    }
-
-    const tagDiv =
-        target.classList.contains("title") ||
-        target.classList.contains("delete-button")
-            ? target.parentElement
-            : target;
-    const tagTitle = target.querySelector(".title");
-    const tagId = tagDiv.dataset.id;
-
-    if (target.classList.contains("delete-button")) {
-        const selectedTagElement = selectedItems.querySelector(
-            `[data-remove='${tagId}']`,
-        );
-
-        if (selectedTagElement) {
-            selectedTagElement.parentElement.remove();
-            selectedTags.delete(tagId);
-        }
-
-        TagInterface.deleteTag(tagId);
-
-        renderer.refreshAllTaskElements();
-
-        tagDiv.remove();
-
-        return;
-    }
-
-    const label = tagTitle.textContent;
-
-    if (tagId && !selectedTags.has(tagId)) {
-        tagDiv.classList.add("tagged");
-
-        selectedTags.add(tagId);
-
-        const tag = document.createElement("span");
-        tag.textContent = `${label} `;
-        tag.classList.add("selected-tag");
-        const xElement = document.createElement("i");
-        xElement.textContent = "x";
-        xElement.dataset.remove = tagId;
-        xElement.classList.add("x-element");
-
-        tag.appendChild(xElement);
-        selectedItems.appendChild(tag);
-    }
-});
-
-selectedItems.addEventListener("click", (e) => {
-    if (e.target.dataset.remove) {
-        const valueToRemove = e.target.dataset.remove;
-        selectedTags.delete(valueToRemove);
-        e.target.parentElement.remove();
-
-        let dropdownEntry = tagsDropdown.querySelector([
-            `.tagged[data-id='${valueToRemove}']`,
-        ]);
-        dropdownEntry.classList.remove("tagged");
-    }
-});
-
-const addTaskForm = document.getElementById("addTaskForm");
 const showAddTaskButton = document.getElementById("add-task-button");
 const submitNewTaskButton = document.getElementById("submitNewTask");
 const taskDateInput = document.getElementById("taskDate");
@@ -172,13 +49,6 @@ const taskDateInput = document.getElementById("taskDate");
 taskDateInput.addEventListener("click", (e) => {
     taskDateInput.showPicker();
 });
-
-function resetDropdown() {
-    selectedTags.clear();
-    selectedItems.innerHTML = "";
-    tagsDropdown.innerHTML =
-        "<div id='openCreateTagButton' class='entry'>Create Tag...</div>";
-}
 
 function resetForm() {
     const inputs = addTaskForm.querySelectorAll("input, textarea, select");
@@ -192,17 +62,50 @@ function resetForm() {
     addTaskForm.reset();
 }
 
-function showForm() {
-    renderer.createDropdownEntries(tagsDropdown);
+let addTaskDropdown;
 
-    showAddTaskButton.classList.add("activated");
-    addTaskDialog.classList.add("activated");
+function resetDropdown() {
+    if (addTaskDropdown) {
+        addTaskDropdown.remove();
+        addTaskDropdown = null;
+    }
+}
+
+function showForm() {
+    addTaskDropdown = new Dropdown({
+        events: {
+            onCreateEntryClick: () => createTagDialog.showModal(),
+        },
+        getEntryData: () => {
+            const currentTags = TagInterface.tags;
+
+            return currentTags.map((tag) => {
+                let data = {};
+
+                data.title = tag.title;
+                data.id = tag.id;
+
+                return data;
+            });
+        },
+        updateOnCreate: true,
+        type: "tag",
+        selectedEntriesPlaceholder: "No tags...",
+    });
+
+    addTaskForm.insertBefore(
+        addTaskDropdown.container,
+        addTaskForm.lastElementChild,
+    );
 
     const inputs = addTaskForm.querySelectorAll("input, textarea, select");
 
     inputs.forEach((input) => {
         input.disabled = false;
     });
+
+    showAddTaskButton.classList.add("activated");
+    addTaskDialog.classList.add("activated");
 }
 
 function submitNewTask() {
@@ -218,7 +121,7 @@ function submitNewTask() {
         Number(priority),
     );
 
-    selectedTags.forEach((id) => {
+    addTaskDropdown.selectedEntries.forEach((id) => {
         task.addTag(id);
     });
 
@@ -238,15 +141,20 @@ submitNewTaskButton.addEventListener("click", (e) => {
 
 showAddTaskButton.addEventListener("click", showForm);
 
-document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("delete-button")) {
+document.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (
+        target.classList.contains("delete-button") ||
+        target.classList.contains("selected-entry")
+    ) {
         return;
     }
 
-    if (!taskGroups.contains(e.target) && !createTagDialog.contains(e.target)) {
+    if (!taskGroups.contains(target) && !createTagDialog.contains(target)) {
         if (
-            e.target.classList.contains("x-element") ||
-            e.target.classList.contains("selected-tag")
+            target.classList.contains("x-element") ||
+            target.classList.contains("selected-tag")
         ) {
             return;
         }
@@ -256,4 +164,38 @@ document.addEventListener("click", (e) => {
 
         resetDropdown();
     }
+});
+
+createTagDialog.addEventListener("close", (event) => {
+    createTagForm.reset();
+});
+
+createTagForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(createTagForm);
+
+    const newTagTitle = formData.get("new-tag-title");
+    const newTag = TagInterface.createTag(newTagTitle);
+
+    refreshAllDropdowns();
+
+    // Select the new tag in every open tag dropdown
+    const dropdowns = getDropdowns();
+
+    for (const id in dropdowns) {
+        const dropdown = dropdowns[id];
+
+        if (dropdown.isOpen && dropdown.type === "tag") {
+            let newTagEntry = dropdown.currentEntries.find(
+                (entry) => entry.id === newTag.id,
+            );
+
+            if (newTagEntry) {
+                newTagEntry.select();
+            }
+        }
+    }
+
+    createTagForm.reset();
+    createTagDialog.close();
 });

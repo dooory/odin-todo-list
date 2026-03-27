@@ -45,10 +45,6 @@
                                 data-property="dueDate"
                                 class="edit-due-date"
                             />
-                            <div class="tags">
-                                <div class="tags-container"></div>
-                                <div class="dropdown"></div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -60,11 +56,24 @@
             <span class="tag">My Tag Title</span>
         </template>
 
-        <template id="tagDropdownEntry">
+        <template id="dropdownTemplate">
+            <div class="dropdown-container">
+                <div class="selected-entries"></div>
+                <div class="dropdown">
+                    <div class="entry create-tag-entry">Create Tag...</div>
+                </div>
+            </div>
+        </template>
+
+        <template id="entryTemplate">
             <div class="entry">
                 <p class="title">Tag Title</p>
-                <button class="delete-button" type="button">X</button>
+                <!-- <button class="delete-button" type="button">X</button> -->
             </div>
+        </template>
+
+        <template id="selectedEntryTemplate">
+            <span class="selected-entry">Example Entry</span>
         </template>
 
         <dialog id="createTagDialog" closedby="any">
@@ -165,7 +174,7 @@
                                     </select>
                                 </div>
 
-                                <div class="tags-dropdown" id="tagsDropdown">
+                                <!-- <div class="tags-dropdown" id="tagsDropdown">
                                     Tags
                                     <div
                                         class="selected-items"
@@ -179,7 +188,7 @@
                                             Create Tag...
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="submit-container">
                                     <input

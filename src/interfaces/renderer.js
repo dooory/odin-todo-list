@@ -1,36 +1,20 @@
 import TagInterface from "./tags";
 import TaskInterface from "./tasks";
 import { formatDate } from "date-fns";
+import { Dropdown, refreshAllDropdowns } from "../components/dropdown";
 
 const allTasksContainer = document.getElementById("all-tasks");
 
 let currentTagFilter = [];
 let elementControllers = {};
+let elementDropdowns = [];
 
 const createTagDialog = document.getElementById("createTagDialog");
 const addTaskDialog = document.getElementById("add-task-dialog");
-const addTaskTagsDropdown = document.getElementById("dropdown");
-
-function createDropdownEntry(tag) {
-    const entryTemplate = document.getElementById("tagDropdownEntry");
-    const templateClone = document.importNode(entryTemplate.content, true);
-
-    const entry = templateClone.querySelector(".entry");
-    entry.dataset.value = tag.title.toLowerCase();
-    entry.dataset.id = tag.id;
-
-    const tagTitle = entry.querySelector(".title");
-    tagTitle.textContent = tag.title;
-
-    return entry;
-}
 
 function deleteTaskElement(task) {
     const taskElement = getTaskElement(task);
 
-    const controller = elementControllers[task.id];
-
-    controller.abort();
     taskElement.remove();
 }
 
@@ -63,117 +47,48 @@ function createTaskElement(task) {
     const dueDate = taskContainer.querySelector(".due-date");
     dueDate.textContent = formatDate(task.dueDate, "dd-MM-yyyy");
 
+    const bottom = taskContainer.querySelector(".bottom");
+
     const editingDate = taskContainer.querySelector(".edit-due-date");
     editingDate.valueAsDate = task.dueDate;
 
-    const tagsSection = taskContainer.querySelector(".tags");
-    const tagsContainer = tagsSection.querySelector(".tags-container");
-
-    if (Object.entries(task.tags).length <= 0) {
-        tagsContainer.textContent = "No tags...";
-        tagsContainer.classList.add("no-tags");
-    }
-
-    task.tags.forEach((tagId) => {
-        let tag = TagInterface.getTagById(tagId);
-
-        const tagTitle = document.createElement("span");
-        tagTitle.textContent = tag.title + ",";
-        tagTitle.dataset.title = tag.title;
-        tagTitle.classList.add("entry");
-
-        tagsContainer.appendChild(tagTitle);
-    });
-
-    // Remove "," from last tag element
-    if (tagsContainer.lastElementChild) {
-        tagsContainer.lastElementChild.textContent =
-            tagsContainer.lastElementChild.dataset.title;
-    }
-
-    // Prevent selecting tag section text when double/triple clicking
-    tagsSection.addEventListener(
-        "mousedown",
-        (event) => {
-            if (event.detail > 1) {
-                event.preventDefault();
-            }
-        },
-        false,
-    );
-
-    const dropdownEntries = taskContainer.querySelector(".dropdown");
-
-    tagsContainer.addEventListener("click", (e) => {
-        dropdownEntries.classList.toggle("activated");
-    });
-
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    elementControllers[task.id] = controller;
-
-    setTimeout(() => {
-        document.addEventListener(
-            "click",
-            (event) => {
-                if (
-                    taskContainer.contains(event.target) ||
-                    createTagDialog.contains(event.target)
-                ) {
-                    return;
+    const taskTagDropdown = new Dropdown({
+        events: {
+            onEntryClick: (clickedEntry, isEntrySelected) => {
+                if (!isEntrySelected) {
+                    task.removeTag(clickedEntry.id, true);
+                } else {
+                    task.addTag(clickedEntry.id);
                 }
-
-                dropdownEntries.classList.remove("activated");
             },
-            { signal },
-        );
-    }, 1);
 
-    createTagDropdownEntries(dropdownEntries, task);
+            onCreateEntryClick: () => createTagDialog.showModal(),
+        },
 
-    let createTagEntry = document.createElement("div");
-    createTagEntry.textContent = "Create Tag...";
-    createTagEntry.classList.add("create-tag-entry", "entry");
+        getEntryData: () => {
+            const currentTags = TagInterface.tags;
 
-    dropdownEntries.appendChild(createTagEntry);
+            return currentTags.map((tag) => {
+                let data = {};
 
-    dropdownEntries.addEventListener("click", (e) => {
-        const target = e.target;
+                data.title = tag.title;
+                data.id = tag.id;
 
-        if (target === createTagEntry) {
-            createTagDialog.showModal();
+                return data;
+            });
+        },
+        isEntrySelected: (entry) => {
+            return task.tags.indexOf(entry.id);
+        },
 
-            return;
-        }
-
-        let tagDiv =
-            target.classList.contains("title") ||
-            target.classList.contains("delete-button")
-                ? target.parentElement
-                : target;
-        const tagId = tagDiv.dataset.id;
-
-        if (target.classList.contains("delete-button")) {
-            TagInterface.deleteTag(tagId);
-
-            refreshAllTaskElements(task);
-            refreshTagDropdownEntries(addTaskTagsDropdown);
-
-            return;
-        }
-
-        const taskHasTag = task.tags.indexOf(tagId) !== -1;
-
-        if (!taskHasTag) {
-            task.addTag(tagId);
-        } else if (taskHasTag) {
-            task.removeTag(tagId, true);
-        }
-
-        refreshTaskElement(task);
+        type: "tag",
+        updateOnCreate: true,
+        selectedEntriesPlaceholder: "No tags...",
+        removeSelectedOnClick: false,
+        ignoredElements: [addTaskDialog],
     });
-    const addTaskDialog = document.getElementById("add-task-dialog");
+
+    bottom.appendChild(taskTagDropdown.container);
 
     title.addEventListener("click", () => {
         if (!title.classList.contains("activated")) {
