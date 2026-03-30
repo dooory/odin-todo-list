@@ -217,6 +217,8 @@ class TaskInterface {
 
         this.#tasks.push(task);
 
+        this.saveTasks();
+
         return task;
     }
 
