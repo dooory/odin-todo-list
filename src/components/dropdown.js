@@ -291,8 +291,25 @@ function refreshAllDropdowns() {
     }
 }
 
+function refreshAllDropdownsOfType(type) {
+    for (const id in dropdowns) {
+        const dropdown = dropdowns[id];
+
+        if (!dropdown.type === type) {
+            return;
+        }
+
+        dropdown.updateEntries();
+    }
+}
+
 function getDropdowns() {
     return dropdowns;
 }
 
-export { Dropdown, refreshAllDropdowns, getDropdowns };
+export {
+    Dropdown,
+    refreshAllDropdowns,
+    refreshAllDropdownsOfType,
+    getDropdowns,
+};

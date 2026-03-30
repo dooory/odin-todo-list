@@ -1,3 +1,4 @@
+import { refreshAllDropdownsOfType } from "../components/dropdown";
 import TaskInterface from "./tasks";
 
 class Tag {
@@ -26,6 +27,8 @@ class Tag {
     set title(newTitle) {
         this.#properties.title = newTitle;
 
+        refreshAllDropdownsOfType("tag");
+
         currentTagInterface.saveTags();
     }
 
@@ -40,6 +43,8 @@ class Tag {
 
         this.#properties.tasks.push(taskId);
 
+        refreshAllDropdownsOfType("tag");
+
         currentTagInterface.saveTags();
     }
 
@@ -53,6 +58,8 @@ class Tag {
         }
 
         this.#properties.tasks.splice(taskIdIndex, 1);
+
+        refreshAllDropdownsOfType("tag");
 
         currentTagInterface.saveTags();
     }

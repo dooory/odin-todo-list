@@ -4,11 +4,7 @@ import TaskInterface from "./interfaces/tasks";
 import TagInterface from "./interfaces/tags";
 import renderer from "./interfaces/renderer";
 
-import {
-    Dropdown,
-    refreshAllDropdowns,
-    getDropdowns,
-} from "./components/dropdown";
+import { Dropdown, getDropdowns } from "./components/dropdown";
 
 import { add } from "date-fns";
 
@@ -94,9 +90,9 @@ function showForm() {
 
     const inputs = addTaskForm.querySelectorAll("input, textarea, select");
 
-    // inputs.forEach((input) => {
-    //     input.disabled = false;
-    // });
+    inputs.forEach((input) => {
+        input.disabled = false;
+    });
 
     showAddTaskButton.classList.add("activated");
     addTaskDialog.classList.add("activated");
@@ -170,8 +166,6 @@ createTagForm.addEventListener("submit", (event) => {
 
     const newTagTitle = formData.get("new-tag-title");
     const newTag = TagInterface.createTag(newTagTitle);
-
-    refreshAllDropdowns();
 
     // Select the new tag in every open tag dropdown
     const dropdowns = getDropdowns();
