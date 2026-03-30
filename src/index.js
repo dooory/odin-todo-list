@@ -43,9 +43,9 @@ function loadUI() {
 function resetForm() {
     const inputs = addTaskForm.querySelectorAll("input, textarea, select");
 
-    // inputs.forEach((input) => {
-    //     input.disabled = true;
-    // });
+    inputs.forEach((input) => {
+        input.disabled = true;
+    });
 
     resetDropdown();
 
