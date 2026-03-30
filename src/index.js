@@ -47,9 +47,9 @@ function loadUI() {
 function resetForm() {
     const inputs = addTaskForm.querySelectorAll("input, textarea, select");
 
-    inputs.forEach((input) => {
-        input.disabled = true;
-    });
+    // inputs.forEach((input) => {
+    //     input.disabled = true;
+    // });
 
     resetDropdown();
 
@@ -94,9 +94,9 @@ function showForm() {
 
     const inputs = addTaskForm.querySelectorAll("input, textarea, select");
 
-    inputs.forEach((input) => {
-        input.disabled = false;
-    });
+    // inputs.forEach((input) => {
+    //     input.disabled = false;
+    // });
 
     showAddTaskButton.classList.add("activated");
     addTaskDialog.classList.add("activated");
@@ -197,3 +197,17 @@ createTagForm.addEventListener("submit", (event) => {
 taskDateInput.addEventListener("click", () => {
     taskDateInput.showPicker();
 });
+
+if (localStorage.getItem("tags")) {
+    TagInterface.loadSavedTags();
+} else {
+    loadDefaultTags();
+}
+
+if (localStorage.getItem("tasks")) {
+    TaskInterface.loadSavedTasks();
+} else {
+    loadDefaultTasks();
+}
+
+loadUI();
