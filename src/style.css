@@ -56,11 +56,6 @@ body {
     height: 100%;
 }
 
-#sidebar {
-    background-color: var(--papaya-whip);
-    min-width: 250px;
-}
-
 #content {
     padding-top: 10vw;
     padding-bottom: 5vw;
