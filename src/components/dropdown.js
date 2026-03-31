@@ -136,22 +136,40 @@ class Dropdown {
                 this.#toggleEntrySelection(entry, true);
             }
         });
+
+        this.#refreshSelectedEntries();
     }
 
     #toggleEntrySelection(entry, isSelected) {
-        if (isSelected === false || this.selectedEntries.has(entry.id)) {
+        if (
+            isSelected === false ||
+            (isSelected !== true && this.selectedEntries.has(entry.id))
+        ) {
             entry.elements.container.classList.remove("tagged");
-            entry.elements.selectedEntrySpan.remove();
 
             this.selectedEntries.delete(entry.id);
         } else if (isSelected === true || !this.selectedEntries.has(entry.id)) {
-            if (this.selectedEntries.size <= 0) {
-                this.selectedEntriesContainer.textContent = "";
-            }
-
             this.selectedEntries.add(entry.id);
 
             entry.elements.container.classList.add("tagged");
+        }
+
+        const placeholderSpan = this.selectedEntriesPlaceholderSpan;
+
+        if (this.selectedEntries.size <= 0) {
+            placeholderSpan.style.display = "block";
+        } else if (this.selectedEntries.size > 0) {
+            placeholderSpan.style.display = "none";
+        }
+
+        return this.selectedEntries.has(entry.id);
+    }
+
+    #renderSelectedEntries() {
+        const sortedSelectedEntries = [...this.selectedEntries].sort();
+
+        sortedSelectedEntries.forEach((id) => {
+            let entry = this.currentEntries.find((entry) => entry.id == id);
 
             const selectedEntryClone = document.importNode(
                 selectedEntryTemplate.content,
@@ -163,20 +181,25 @@ class Dropdown {
 
             selectedEntrySpan.textContent = entry.title;
             selectedEntrySpan.dataset.id = entry.id;
+
             entry.elements.selectedEntrySpan = selectedEntrySpan;
 
             this.selectedEntriesContainer.appendChild(selectedEntrySpan);
-        }
+        });
+    }
 
-        if (this.selectedEntriesPlaceholder && this.selectedEntries.size <= 0) {
-            let placeholderSpan = document.createElement("span");
-            placeholderSpan.classList.add("placeholder");
-            placeholderSpan.textContent = this.selectedEntriesPlaceholder;
+    #clearSelectedEntries() {
+        let selectedEntriesElements =
+            this.selectedEntriesContainer.querySelectorAll(".selected-entry");
 
-            this.selectedEntriesContainer.appendChild(placeholderSpan);
-        }
+        selectedEntriesElements.forEach((element) => {
+            element.remove();
+        });
+    }
 
-        return this.selectedEntries.has(entry.id);
+    #refreshSelectedEntries() {
+        this.#clearSelectedEntries();
+        this.#renderSelectedEntries();
     }
 
     constructor(options) {
@@ -198,12 +221,20 @@ class Dropdown {
         this.entriesContainer = this.container.querySelector(".dropdown");
         this.selectedEntriesContainer =
             this.container.querySelector(".selected-entries");
+        this.selectedEntriesPlaceholderSpan =
+            this.selectedEntriesContainer.querySelector(".placeholder");
 
         this.type = options.type;
         this.ignoredElements = options.ignoredElements || [];
         this.events = options.events || {};
         this.getEntryData = options.getEntryData;
         this.selectedEntriesPlaceholder = options.selectedEntriesPlaceholder;
+
+        if (this.selectedEntriesPlaceholder) {
+            this.selectedEntriesPlaceholderSpan.textContent =
+                this.selectedEntriesPlaceholder;
+        }
+
         this.removeSelectedOnClick =
             options.removeSelectedOnClick === false
                 ? options.removeSelectedOnClick
@@ -211,14 +242,6 @@ class Dropdown {
         this.isEntrySelected = options.isEntrySelected;
 
         dropdowns[this.id] = this;
-
-        if (this.selectedEntriesPlaceholder && this.selectedEntries.size <= 0) {
-            let placeholderSpan = document.createElement("span");
-            placeholderSpan.classList.add("placeholder");
-            placeholderSpan.textContent = this.selectedEntriesPlaceholder;
-
-            this.selectedEntriesContainer.appendChild(placeholderSpan);
-        }
 
         if (options.updateOnCreate) {
             this.updateEntries();
@@ -251,6 +274,8 @@ class Dropdown {
                 const isEntrySelected =
                     this.#toggleEntrySelection(clickedEntry);
 
+                this.#refreshSelectedEntries();
+
                 if (this.events.onEntryClick) {
                     this.events.onEntryClick(clickedEntry, isEntrySelected);
 
@@ -274,6 +299,8 @@ class Dropdown {
                 );
 
                 this.#toggleEntrySelection(clickedEntry);
+
+                this.#refreshSelectedEntries();
 
                 return;
             }
