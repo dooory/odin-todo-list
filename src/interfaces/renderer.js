@@ -155,8 +155,16 @@ function createTaskElement(task) {
         hideEditOptions();
 
         let dupeTask = TaskInterface.duplicateTask(task.id);
+        let dupeTaskElement = createTaskElement(dupeTask);
 
-        createTaskElementInDom(dupeTask);
+        // Insert after current task element
+        taskElement.insertAdjacentElement("afterend", dupeTaskElement);
+    });
+
+    const editButton = taskContainer.querySelector(".edit-button");
+
+    editButton.addEventListener("click", () => {
+        showEditOptions();
     });
 
     return taskElement;
