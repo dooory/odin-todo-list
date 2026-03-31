@@ -49,8 +49,9 @@ body {
 }
 
 #root {
-    display: grid;
-    grid-template-columns: 1fr 5.5fr;
+    #wipeButton {
+        position: fixed;
+    }
 
     height: 100%;
 }

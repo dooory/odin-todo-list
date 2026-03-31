@@ -98,17 +98,16 @@
             </div>
         </dialog>
         <div id="root">
-            <div id="sidebar">
-                <button
-                    type="button"
-                    onclick="
-                        localStorage.clear();
-                        location.reload();
-                    "
-                >
-                    Wipe Storage
-                </button>
-            </div>
+            <button
+                type="button"
+                onclick="
+                    localStorage.clear();
+                    location.reload();
+                "
+                id="wipeButton"
+            >
+                Wipe Storage
+            </button>
             <div id="content">
                 <div id="taskGroups">
                     <div id="allTasks" class="tasks-container">
