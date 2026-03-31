@@ -8,14 +8,14 @@ import { Dropdown, getDropdowns } from "./components/dropdown";
 
 import { add } from "date-fns";
 
-const taskGroups = document.getElementById("task-groups");
-const addTaskDialog = document.getElementById("add-task-dialog");
+const taskGroups = document.getElementById("taskGroups");
+const addTaskDialog = document.getElementById("addTaskDialog");
 const addTaskForm = document.getElementById("addTaskForm");
 
 const createTagDialog = document.getElementById("createTagDialog");
 const createTagForm = document.getElementById("createTagForm");
 
-const showAddTaskButton = document.getElementById("add-task-button");
+const showAddTaskButton = document.getElementById("addTaskButton");
 const submitNewTaskButton = document.getElementById("submitNewTask");
 const taskDateInput = document.getElementById("taskDate");
 const closeAddTaskButton = document.getElementById("closeAddTaskDialog");

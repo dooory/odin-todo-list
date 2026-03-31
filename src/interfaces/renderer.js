@@ -3,9 +3,9 @@ import TaskInterface from "./tasks";
 import { formatDate } from "date-fns";
 import { Dropdown } from "../components/dropdown";
 
-const allTasksContainer = document.getElementById("all-tasks");
+const allTasksContainer = document.getElementById("allTasks");
 const createTagDialog = document.getElementById("createTagDialog");
-const addTaskDialog = document.getElementById("add-task-dialog");
+const addTaskDialog = document.getElementById("addTaskDialog");
 
 function deleteTaskElement(task) {
     const taskElement = getTaskElement(task);
@@ -22,7 +22,7 @@ function createTaskElementInDom(task) {
 }
 
 function createTaskElement(task) {
-    const taskTemplate = document.getElementById("task-template");
+    const taskTemplate = document.getElementById("taskTemplate");
 
     let taskFragment = document.importNode(taskTemplate.content, true);
     let taskElement = taskFragment.querySelector(".task");
