@@ -1,7 +1,7 @@
 import TagInterface from "./tags";
 import TaskInterface from "./tasks";
 import { formatDate } from "date-fns";
-import { Dropdown } from "../components/dropdown";
+import { Dropdown, refreshAllDropdownsOfType } from "../components/dropdown";
 
 const allTasksContainer = document.getElementById("all-tasks");
 const createTagDialog = document.getElementById("createTagDialog");
