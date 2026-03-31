@@ -81,6 +81,14 @@ class TagInterface {
         this.#tags = [];
     }
 
+    get tags() {
+        return this.#tags;
+    }
+
+    getTagById(tagId) {
+        return this.#tags.find((tag) => tag.id === tagId);
+    }
+
     createTag(title) {
         const id = crypto.randomUUID();
 
@@ -93,6 +101,27 @@ class TagInterface {
         this.saveTags();
 
         return newTag;
+    }
+
+    deleteTag(tagId) {
+        const tagIndex = this.#tags.findIndex((tag) => tag.id === tagId);
+
+        if (tagIndex === -1) {
+            throw new Error(
+                `Error when attempting to delete tag with id <${tagId}>, unable to find such tag`,
+            );
+        }
+
+        const tag = this.#tags[tagIndex];
+
+        tag.removeAllTasks();
+        this.#tags.splice(tagIndex, 1);
+
+        currentTagInterface.saveTags();
+    }
+
+    deleteAllTags() {
+        this.#tags.forEach((tag) => this.deleteTag(tag.id));
     }
 
     #createTagFromJSON(json) {
@@ -119,35 +148,6 @@ class TagInterface {
         let savedtags = localStorage.getItem("tags");
 
         this.#deserialize(savedtags);
-    }
-
-    deleteTag(tagId) {
-        const tagIndex = this.#tags.findIndex((tag) => tag.id === tagId);
-
-        if (tagIndex === -1) {
-            throw new Error(
-                `Error when attempting to delete tag with id <${tagId}>, unable to find such tag`,
-            );
-        }
-
-        const tag = this.#tags[tagIndex];
-
-        tag.removeAllTasks();
-        this.#tags.splice(tagIndex, 1);
-
-        currentTagInterface.saveTags();
-    }
-
-    deleteAllTags() {
-        this.#tags.forEach((tag) => this.deleteTag(tag.id));
-    }
-
-    getTagById(tagId) {
-        return this.#tags.find((tag) => tag.id === tagId);
-    }
-
-    get tags() {
-        return this.#tags;
     }
 
     #deserialize(serializedTagInterface) {

@@ -61,12 +61,12 @@ class Task {
         currentTaskInterface.saveTasks();
     }
 
-    get dueDate() {
-        return this.#properties.dueDate;
+    get tags() {
+        return this.#properties.tags;
     }
 
-    isDue() {
-        return this.#properties.dueDate < new Date();
+    get dueDate() {
+        return this.#properties.dueDate;
     }
 
     get state() {
@@ -79,6 +79,14 @@ class Task {
         currentTaskInterface.saveTasks();
 
         return this.#properties.state;
+    }
+
+    markAsDue() {
+        this.#setState("due");
+    }
+
+    isDue() {
+        return this.#properties.dueDate < new Date();
     }
 
     complete() {
@@ -105,14 +113,6 @@ class Task {
         } else {
             this.#setState("ongoing");
         }
-    }
-
-    markAsDue() {
-        this.#setState("due");
-    }
-
-    get tags() {
-        return this.#properties.tags;
     }
 
     addTag(tagId) {
@@ -160,60 +160,13 @@ class TaskInterface {
         this.#tasks = [];
     }
 
-    #deserialize(serializedTaskInterface) {
-        const serializedTasks = JSON.parse(serializedTaskInterface);
-
-        serializedTasks.forEach((taskJSON) =>
-            this.#createTaskFromJSON(taskJSON),
-        );
-    }
-
-    #serialize() {
-        let serializedTasks = this.#tasks.map((task) => task.serialize());
-
-        return JSON.stringify(serializedTasks);
-    }
-
-    saveTasks() {
-        let serializedTaskInterface = this.#serialize();
-
-        localStorage.setItem("tasks", serializedTaskInterface);
-    }
-
-    loadSavedTasks() {
-        let savedTasks = localStorage.getItem("tasks");
-
-        this.#deserialize(savedTasks);
+    get tasks() {
+        return this.#tasks;
     }
 
     createTask(title, description, dueDate, priority, state) {
         const id = crypto.randomUUID();
         let task = new Task(id, title, description, dueDate, priority, state);
-
-        this.#tasks.push(task);
-
-        this.saveTasks();
-
-        return task;
-    }
-
-    #createTaskFromJSON(json) {
-        const parsedJSON = JSON.parse(json);
-
-        if (this.#tasks.find((task) => task.id === parsedJSON.id)) {
-            throw new Error(`Task with id <${parsedJSON.id}>, already exists`);
-        }
-
-        let task = new Task(
-            parsedJSON.id,
-            parsedJSON.title,
-            parsedJSON.description,
-            new Date(parsedJSON.dueDate),
-            parsedJSON.priority,
-            parsedJSON.state,
-        );
-
-        parsedJSON.tags.forEach((tagId) => task.addTag(tagId));
 
         this.#tasks.push(task);
 
@@ -274,8 +227,55 @@ class TaskInterface {
         return this.#tasks.find((task) => task.id === id);
     }
 
-    get tasks() {
-        return this.#tasks;
+    #createTaskFromJSON(json) {
+        const parsedJSON = JSON.parse(json);
+
+        if (this.#tasks.find((task) => task.id === parsedJSON.id)) {
+            throw new Error(`Task with id <${parsedJSON.id}>, already exists`);
+        }
+
+        let task = new Task(
+            parsedJSON.id,
+            parsedJSON.title,
+            parsedJSON.description,
+            new Date(parsedJSON.dueDate),
+            parsedJSON.priority,
+            parsedJSON.state,
+        );
+
+        parsedJSON.tags.forEach((tagId) => task.addTag(tagId));
+
+        this.#tasks.push(task);
+
+        this.saveTasks();
+
+        return task;
+    }
+
+    #deserialize(serializedTaskInterface) {
+        const serializedTasks = JSON.parse(serializedTaskInterface);
+
+        serializedTasks.forEach((taskJSON) =>
+            this.#createTaskFromJSON(taskJSON),
+        );
+    }
+
+    #serialize() {
+        let serializedTasks = this.#tasks.map((task) => task.serialize());
+
+        return JSON.stringify(serializedTasks);
+    }
+
+    saveTasks() {
+        let serializedTaskInterface = this.#serialize();
+
+        localStorage.setItem("tasks", serializedTaskInterface);
+    }
+
+    loadSavedTasks() {
+        let savedTasks = localStorage.getItem("tasks");
+
+        this.#deserialize(savedTasks);
     }
 }
 
