@@ -108,20 +108,23 @@ body {
                         font-size: 1rem;
                     }
 
-                    input.activated {
+                    input.edit-option.activated,
+                    button.edit-option.activated {
                         display: block;
                     }
 
-                    input:not(.activated),
-                    button:not(.activated):not(.delete-button):not(.delete-button) {
+                    input.edit-option,
+                    button.edit-option {
                         display: none;
                     }
 
-                    .title,
-                    .due-date,
-                    .tags,
+                    .edit-option,
                     button[type="button"] {
                         cursor: pointer;
+                    }
+
+                    .delete-button {
+                        display: block;
                     }
 
                     .top {

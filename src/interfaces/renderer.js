@@ -85,22 +85,30 @@ function createTaskElement(task) {
 
     bottom.appendChild(taskTagDropdown.container);
 
+    function showEditOptions() {
+        body.querySelectorAll(".edit-option").forEach((element) => {
+            element.classList.add("activated");
+        });
+    }
+
+    function hideEditOptions() {
+        body.querySelectorAll(".edit-option").forEach((element) => {
+            element.classList.remove("activated");
+        });
+    }
+
     title.addEventListener("click", () => {
         if (!title.classList.contains("activated")) {
-            title.classList.add("activated");
-            editingTitle.classList.add("activated");
-            saveButton.classList.add("activated");
-            cancelButton.classList.add("activated");
+            showEditOptions();
+
             editingTitle.focus();
         }
     });
 
     dueDate.addEventListener("click", () => {
         if (!dueDate.classList.contains("activated")) {
-            dueDate.classList.add("activated");
-            editingDate.classList.add("activated");
-            saveButton.classList.add("activated");
-            cancelButton.classList.add("activated");
+            showEditOptions();
+
             editingDate.focus();
         }
     });
@@ -109,9 +117,7 @@ function createTaskElement(task) {
     const body = taskContainer.querySelector(".body");
 
     saveButton.addEventListener("click", () => {
-        body.querySelectorAll("div, input, button").forEach((element) => {
-            element.classList.remove("activated");
-        });
+        hideEditOptions();
 
         body.querySelectorAll("input[data-property]").forEach((element) => {
             let propName = element.dataset.property;
@@ -130,9 +136,7 @@ function createTaskElement(task) {
     const cancelButton = taskContainer.querySelector(".cancel-button");
 
     cancelButton.addEventListener("click", () => {
-        body.querySelectorAll("div, input, button").forEach((element) => {
-            element.classList.remove("activated");
-        });
+        hideEditOptions();
 
         editingTitle.value = task.title;
         editingDate.valueAsDate = task.dueDate;
@@ -143,6 +147,14 @@ function createTaskElement(task) {
     deleteButton.addEventListener("click", () => {
         deleteTaskElement(task);
         TaskInterface.deleteTask(task.id);
+    });
+
+    const duplicateButton = taskContainer.querySelector(".duplicate-button");
+
+    duplicateButton.addEventListener("click", () => {
+        hideEditOptions();
+
+        TaskInterface.duplicateTask(task.id);
     });
 
     return taskElement;
