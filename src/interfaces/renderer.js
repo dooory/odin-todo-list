@@ -1,14 +1,9 @@
 import TagInterface from "./tags";
 import TaskInterface from "./tasks";
 import { formatDate } from "date-fns";
-import { Dropdown, refreshAllDropdowns } from "../components/dropdown";
+import { Dropdown } from "../components/dropdown";
 
 const allTasksContainer = document.getElementById("all-tasks");
-
-let currentTagFilter = [];
-let elementControllers = {};
-let elementDropdowns = [];
-
 const createTagDialog = document.getElementById("createTagDialog");
 const addTaskDialog = document.getElementById("add-task-dialog");
 
@@ -166,7 +161,6 @@ function refreshAllTaskElements() {
 }
 
 function refreshTaskElement(task) {
-    const id = task.id;
     const currentTaskElement = getTaskElement(task);
     const nextTaskElement = currentTaskElement.nextSibling;
 
@@ -231,39 +225,7 @@ function getTaskElement(task) {
     return allTasksContainer.querySelector(`.task[data-id='${task.id}']`);
 }
 
-function createTagDropdownEntries(dropdown, task) {
-    TagInterface.tags.forEach((tag) => {
-        let entry = createDropdownEntry(tag);
-
-        if (task) {
-            const taskHasTag = task.tags.indexOf(tag.id) !== -1;
-
-            if (taskHasTag) {
-                entry.classList.add("tagged");
-            }
-        }
-
-        dropdown.insertBefore(entry, dropdown.lastElementChild);
-    });
-}
-
-function refreshTagDropdownEntries(dropdown, task) {
-    let oldEntries = dropdown.querySelectorAll(".entry[data-id]");
-
-    oldEntries.forEach((element) => element.remove());
-
-    createTagDropdownEntries(dropdown, task);
-}
-
-class Renderer {
-    constructor() {}
-
-    createTaskElementInDom = createTaskElementInDom;
-    createAllTaskElements = createAllTaskElements;
-    refreshTaskElement = refreshTaskElement;
-    refreshAllTaskElements = refreshAllTaskElements;
-    createDropdownEntries = createTagDropdownEntries;
-    refreshTagDropdownEntries = refreshTagDropdownEntries;
-}
-
-export default new Renderer();
+export default {
+    createTaskElementInDom,
+    createAllTaskElements,
+};
