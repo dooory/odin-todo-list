@@ -274,7 +274,7 @@ class TaskInterface {
         return this.#tasks.find((task) => task.id === id);
     }
 
-    getTasks() {
+    get tasks() {
         return this.#tasks;
     }
 }
