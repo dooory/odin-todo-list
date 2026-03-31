@@ -110,12 +110,14 @@ body {
                     }
 
                     input.edit-option.activated,
-                    button.edit-option.activated {
+                    button.edit-option.activated,
+                    .hide-on.edit {
                         display: block;
                     }
 
                     input.edit-option,
-                    button.edit-option {
+                    button.edit-option,
+                    .hide-on-edit.activated {
                         display: none;
                     }
 

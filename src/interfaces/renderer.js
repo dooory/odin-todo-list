@@ -86,15 +86,15 @@ function createTaskElement(task) {
     bottom.appendChild(taskTagDropdown.container);
 
     function showEditOptions() {
-        body.querySelectorAll(".edit-option").forEach((element) => {
-            element.classList.add("activated");
-        });
+        body.querySelectorAll(".edit-option, .hide-on-edit").forEach(
+            (element) => element.classList.add("activated"),
+        );
     }
 
     function hideEditOptions() {
-        body.querySelectorAll(".edit-option").forEach((element) => {
-            element.classList.remove("activated");
-        });
+        body.querySelectorAll(".edit-option, .hide-on-edit").forEach(
+            (element) => element.classList.remove("activated"),
+        );
     }
 
     title.addEventListener("click", () => {
@@ -163,9 +163,7 @@ function createTaskElement(task) {
 
     const editButton = taskContainer.querySelector(".edit-button");
 
-    editButton.addEventListener("click", () => {
-        showEditOptions();
-    });
+    editButton.addEventListener("click", () => showEditOptions());
 
     return taskElement;
 }
