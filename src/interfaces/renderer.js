@@ -151,13 +151,13 @@ function createTaskElement(task) {
 function createAllTaskElements() {
     clearAllTaskElements();
 
-    TaskInterface.getTasks().forEach((task) => {
+    TaskInterface.tasks.forEach((task) => {
         createTaskElementInDom(task);
     });
 }
 
 function refreshAllTaskElements() {
-    TaskInterface.getTasks().forEach((task) => refreshTaskElement(task));
+    TaskInterface.tasks.forEach((task) => refreshTaskElement(task));
 }
 
 function refreshTaskElement(task) {
