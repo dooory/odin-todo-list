@@ -113,8 +113,13 @@ function createTaskElement(task) {
         }
     });
 
-    const saveButton = taskContainer.querySelector(".save-button");
     const body = taskContainer.querySelector(".body");
+
+    const saveButton = body.querySelector(".save-button");
+    const cancelButton = body.querySelector(".cancel-button");
+    const deleteButton = body.querySelector(".delete-button");
+    const duplicateButton = body.querySelector(".duplicate-button");
+    const editButton = body.querySelector(".edit-button");
 
     saveButton.addEventListener("click", () => {
         hideEditOptions();
@@ -133,8 +138,6 @@ function createTaskElement(task) {
         refreshTaskElement(task);
     });
 
-    const cancelButton = taskContainer.querySelector(".cancel-button");
-
     cancelButton.addEventListener("click", () => {
         hideEditOptions();
 
@@ -142,14 +145,10 @@ function createTaskElement(task) {
         editingDate.valueAsDate = task.dueDate;
     });
 
-    const deleteButton = taskContainer.querySelector(".delete-button");
-
     deleteButton.addEventListener("click", () => {
         deleteTaskElement(task);
         TaskInterface.deleteTask(task.id);
     });
-
-    const duplicateButton = taskContainer.querySelector(".duplicate-button");
 
     duplicateButton.addEventListener("click", () => {
         hideEditOptions();
@@ -160,8 +159,6 @@ function createTaskElement(task) {
         // Insert after current task element
         taskElement.insertAdjacentElement("afterend", dupeTaskElement);
     });
-
-    const editButton = taskContainer.querySelector(".edit-button");
 
     editButton.addEventListener("click", () => showEditOptions());
 
