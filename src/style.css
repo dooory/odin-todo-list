@@ -4,6 +4,7 @@
     --papaya-whip: rgb(234, 234, 234);
     --deep-space-blue: #003049ff;
     --steel-blue: #669bbcff;
+    scrollbar-gutter: stable both-edges;
 }
 
 body {
