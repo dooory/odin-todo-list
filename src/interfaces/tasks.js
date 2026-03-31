@@ -160,7 +160,7 @@ class TaskInterface {
         this.#tasks = [];
     }
 
-    deserialize(serializedTaskInterface) {
+    #deserialize(serializedTaskInterface) {
         const serializedTasks = JSON.parse(serializedTaskInterface);
 
         serializedTasks.forEach((taskJSON) =>
@@ -183,7 +183,7 @@ class TaskInterface {
     loadSavedTasks() {
         let savedTasks = localStorage.getItem("tasks");
 
-        this.deserialize(savedTasks);
+        this.#deserialize(savedTasks);
     }
 
     createTask(title, description, dueDate, priority, state) {

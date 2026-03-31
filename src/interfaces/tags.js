@@ -95,7 +95,7 @@ class TagInterface {
         return newTag;
     }
 
-    createTagFromJSON(json) {
+    #createTagFromJSON(json) {
         const parsedJSON = JSON.parse(json);
 
         if (this.#tags.find((tag) => tag.id === parsedJSON.id)) {
@@ -110,7 +110,7 @@ class TagInterface {
     }
 
     saveTags() {
-        let serializedTagsInterface = this.serialize();
+        let serializedTagsInterface = this.#serialize();
 
         localStorage.setItem("tags", serializedTagsInterface);
     }
@@ -118,7 +118,7 @@ class TagInterface {
     loadSavedTags() {
         let savedtags = localStorage.getItem("tags");
 
-        this.deserialize(savedtags);
+        this.#deserialize(savedtags);
     }
 
     deleteTag(tagId) {
@@ -150,13 +150,13 @@ class TagInterface {
         return this.#tags;
     }
 
-    deserialize(serializedTagInterface) {
+    #deserialize(serializedTagInterface) {
         let serializedTags = JSON.parse(serializedTagInterface);
 
-        serializedTags.forEach((tagJSON) => this.createTagFromJSON(tagJSON));
+        serializedTags.forEach((tagJSON) => this.#createTagFromJSON(tagJSON));
     }
 
-    serialize() {
+    #serialize() {
         let serializedTags = this.#tags.map((tag) => tag.serialize());
 
         return JSON.stringify(serializedTags);
