@@ -18,6 +18,7 @@ const createTagForm = document.getElementById("createTagForm");
 const showAddTaskButton = document.getElementById("add-task-button");
 const submitNewTaskButton = document.getElementById("submitNewTask");
 const taskDateInput = document.getElementById("taskDate");
+const closeAddTaskButton = document.getElementById("closeAddTaskDialog");
 
 function loadDefaultTags() {
     TagInterface.createTag("Example Tag");
@@ -59,6 +60,11 @@ function resetDropdown() {
         addTaskDropdown.remove();
         addTaskDropdown = null;
     }
+}
+
+function closeForm() {
+    showAddTaskButton.classList.remove("activated");
+    addTaskDialog.classList.remove("activated");
 }
 
 function showForm() {
@@ -122,14 +128,19 @@ submitNewTaskButton.addEventListener("click", () => {
     if (addTaskForm.checkValidity()) {
         submitNewTask();
 
-        showAddTaskButton.classList.remove("activated");
-        addTaskDialog.classList.remove("activated");
+        closeForm();
 
         resetForm();
     }
 });
 
 showAddTaskButton.addEventListener("click", showForm);
+
+closeAddTaskButton.addEventListener("click", () => {
+    closeForm();
+
+    resetForm();
+});
 
 document.addEventListener("click", (event) => {
     const target = event.target;
@@ -149,8 +160,7 @@ document.addEventListener("click", (event) => {
             return;
         }
 
-        showAddTaskButton.classList.remove("activated");
-        addTaskDialog.classList.remove("activated");
+        closeForm();
 
         resetDropdown();
     }

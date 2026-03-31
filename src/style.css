@@ -238,10 +238,21 @@ body {
                 display: none;
 
                 border: 2px solid #ccc;
-                padding: 1rem 0.5rem;
+                padding: 1rem 1rem;
 
-                h2 {
-                    margin: 10px 0;
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-bottom: 1rem;
+
+                    h2 {
+                        margin: 0;
+                    }
+
+                    #closeAddTaskDialog {
+                        aspect-ratio: 1;
+                    }
                 }
 
                 form {

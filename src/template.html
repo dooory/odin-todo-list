@@ -123,8 +123,18 @@
                         <button id="add-task-button" type="button">
                             <i>+</i> Add Task
                         </button>
-                        <div id="add-task-dialog">
-                            <h2>Add new task</h2>
+                        <div id="add-task-dialog" class="activated">
+                            <div class="header">
+                                <h2>Add new task</h2>
+                                <div class="close-button-container">
+                                    <button
+                                        id="closeAddTaskDialog"
+                                        type="button"
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            </div>
                             <form id="addTaskForm">
                                 <div class="title-container">
                                     <label for="taskTitle">Title</label>
