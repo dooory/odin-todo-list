@@ -43,8 +43,6 @@ class Tag {
 
         this.#properties.tasks.push(taskId);
 
-        refreshAllDropdownsOfType("tag");
-
         currentTagInterface.saveTags();
     }
 
@@ -58,8 +56,6 @@ class Tag {
         }
 
         this.#properties.tasks.splice(taskIdIndex, 1);
-
-        refreshAllDropdownsOfType("tag");
 
         currentTagInterface.saveTags();
     }
@@ -85,12 +81,14 @@ class TagInterface {
         this.#tags = [];
     }
 
-    createTag(title, tasks) {
+    createTag(title) {
         const id = crypto.randomUUID();
 
         const newTag = new Tag(id, title);
 
         this.#tags.push(newTag);
+
+        refreshAllDropdownsOfType("tag");
 
         this.saveTags();
 
