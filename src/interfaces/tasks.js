@@ -210,8 +210,8 @@ class TaskInterface {
             originalTask.state,
         );
 
-        originalTask.tags.forEach((tag) => {
-            dupeTask.addTag(tag.id);
+        originalTask.tags.forEach((id) => {
+            dupeTask.addTag(id);
         });
 
         currentTaskInterface.saveTasks();

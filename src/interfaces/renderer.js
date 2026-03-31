@@ -154,7 +154,9 @@ function createTaskElement(task) {
     duplicateButton.addEventListener("click", () => {
         hideEditOptions();
 
-        TaskInterface.duplicateTask(task.id);
+        let dupeTask = TaskInterface.duplicateTask(task.id);
+
+        createTaskElementInDom(dupeTask);
     });
 
     return taskElement;
