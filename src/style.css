@@ -161,7 +161,11 @@ body {
                                 gap: 0.5ch;
 
                                 span {
-                                    padding: 1ch;
+                                    max-width: 136px;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    padding: 8px;
                                     font-size: 0.9rem;
                                     background-color: #aaa;
                                     color: #fff;
