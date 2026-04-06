@@ -32,6 +32,7 @@ function createTaskElement(task) {
 
     const stateCheckbox = taskContainer.querySelector(".task-checkbox");
     stateCheckbox.checked = task.state === "completed" ? true : false;
+    toggleCompleteTask(stateCheckbox.checked);
 
     const title = taskContainer.querySelector(".title");
     title.textContent = task.title;
@@ -110,6 +111,26 @@ function createTaskElement(task) {
             showEditOptions();
 
             editingDate.focus();
+        }
+    });
+
+    function toggleCompleteTask(isComplete) {
+        if (isComplete) {
+            taskElement.classList.add("complete");
+        } else if (!isComplete) {
+            taskElement.classList.remove("complete");
+        }
+    }
+
+    stateCheckbox.addEventListener("change", () => {
+        const isChecked = stateCheckbox.checked;
+
+        toggleCompleteTask(isChecked);
+
+        if (isChecked) {
+            task.complete();
+        } else {
+            task.uncomplete();
         }
     });
 
