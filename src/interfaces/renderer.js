@@ -20,7 +20,7 @@ function createTaskElementInDom(task) {
 
     allTasksContainer.appendChild(newTaskElement);
 
-    filterTaskElements(searchBar.value, tagFilter.value);
+    filterTaskElement(task, searchBar.value, tagFilter.value);
 
     return newTaskElement;
 }
