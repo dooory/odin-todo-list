@@ -3,6 +3,9 @@
     --c-orange: hsl(20, 100%, 65%);
     --c-yellow: hsl(40, 100%, 65%);
     --c-blue: hsl(205, 100%, 65%);
+    --c-white: hsl(0, 0%, 95%);
+    --c-grey: hsl(0, 0%, 50%);
+    --c-black: hsl(0, 0%, 20%);
     scrollbar-gutter: stable both-edges;
 }
 
@@ -63,6 +66,34 @@ body {
     margin: auto;
 
     max-width: 700px;
+
+    .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .search-tasks,
+        .search-tags {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 2px solid var(--c-grey);
+            background-color: var(--c-white);
+            color: var(--c-black);
+        }
+
+        input,
+        select {
+
+            &:hover,
+            &:focus-visible {
+                border-color: hsl(from var(--c-grey) h s l / .5);
+            }
+        }
+
+        option {
+            background-color: var(--c-white);
+        }
+    }
 
     #tasksRoot {
         display: flex;

@@ -6,6 +6,8 @@ import { Dropdown } from "../components/dropdown";
 const allTasksContainer = document.getElementById("allTasks");
 const createTagDialog = document.getElementById("createTagDialog");
 const addTaskDialog = document.getElementById("addTaskDialog");
+const tagFilter = document.getElementById("searchTags");
+const searchBar = document.getElementById("searchTasks");
 
 function deleteTaskElement(task) {
     const taskElement = getTaskElement(task);
@@ -17,6 +19,8 @@ function createTaskElementInDom(task) {
     let newTaskElement = createTaskElement(task);
 
     allTasksContainer.appendChild(newTaskElement);
+
+    filterTaskElements(searchBar.value, tagFilter.value);
 
     return newTaskElement;
 }
@@ -58,6 +62,8 @@ function createTaskElement(task) {
                 } else {
                     task.addTag(clickedEntry.id);
                 }
+
+                filterTaskElement(task, searchBar.value, tagFilter.value);
             },
 
             onCreateEntryClick: () => createTagDialog.showModal(),
@@ -159,6 +165,7 @@ function createTaskElement(task) {
         });
 
         refreshTaskElement(task);
+        filterTaskElement(task, searchBar.value, tagFilter.value);
     });
 
     cancelButton.addEventListener("click", () => {
@@ -191,9 +198,7 @@ function createTaskElement(task) {
 function createAllTaskElements() {
     clearAllTaskElements();
 
-    TaskInterface.tasks.forEach((task) => {
-        createTaskElementInDom(task);
-    });
+    TaskInterface.tasks.forEach((task) => createTaskElementInDom(task));
 }
 
 function refreshAllTaskElements() {
@@ -265,7 +270,55 @@ function getTaskElement(task) {
     return allTasksContainer.querySelector(`.task[data-id='${task.id}']`);
 }
 
+function filterTaskElements(searchQuery, selectedTagId) {
+    const tasks = TaskInterface.tasks;
+
+    tasks.forEach((task) =>
+        filterTaskElement(task, searchQuery, selectedTagId),
+    );
+}
+
+function filterTaskElement(task, searchQuery, selectedTagId) {
+    const element = getTaskElement(task);
+
+    const queryMatchesTitle = task.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+
+    let hasSelectedTag =
+        selectedTagId === "all" || task.tags.includes(selectedTagId);
+
+    if (!queryMatchesTitle || !hasSelectedTag) {
+        element.style.display = "none";
+    } else {
+        element.style.display = "block";
+    }
+}
+
+function refreshTagsFilter() {
+    tagFilter.innerHTML = "";
+
+    const allTagsOption = document.createElement("option");
+    allTagsOption.value = "all";
+    allTagsOption.textContent = "All tags";
+    allTagsOption.selected = true;
+
+    tagFilter.appendChild(allTagsOption);
+
+    const tags = TagInterface.tags;
+
+    tags.forEach((tag) => {
+        const tagOption = document.createElement("option");
+        tagOption.value = tag.id;
+        tagOption.textContent = tag.title;
+
+        tagFilter.appendChild(tagOption);
+    });
+}
+
 export default {
     createTaskElementInDom,
     createAllTaskElements,
+    filterTaskElements,
+    refreshTagsFilter,
 };

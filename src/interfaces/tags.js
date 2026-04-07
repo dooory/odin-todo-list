@@ -1,5 +1,6 @@
 import { refreshAllDropdownsOfType } from "../components/dropdown";
 import TaskInterface from "./tasks";
+import renderer from "./renderer";
 
 class Tag {
     #properties;
@@ -97,6 +98,7 @@ class TagInterface {
         this.#tags.push(newTag);
 
         refreshAllDropdownsOfType("tag");
+        renderer.refreshTagsFilter();
 
         this.saveTags();
 
@@ -116,6 +118,9 @@ class TagInterface {
 
         tag.removeAllTasks();
         this.#tags.splice(tagIndex, 1);
+
+        refreshAllDropdownsOfType("tag");
+        renderer.refreshTagsFilter();
 
         currentTagInterface.saveTags();
     }
@@ -154,6 +159,8 @@ class TagInterface {
         let serializedTags = JSON.parse(serializedTagInterface);
 
         serializedTags.forEach((tagJSON) => this.#createTagFromJSON(tagJSON));
+
+        renderer.refreshTagsFilter();
     }
 
     #serialize() {

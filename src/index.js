@@ -8,6 +8,10 @@ import { Dropdown, getDropdowns } from "./components/dropdown";
 
 import { add } from "date-fns";
 
+const filterForm = document.getElementById("filterForm");
+const searchBar = document.getElementById("searchTasks");
+const tagFilter = document.getElementById("searchTags");
+
 const tasksRoot = document.getElementById("tasksRoot");
 const addTaskDialog = document.getElementById("addTaskDialog");
 const addTaskForm = document.getElementById("addTaskForm");
@@ -123,6 +127,20 @@ function submitNewTask() {
 
     renderer.createTaskElementInDom(task);
 }
+
+filterForm.addEventListener("submit", (event) => event.preventDefault());
+
+searchBar.addEventListener("input", (event) => {
+    const query = event.target.value;
+
+    renderer.filterTaskElements(query, tagFilter.value);
+});
+
+tagFilter.addEventListener("change", (event) => {
+    const filterValue = event.target.value;
+
+    renderer.filterTaskElements(searchBar.value, filterValue);
+});
 
 submitNewTaskButton.addEventListener("click", () => {
     if (addTaskForm.checkValidity()) {
