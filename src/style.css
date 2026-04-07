@@ -149,6 +149,12 @@ body {
                         align-items: center;
                         justify-content: space-between;
 
+                        .title {
+                            max-width: 200px;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                        }
+
                         .edit-task-buttons {
                             display: flex;
                             gap: 0.5rem;
