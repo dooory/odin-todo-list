@@ -79,16 +79,17 @@ body {
 
         .search-form {
 
-            background-color: var(--c-grey);
+            border-radius: 1rem;
+            background-color: var(--c-black);
             padding: 1rem;
 
             .search-tasks,
             .search-tags {
                 padding: 0.5rem;
                 border-radius: 0.5rem;
-                border: 2px solid var(--c-grey);
-                background-color: var(--c-white);
-                color: var(--c-black);
+                border: 2px solid var(--c-white);
+                background-color: var(--c-black);
+                color: var(--c-white);
             }
 
             input,
