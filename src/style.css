@@ -69,30 +69,40 @@ body {
 
     .header {
         position: sticky;
+        top: 1rem;
+        width: fit-content;
+        margin: auto;
+
         display: flex;
         justify-content: center;
         align-items: center;
 
-        .search-tasks,
-        .search-tags {
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            border: 2px solid var(--c-grey);
-            background-color: var(--c-white);
-            color: var(--c-black);
-        }
+        .search-form {
 
-        input,
-        select {
+            background-color: var(--c-grey);
+            padding: 1rem;
 
-            &:hover,
-            &:focus-visible {
-                border-color: hsl(from var(--c-grey) h s l / .5);
+            .search-tasks,
+            .search-tags {
+                padding: 0.5rem;
+                border-radius: 0.5rem;
+                border: 2px solid var(--c-grey);
+                background-color: var(--c-white);
+                color: var(--c-black);
             }
-        }
 
-        option {
-            background-color: var(--c-white);
+            input,
+            select {
+
+                &:hover,
+                &:focus-visible {
+                    border-color: hsl(from var(--c-grey) h s l / .5);
+                }
+            }
+
+            option {
+                background-color: var(--c-white);
+            }
         }
     }
 
