@@ -51,6 +51,7 @@ body {
 #root {
     #wipeButton {
         position: fixed;
+        top: calc(100% - 30px);
     }
 
     margin: 1rem;
