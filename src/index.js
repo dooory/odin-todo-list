@@ -8,7 +8,7 @@ import { Dropdown, getDropdowns } from "./components/dropdown";
 
 import { add } from "date-fns";
 
-const taskGroups = document.getElementById("taskGroups");
+const tasksRoot = document.getElementById("tasksRoot");
 const addTaskDialog = document.getElementById("addTaskDialog");
 const addTaskForm = document.getElementById("addTaskForm");
 
@@ -152,7 +152,7 @@ document.addEventListener("click", (event) => {
         return;
     }
 
-    if (!taskGroups.contains(target) && !createTagDialog.contains(target)) {
+    if (!tasksRoot.contains(target) && !createTagDialog.contains(target)) {
         if (
             target.classList.contains("x-element") ||
             target.classList.contains("selected-tag")
