@@ -1,9 +1,8 @@
 :root {
-    --molten-lava: #780000ff;
-    --brick-red: #c1121fff;
-    --papaya-whip: rgb(234, 234, 234);
-    --deep-space-blue: #003049ff;
-    --steel-blue: #669bbcff;
+    --c-red: hsl(0, 100%, 65%);
+    --c-orange: hsl(20, 100%, 65%);
+    --c-yellow: hsl(40, 100%, 65%);
+    --c-blue: hsl(205, 100%, 65%);
     scrollbar-gutter: stable both-edges;
 }
 
@@ -88,10 +87,25 @@ body {
                 display: flex;
                 gap: 0.5rem;
 
+                &.priority-1 {
+                    border-left: 3px solid var(--c-red);
+                }
+
+                &.priority-2 {
+                    border-left: 3px solid var(--c-orange);
+                }
+
+                &.priority-3 {
+                    border-left: 3px solid var(--c-yellow);
+                }
+
                 .state {
+                    margin: 3px 0 0 0.5rem;
+
                     .task-checkbox {
                         height: 1rem;
                         width: 1rem;
+                        margin: 0;
                     }
                 }
 
@@ -186,10 +200,6 @@ body {
                                 z-index: 100;
                                 font-size: 0.9rem;
 
-                                .entry:hover {
-                                    background-color: #ccc;
-                                }
-
                                 .entry {
                                     display: flex;
                                     justify-content: space-between;
@@ -198,12 +208,20 @@ body {
                                     gap: 1rem;
 
                                     &.tagged {
-                                        background-color: var(--steel-blue);
+                                        background-color: hsl(from var(--c-blue) h 50% l);
                                         color: #fff;
+
+                                        &:hover {
+                                            background-color: hsl(from var(--c-blue) h 50% 40%);
+                                        }
                                     }
 
                                     .title {
                                         margin: 0;
+                                    }
+
+                                    &:hover {
+                                        background-color: #ccc;
                                     }
                                 }
                             }
@@ -314,10 +332,6 @@ body {
                             z-index: 100;
                             font-size: 0.9rem;
 
-                            .entry:hover {
-                                background-color: #eee;
-                            }
-
                             .entry {
                                 border: solid 1px #ccc;
 
@@ -334,6 +348,10 @@ body {
 
                                 .title {
                                     margin: 0;
+                                }
+
+                                &:hover {
+                                    background-color: #eee;
                                 }
                             }
 

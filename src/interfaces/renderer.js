@@ -30,6 +30,8 @@ function createTaskElement(task) {
 
     let taskContainer = taskFragment.querySelector(".task-container");
 
+    taskContainer.classList.add(`priority-${task.priority}`);
+
     const stateCheckbox = taskContainer.querySelector(".task-checkbox");
     stateCheckbox.checked = task.state === "completed" ? true : false;
     toggleCompleteTask(stateCheckbox.checked);
