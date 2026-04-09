@@ -11,6 +11,7 @@ import { add } from "date-fns";
 const filterForm = document.getElementById("filterForm");
 const searchBar = document.getElementById("searchTasks");
 const tagFilter = document.getElementById("searchTags");
+const clearFilterButton = document.getElementById("clearFilter");
 
 const tasksRoot = document.getElementById("tasksRoot");
 const addTaskDialog = document.getElementById("addTaskDialog");
@@ -140,6 +141,13 @@ tagFilter.addEventListener("change", (event) => {
     const filterValue = event.target.value;
 
     renderer.filterTaskElements(searchBar.value, filterValue);
+});
+
+clearFilterButton.addEventListener("click", () => {
+    searchBar.value = "";
+    tagFilter.value = "all";
+
+    renderer.filterTaskElements(searchBar.value, tagFilter.value);
 });
 
 submitNewTaskButton.addEventListener("click", () => {

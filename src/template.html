@@ -135,16 +135,26 @@
                             id="searchTasks"
                             class="search-tasks"
                             placeholder="Search tasks"
+                            title="Filter by task title"
                         />
                         <select
                             name="search-tags"
                             class="search-tags"
                             id="searchTags"
+                            title="Filter by tags"
                         >
                             <option selected value="all">All tags</option>
                             <option value="example">Example Tag</option>
                             <option value="other">Other Tag</option>
                         </select>
+                        <button
+                            type="button"
+                            class="clear-search-button"
+                            id="clearFilter"
+                            title="Clear filter"
+                        >
+                            X
+                        </button>
                     </form>
                 </div>
                 <div id="tasksRoot">

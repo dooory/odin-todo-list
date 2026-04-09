@@ -78,31 +78,37 @@ body {
         align-items: center;
 
         .search-form {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
 
-            border-radius: 1rem;
-            background-color: var(--c-black);
-            padding: 1rem;
+            >* {
+                cursor: pointer;
+            }
+
+            input,
+            select,
+            button {
+                border: none;
+
+                &:hover,
+                &:focus-visible {
+                    outline: 2px solid var(--c-blue);
+                }
+            }
 
             .search-tasks,
             .search-tags {
                 padding: 0.5rem;
                 border-radius: 0.5rem;
-                border: 2px solid var(--c-white);
                 background-color: var(--c-black);
                 color: var(--c-white);
             }
 
-            input,
-            select {
-
-                &:hover,
-                &:focus-visible {
-                    border-color: hsl(from var(--c-grey) h s l / .5);
-                }
-            }
-
-            option {
-                background-color: var(--c-white);
+            .clear-search-button {
+                background-color: transparent;
+                border: none;
+                font-size: 1.2rem;
             }
         }
     }
