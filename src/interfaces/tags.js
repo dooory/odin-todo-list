@@ -99,6 +99,7 @@ class TagInterface {
 
         refreshAllDropdownsOfType("tag");
         renderer.refreshTagsFilter();
+        renderer.refreshTagManager();
 
         this.saveTags();
 
@@ -121,6 +122,7 @@ class TagInterface {
 
         refreshAllDropdownsOfType("tag");
         renderer.refreshTagsFilter();
+        renderer.refreshTagManager();
 
         currentTagInterface.saveTags();
     }

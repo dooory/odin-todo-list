@@ -117,10 +117,6 @@ body {
                         .rename-tag-button {
                             display: none;
                         }
-
-                        .delete-tag-button {
-                            display: none;
-                        }
                     }
                 }
 
@@ -146,7 +142,7 @@ body {
 #root {
     #wipeButton {
         position: fixed;
-        top: calc(100% - 30px);
+        top: calc(100% - 100px);
     }
 
     margin: 1rem;
@@ -154,6 +150,8 @@ body {
 
 #content {
     margin: auto;
+    display: grid;
+    gap: 2rem;
 
     max-width: 700px;
 
@@ -186,7 +184,6 @@ body {
 
         .search-form {
             display: flex;
-            flex-wrap: wrap;
             gap: 0.4rem;
 
             .search-tasks,
@@ -340,6 +337,14 @@ body {
                                     background-color: #aaa;
                                     color: #fff;
                                     border-radius: 1rem;
+                                }
+
+                                .placeholder {
+                                    display: none;
+
+                                    &:only-child {
+                                        display: block;
+                                    }
                                 }
                             }
 

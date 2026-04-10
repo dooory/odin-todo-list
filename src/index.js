@@ -152,9 +152,9 @@ clearFilterButton.addEventListener("click", () => {
 
     renderer.filterTaskElements(searchBar.value, tagFilter.value);
 });
-tagsManagerDialog.showModal();
 
 showTagsManagerButton.addEventListener("click", () => {
+    renderer.refreshTagManager();
     tagsManagerDialog.showModal();
 });
 

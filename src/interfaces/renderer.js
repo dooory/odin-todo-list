@@ -9,6 +9,11 @@ const addTaskDialog = document.getElementById("addTaskDialog");
 const tagFilter = document.getElementById("searchTags");
 const searchBar = document.getElementById("searchTasks");
 
+const tagManager = document.getElementById("manageTagsDialog");
+const managerTagsList = tagManager.querySelector(".tags-list");
+const createTagOption = tagManager.querySelector(".create-tag-option");
+const tagOptionTemplate = document.getElementById("tagOptionTemplate");
+
 function deleteTaskElement(task) {
     const taskElement = getTaskElement(task);
 
@@ -316,9 +321,56 @@ function refreshTagsFilter() {
     });
 }
 
+function createTagManagerEntry(tag) {
+    const tagOptionClone = document.importNode(tagOptionTemplate.content, true);
+    const newTagOption = tagOptionClone.querySelector(".tag-option");
+    newTagOption.dataset.id = tag.id;
+
+    const optionTitleText = newTagOption.querySelector(".tag-title-text");
+    const optionTitleInput = newTagOption.querySelector(".tag-title-input");
+
+    optionTitleText.textContent = tag.title;
+    optionTitleInput.value = tag.title;
+
+    const saveTagButton = newTagOption.querySelector(".save-tag-button");
+    const renameTagButton = newTagOption.querySelector(".rename-tag-button");
+    const deleteTagButton = newTagOption.querySelector(".delete-tag-button");
+
+    saveTagButton.addEventListener("click", () => {
+        tag.title = optionTitleInput.value;
+        newTagOption.classList.remove("activated");
+    });
+
+    renameTagButton.addEventListener("click", () => {
+        newTagOption.classList.add("activated");
+        optionTitleInput.select();
+    });
+
+    deleteTagButton.addEventListener("click", () => {
+        if (newTagOption.classList.contains("activated")) {
+            newTagOption.classList.remove("activated");
+        } else {
+            TagInterface.deleteTag(tag.id);
+        }
+    });
+
+    managerTagsList.insertBefore(newTagOption, createTagOption);
+
+    return newTagOption;
+}
+
+function refreshTagManager() {
+    const currentTagOptions = managerTagsList.querySelectorAll(".tag-option");
+
+    currentTagOptions.forEach((element) => element.remove());
+
+    TagInterface.tags.forEach((tag) => createTagManagerEntry(tag));
+}
+
 export default {
     createTaskElementInDom,
     createAllTaskElements,
     filterTaskElements,
     refreshTagsFilter,
+    refreshTagManager,
 };

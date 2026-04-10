@@ -156,12 +156,6 @@ class Dropdown {
 
         const placeholderSpan = this.selectedEntriesPlaceholderSpan;
 
-        if (this.selectedEntries.size <= 0) {
-            placeholderSpan.style.display = "block";
-        } else if (this.selectedEntries.size > 0) {
-            placeholderSpan.style.display = "none";
-        }
-
         return this.selectedEntries.has(entry.id);
     }
 
@@ -170,6 +164,12 @@ class Dropdown {
 
         sortedSelectedEntries.forEach((id) => {
             let entry = this.currentEntries.find((entry) => entry.id == id);
+
+            if (!entry) {
+                this.selectedEntries.delete(id);
+
+                return;
+            }
 
             const selectedEntryClone = document.importNode(
                 selectedEntryTemplate.content,
