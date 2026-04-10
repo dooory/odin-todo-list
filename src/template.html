@@ -92,6 +92,21 @@
             <span class="selected-entry">Example Entry</span>
         </template>
 
+        <template id="tagOptionTemplate">
+            <input
+                type="text"
+                name="tag-title"
+                value="Example Tag"
+                class="tag-title-input"
+            />
+            <span class="tag-title-text">Example Tag</span>
+            <div class="option-buttons">
+                <i class="fi fi-rr-disk save-tag-button"></i>
+                <i class="fi fi-rr-edit rename-tag-button"></i>
+                <i class="fi fi-rr-cross-circle delete-tag-button"></i>
+            </div>
+        </template>
+
         <dialog id="createTagDialog" closedby="any">
             <div class="dialog-container">
                 <h3>Create New Tag</h3>
@@ -115,6 +130,43 @@
                 </form>
             </div>
         </dialog>
+
+        <dialog id="manageTagsDialog" closedby="any">
+            <div class="container">
+                <div class="header">
+                    <h2>Tags</h2>
+                </div>
+                <hr />
+
+                <div class="tags-list">
+                    <div class="tag-option">
+                        <input
+                            type="text"
+                            name="tag-title"
+                            value="Example Tag"
+                            class="tag-title-input"
+                        />
+                        <span class="tag-title-text">Example Tag</span>
+                        <div class="option-buttons">
+                            <i class="fi fi-rr-disk save-tag-button"></i>
+                            <i class="fi fi-rr-edit rename-tag-button"></i>
+                            <i
+                                class="fi fi-rr-cross-circle delete-tag-button"
+                            ></i>
+                        </div>
+                    </div>
+                    <div class="create-tag-option">
+                        Create Tag
+                        <div class="option-buttons">
+                            <i
+                                class="fi fi-rr-square-plus create-tag-button"
+                            ></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </dialog>
+
         <div id="root">
             <button
                 type="button"
@@ -156,6 +208,15 @@
                             X
                         </button>
                     </form>
+                    <div class="header-options">
+                        <button
+                            type="button"
+                            class="options-button"
+                            id="showTagsManager"
+                        >
+                            Manage Tags
+                        </button>
+                    </div>
                 </div>
                 <div id="tasksRoot">
                     <div id="allTasks" class="tasks-container">

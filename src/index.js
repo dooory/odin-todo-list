@@ -13,6 +13,9 @@ const searchBar = document.getElementById("searchTasks");
 const tagFilter = document.getElementById("searchTags");
 const clearFilterButton = document.getElementById("clearFilter");
 
+const showTagsManagerButton = document.getElementById("showTagsManager");
+const tagsManagerDialog = document.getElementById("manageTagsDialog");
+
 const tasksRoot = document.getElementById("tasksRoot");
 const addTaskDialog = document.getElementById("addTaskDialog");
 const addTaskForm = document.getElementById("addTaskForm");
@@ -148,6 +151,11 @@ clearFilterButton.addEventListener("click", () => {
     tagFilter.value = "all";
 
     renderer.filterTaskElements(searchBar.value, tagFilter.value);
+});
+tagsManagerDialog.showModal();
+
+showTagsManagerButton.addEventListener("click", () => {
+    tagsManagerDialog.showModal();
 });
 
 submitNewTaskButton.addEventListener("click", () => {
