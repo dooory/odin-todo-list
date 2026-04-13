@@ -355,11 +355,6 @@ function createTagManagerEntry(tag) {
         }
     });
 
-    optionTitleInput.addEventListener("blur", () => {
-        optionTitleInput.value = tag.title;
-        newTagOption.classList.remove("activated");
-    });
-
     managerTagsList.insertBefore(newTagOption, createTagOption);
 
     return newTagOption;
