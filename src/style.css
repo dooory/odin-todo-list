@@ -1,10 +1,11 @@
 @import url(~@flaticon/flaticon-uicons/css/regular/rounded);
 
 :root {
-    --c-red: hsl(0, 100%, 65%);
-    --c-orange: hsl(20, 100%, 65%);
-    --c-yellow: hsl(40, 100%, 65%);
-    --c-blue: hsl(205, 100%, 65%);
+    --c-red: hsl(0, 100%, 55%);
+    --c-orange: hsl(20, 100%, 55%);
+    --c-yellow: hsl(40, 100%, 55%);
+    --c-blue: hsl(205, 100%, 55%);
+    --c-green: hsl(77, 100%, 40%);
     --c-white: hsl(0, 0%, 95%);
     --c-grey: hsl(0, 0%, 50%);
     --c-black: hsl(0, 0%, 20%);
@@ -258,6 +259,10 @@ body {
             h3 {
                 margin: 0;
                 margin-bottom: 1rem;
+
+                &:only-child {
+                    margin: 0;
+                }
             }
 
             hr {
@@ -325,10 +330,6 @@ body {
                         cursor: pointer;
                     }
 
-                    .delete-button {
-                        display: block;
-                    }
-
                     .top {
                         display: flex;
                         align-items: center;
@@ -344,11 +345,24 @@ body {
                             display: flex;
                             gap: 0.5rem;
 
+                            button:not(.delete-button) {
+                                background-color: var(--c-black);
+                                color: var(--c-white);
+                                border-radius: 0.5rem;
+                                border: none;
+                                padding: 4px 10px;
+                            }
+
                             .delete-button {
-                                border: 1px solid #ccc;
-                                background-color: #fff;
-                                aspect-ratio: 1;
+                                color: var(--c-black);
+                                background: none;
+                                border: 1px solid var(--c-black);
                                 border-radius: 100%;
+                                aspect-ratio: 1;
+
+                                i {
+                                    display: grid;
+                                }
                             }
                         }
                     }
@@ -372,8 +386,8 @@ body {
                                     text-overflow: ellipsis;
                                     padding: 8px;
                                     font-size: 0.9rem;
-                                    background-color: #aaa;
-                                    color: #fff;
+                                    background-color: var(--c-grey);
+                                    color: var(--c-white);
                                     border-radius: 1rem;
                                 }
 
@@ -442,6 +456,9 @@ body {
 
         #addTask {
             #addTaskButton {
+                display: flex;
+                gap: 0.5rem;
+                align-items: center;
                 border: none;
                 background-color: var(--c-black);
                 color: var(--c-white);
@@ -541,12 +558,6 @@ body {
                                 justify-content: space-between;
                                 align-items: center;
                                 display: flex;
-
-                                .delete-button {
-                                    font-size: 1rem;
-                                    max-width: min-content;
-                                    max-height: min-content;
-                                }
 
                                 .title {
                                     margin: 0;
