@@ -51,6 +51,9 @@ function createTaskElement(task) {
     const editingDate = taskContainer.querySelector(".edit-due-date");
     editingDate.valueAsDate = task.dueDate;
 
+    const prioritySelect = taskContainer.querySelector(".edit-priority");
+    prioritySelect.value = task.priority;
+
     const taskTagDropdown = new Dropdown({
         events: {
             onEntryClick: (clickedEntry, isEntrySelected) => {
@@ -159,7 +162,7 @@ function createTaskElement(task) {
     saveButton.addEventListener("click", () => {
         hideEditOptions();
 
-        body.querySelectorAll("input[data-property]").forEach((element) => {
+        body.querySelectorAll("[data-property]").forEach((element) => {
             let propName = element.dataset.property;
             let value = element.value;
 
@@ -167,6 +170,8 @@ function createTaskElement(task) {
                 task.dueDate = new Date(value);
             } else if (propName === "title") {
                 task.title = value;
+            } else if (propName === "priority") {
+                task.priority = value;
             }
         });
 
@@ -179,6 +184,7 @@ function createTaskElement(task) {
 
         editingTitle.value = task.title;
         editingDate.valueAsDate = task.dueDate;
+        prioritySelect.value = task.priority;
     });
 
     deleteButton.addEventListener("click", () => {

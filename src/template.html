@@ -56,13 +56,28 @@
                             </div>
                         </div>
                         <div class="bottom">
-                            <div class="due-date edit-option">Today 1 PM</div>
-                            <input
-                                type="date"
-                                name="edit-due-date"
-                                data-property="dueDate"
-                                class="edit-due-date edit-option"
-                            />
+                            <div class="left-options">
+                                <div class="due-date-container">
+                                    <div class="due-date edit-option">
+                                        Today 1 PM
+                                    </div>
+                                    <input
+                                        type="date"
+                                        name="edit-due-date"
+                                        data-property="dueDate"
+                                        class="edit-due-date edit-option"
+                                    />
+                                </div>
+                                <select
+                                    name="task-priority"
+                                    class="edit-option edit-priority"
+                                    data-property="priority"
+                                >
+                                    <option value="1">High</option>
+                                    <option value="2">Medium</option>
+                                    <option value="3">Low</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

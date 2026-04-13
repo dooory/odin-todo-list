@@ -1,9 +1,9 @@
 @import url(~@flaticon/flaticon-uicons/css/regular/rounded);
 
 :root {
-    --c-red: hsl(0, 100%, 55%);
-    --c-orange: hsl(20, 100%, 55%);
-    --c-yellow: hsl(40, 100%, 55%);
+    --c-red: hsl(0, 100%, 50%);
+    --c-orange: hsl(30, 100%, 50%);
+    --c-yellow: hsl(57, 100%, 50%);
     --c-blue-600: hsl(205, 100%, 60%);
     --c-blue-500: hsl(205, 100%, 50%);
     --c-blue-400: hsl(205 100%, 40%);
@@ -266,12 +266,14 @@ body {
 
                     input.edit-option.activated,
                     button.edit-option.activated,
+                    select.edit-option.activated,
                     .hide-on.edit {
                         display: block;
                     }
 
                     input.edit-option,
                     button.edit-option,
+                    select.edit-option,
                     .hide-on-edit.activated {
                         display: none;
                     }
@@ -322,6 +324,12 @@ body {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
+
+                        .left-options {
+                            display: flex;
+                            align-items: stretch;
+                            gap: 1rem;
+                        }
 
                         .dropdown-container {
                             cursor: pointer;
