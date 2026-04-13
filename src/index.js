@@ -8,28 +8,11 @@ import { Dropdown, getDropdowns } from "./components/dropdown";
 
 import { add } from "date-fns";
 
+// Search/Filtering tasks handling
 const filterForm = document.getElementById("filterForm");
 const searchBar = document.getElementById("searchTasks");
 const tagFilter = document.getElementById("searchTags");
 const clearFilterButton = document.getElementById("clearFilter");
-
-const showTagsManagerButton = document.getElementById("showTagsManager");
-const tagsManager = document.getElementById("manageTagsDialog");
-const openCreateTagButton = document.querySelector(".create-tag-option");
-const createTagForm = document.getElementById("createTagForm");
-const createTagTitle = document.getElementById("createTagTitle");
-const cancelCreateTagButton = document.getElementById("cancelCreateTagButton");
-
-const tasksRoot = document.getElementById("tasksRoot");
-const addTaskDialog = document.getElementById("addTaskDialog");
-const addTaskForm = document.getElementById("addTaskForm");
-
-const showAddTaskButton = document.getElementById("addTaskButton");
-const submitNewTaskButton = document.getElementById("submitNewTask");
-const taskDateInput = document.getElementById("taskDate");
-const closeAddTaskButton = document.getElementById("closeAddTaskDialog");
-
-// Search/Filtering tasks handling
 
 filterForm.addEventListener("submit", (event) => event.preventDefault());
 
@@ -53,6 +36,12 @@ clearFilterButton.addEventListener("click", () => {
 });
 
 // Tags Manager handling
+const showTagsManagerButton = document.getElementById("showTagsManager");
+const tagsManager = document.getElementById("manageTagsDialog");
+const openCreateTagButton = document.querySelector(".create-tag-option");
+const createTagForm = document.getElementById("createTagForm");
+const createTagTitle = document.getElementById("createTagTitle");
+const cancelCreateTagButton = document.getElementById("cancelCreateTagButton");
 
 function toggleCreateTagOption(toggle) {
     if (toggle === true) {
@@ -115,6 +104,17 @@ tagsManager.addEventListener("close", () => {
 });
 
 // Create new task form handling
+
+const tasksRoot = document.getElementById("tasksRoot");
+const addTaskDialog = document.getElementById("addTaskDialog");
+const addTaskForm = document.getElementById("addTaskForm");
+
+const showAddTaskButton = document.getElementById("addTaskButton");
+const closeAddTaskButton = document.getElementById("closeAddTaskDialog");
+
+const taskDateInput = document.getElementById("taskDate");
+const submitNewTaskButton = document.getElementById("submitNewTask");
+
 let addTaskDropdown;
 
 function showForm() {
