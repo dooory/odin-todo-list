@@ -372,7 +372,7 @@ function createTagManagerEntry(tag) {
         if (newTagOption.classList.contains("activated")) {
             newTagOption.classList.remove("activated");
         } else {
-            TagInterface.deleteTag(tag.id);
+            setTimeout(() => TagInterface.deleteTag(tag.id), 1);
         }
     });
 

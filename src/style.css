@@ -513,7 +513,7 @@ body {
                             top: 96%;
                             left: 0;
                             right: 0;
-                            background: white;
+                            background: none;
                             overflow-y: auto;
                             z-index: 100;
                             font-size: 0.9rem;
