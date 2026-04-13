@@ -26,15 +26,13 @@ document.addEventListener("mousedown", (event) => {
 document.addEventListener("click", (event) => {
     const target = event.target;
 
-    for (const id in dropdowns) {
-        const dropdown = dropdowns[id];
-
-        if (!dropdown.isOpen) {
-            return;
+    for (let dropdown of Object.values(dropdowns)) {
+        if (dropdown.isOpen === false) {
+            continue;
         }
 
         if (dropdown.container.contains(target)) {
-            return;
+            continue;
         }
 
         const isIgnoredElement = dropdown.ignoredElements.find((element) =>
@@ -42,7 +40,7 @@ document.addEventListener("click", (event) => {
         );
 
         if (isIgnoredElement) {
-            return;
+            continue;
         }
 
         dropdown.close(event);
