@@ -5,11 +5,10 @@ const maxPriority = 3;
 
 class Task {
     #properties;
-    constructor(id, title, description, dueDate, priority, state) {
+    constructor(id, title, dueDate, priority, state) {
         this.#properties = {
             id,
             title,
-            description,
             dueDate,
             priority,
             state: state ? state : "ongoing",
@@ -33,16 +32,6 @@ class Task {
 
     get id() {
         return this.#properties.id;
-    }
-
-    set description(newDescription) {
-        this.#properties.description = newDescription;
-
-        currentTaskInterface.saveTasks();
-    }
-
-    get description() {
-        return this.#properties.description;
     }
 
     set priority(newPriority) {
@@ -164,9 +153,9 @@ class TaskInterface {
         return this.#tasks;
     }
 
-    createTask(title, description, dueDate, priority, state) {
+    createTask(title, dueDate, priority, state) {
         const id = crypto.randomUUID();
-        let task = new Task(id, title, description, dueDate, priority, state);
+        let task = new Task(id, title, dueDate, priority, state);
 
         this.#tasks.push(task);
 
@@ -204,7 +193,6 @@ class TaskInterface {
 
         let dupeTask = this.createTask(
             originalTask.title,
-            originalTask.description,
             originalTask.dueDate,
             originalTask.priority,
             originalTask.state,
@@ -237,7 +225,6 @@ class TaskInterface {
         let task = new Task(
             parsedJSON.id,
             parsedJSON.title,
-            parsedJSON.description,
             new Date(parsedJSON.dueDate),
             parsedJSON.priority,
             parsedJSON.state,

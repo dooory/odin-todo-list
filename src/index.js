@@ -190,7 +190,6 @@ function submitNewTask() {
 
     const task = TaskInterface.createTask(
         title,
-        "Description",
         new Date(dueDate),
         Number(priority),
     );
@@ -256,7 +255,6 @@ function loadDefaultTags() {
 function loadDefaultTasks() {
     let myTask = TaskInterface.createTask(
         "Example task",
-        "Example description",
         add(new Date(), {
             days: 1,
         }),
