@@ -94,7 +94,7 @@ function createTaskElement(task) {
         updateOnCreate: true,
         selectedEntriesPlaceholder: "No tags...",
         removeSelectedOnClick: false,
-        ignoredElements: [addTaskDialog],
+        ignoredElements: [tagManager],
     });
 
     bottom.appendChild(taskTagDropdown.container);
