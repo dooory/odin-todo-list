@@ -114,7 +114,7 @@ function createTaskElement(task) {
         if (!title.classList.contains("activated")) {
             showEditOptions();
 
-            editingTitle.focus();
+            editingTitle.select();
         }
     });
 
@@ -122,7 +122,7 @@ function createTaskElement(task) {
         if (!dueDate.classList.contains("activated")) {
             showEditOptions();
 
-            editingDate.focus();
+            editingDate.select();
         }
     });
 
