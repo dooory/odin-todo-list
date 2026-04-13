@@ -338,6 +338,7 @@ function createTagManagerEntry(tag) {
 
     saveTagButton.addEventListener("click", () => {
         tag.title = optionTitleInput.value;
+        optionTitleText.textContent = tag.title;
         newTagOption.classList.remove("activated");
     });
 
