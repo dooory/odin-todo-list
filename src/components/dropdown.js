@@ -50,9 +50,9 @@ document.addEventListener("click", (event) => {
 class Dropdown {
     toggle(event) {
         if (!this.container.classList.contains("activated")) {
-            this.open();
+            this.open(event);
         } else {
-            this.close();
+            this.close(event);
         }
     }
 
