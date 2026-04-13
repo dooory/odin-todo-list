@@ -51,11 +51,7 @@ document.addEventListener("click", (event) => {
 
 class Dropdown {
     toggle(event) {
-        const isOpen = !this.container.classList.contains("activated");
-
-        this.isOpen = isOpen;
-
-        if (isOpen) {
+        if (!this.container.classList.contains("activated")) {
             this.open();
         } else {
             this.close();
@@ -64,6 +60,7 @@ class Dropdown {
 
     close(event) {
         this.container.classList.remove("activated");
+        this.isOpen = false;
 
         if (this.events.onClose) {
             this.events.onClose(event);
@@ -72,6 +69,7 @@ class Dropdown {
 
     open(event) {
         this.container.classList.add("activated");
+        this.isOpen = true;
 
         if (this.events.onOpen) {
             this.events.onOpen(event);
