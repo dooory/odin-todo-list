@@ -3,18 +3,8 @@ import TaskInterface from "./tasks";
 import { formatDate } from "date-fns";
 import { Dropdown } from "../components/dropdown";
 
+// Handling task elements
 const allTasksContainer = document.getElementById("allTasks");
-const tagFilter = document.getElementById("searchTags");
-const searchBar = document.getElementById("searchTasks");
-
-const tagManager = document.getElementById("manageTagsDialog");
-const managerTagsList = tagManager.querySelector(".tags-list");
-
-const createTagOption = tagManager.querySelector(".create-tag-option");
-const createTagForm = document.getElementById("createTagForm");
-const createTagTitle = document.getElementById("createTagTitle");
-
-const tagOptionTemplate = document.getElementById("tagOptionTemplate");
 
 function deleteTaskElement(task) {
     const taskElement = getTaskElement(task);
@@ -284,6 +274,10 @@ function getTaskElement(task) {
     return allTasksContainer.querySelector(`.task[data-id='${task.id}']`);
 }
 
+// Handling filtering
+const tagFilter = document.getElementById("searchTags");
+const searchBar = document.getElementById("searchTasks");
+
 function filterTaskElements(searchQuery, selectedTagId) {
     const tasks = TaskInterface.tasks;
 
@@ -329,6 +323,16 @@ function refreshTagsFilter() {
         tagFilter.appendChild(tagOption);
     });
 }
+
+// Handling tag manager entries
+const tagManager = document.getElementById("manageTagsDialog");
+const managerTagsList = tagManager.querySelector(".tags-list");
+
+const tagOptionTemplate = document.getElementById("tagOptionTemplate");
+
+const createTagOption = tagManager.querySelector(".create-tag-option");
+const createTagForm = document.getElementById("createTagForm");
+const createTagTitle = document.getElementById("createTagTitle");
 
 function createTagManagerEntry(tag) {
     const tagOptionClone = document.importNode(tagOptionTemplate.content, true);
