@@ -4,7 +4,9 @@
     --c-red: hsl(0, 100%, 55%);
     --c-orange: hsl(20, 100%, 55%);
     --c-yellow: hsl(40, 100%, 55%);
-    --c-blue: hsl(205, 100%, 55%);
+    --c-blue-600: hsl(205, 100%, 60%);
+    --c-blue-500: hsl(205, 100%, 50%);
+    --c-blue-400: hsl(205 100%, 40%);
     --c-green: hsl(77, 100%, 40%);
     --c-white: hsl(0, 0%, 95%);
     --c-grey: hsl(0, 0%, 50%);
@@ -173,7 +175,7 @@ body {
             color: var(--c-white);
 
             &:focus-visible {
-                outline: 2px solid var(--c-blue);
+                outline: 2px solid var(--c-blue-500);
             }
 
             padding: 0.5rem;
@@ -195,7 +197,7 @@ body {
                     i {
                         display: grid;
                         outline-offset: 0.25rem;
-                        outline: 2px solid var(--c-blue);
+                        outline: 2px solid var(--c-blue-500);
                     }
                 }
             }
@@ -370,7 +372,7 @@ body {
                                     align-items: center;
                                     padding: 5px;
                                     gap: 1rem;
-                                    border: 2px solid var(--c-black);
+                                    border: 2px solid hsl(from var(--c-black) h s l / 0.8);
                                     background-color: var(--c-white);
                                     margin-bottom: -2px;
 
@@ -387,11 +389,11 @@ body {
                                     }
 
                                     &.tagged {
-                                        background-color: hsl(from var(--c-blue) h 50% l);
+                                        background-color: hsl(from var(--c-blue-500) h 50% l);
                                         color: #fff;
 
                                         &:hover {
-                                            background-color: hsl(from var(--c-blue) h 50% 40%);
+                                            background-color: hsl(from var(--c-blue-500) h 50% 40%);
                                         }
                                     }
 
@@ -438,8 +440,10 @@ body {
 
                 display: none;
 
-                border: 2px solid #ccc;
+                background-color: var(--c-black);
+                color: var(--c-white);
                 padding: 1rem 1rem;
+                border-radius: 0.5rem;
 
                 .header {
                     display: flex;
@@ -449,6 +453,10 @@ body {
 
                     h2 {
                         margin: 0;
+                    }
+
+                    i {
+                        display: grid;
                     }
                 }
 
@@ -465,13 +473,14 @@ body {
                         input,
                         textarea,
                         select {
-                            border: 1px solid #ccc;
+                            border: none;
                             font-size: 0.9rem;
                             padding: 0.5rem;
 
                             cursor: pointer;
 
                             background-color: white;
+                            color: var(--c-black);
                         }
 
                         select,
@@ -480,7 +489,9 @@ body {
                         }
 
                         input[type="submit"] {
-                            background-color: #ccc;
+                            background-color: var(--c-blue-400);
+                            color: var(--c-white);
+                            border-radius: 8px;
                         }
                     }
 
@@ -491,33 +502,46 @@ body {
                         .dropdown {
                             display: none;
                             position: absolute;
-                            top: 99%;
+                            top: 96%;
                             left: 0;
                             right: 0;
                             background: white;
-                            border: 1px solid #ccc;
                             overflow-y: auto;
                             z-index: 100;
                             font-size: 0.9rem;
 
                             .entry {
-                                border: solid 1px #ccc;
-
                                 padding: 10px;
+                                color: var(--c-black);
+                                border: 2px solid var(--c-grey);
+                                background-color: var(--c-white);
+
+                                &:last-child {
+                                    margin-top: -2px;
+
+                                    border-bottom-left-radius: 0.5rem;
+                                    border-bottom-right-radius: 0.5rem;
+                                }
 
                                 &:hover {
-                                    background-color: #eee;
+                                    background-color: hsl(from var(--c-grey) h s l / 0.7);
                                 }
-                            }
 
-                            .entry.tagged {
-                                background-color: #ddd;
+                                &.tagged {
+                                    background-color: var(--c-grey);
+                                    color: var(--c-white);
+                                }
                             }
                         }
 
                         &.activated {
                             .dropdown {
                                 display: block;
+                            }
+
+                            .selected-entries {
+                                border-bottom-left-radius: 0;
+                                border-bottom-right-radius: 0;
                             }
                         }
 
@@ -526,10 +550,12 @@ body {
                             align-items: center;
                             padding: 10px;
                             gap: 0.5rem;
-                            border: 1px solid #ccc;
+                            background: var(--c-white);
+                            border: 2px solid var(--c-grey);
+                            border-radius: 0.25rem;
 
                             span {
-                                background-color: #aaa;
+                                background-color: var(--c-grey);
                                 color: white;
                                 padding: 5px 10px;
                                 border-radius: 1rem;
