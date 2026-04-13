@@ -131,7 +131,11 @@ class Task {
         this.#properties.tags.splice(tagIdIndex, 1);
 
         if (callRemoveTask) {
-            TagInterface.getTagById(tagId).removeTask(this.#properties.id);
+            let tag = TagInterface.getTagById(tagId);
+
+            if (tag) {
+                tag.removeTask(this.#properties.id);
+            }
         }
 
         currentTaskInterface.saveTasks();
