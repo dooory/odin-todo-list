@@ -140,8 +140,10 @@ function createTaskElement(task) {
         toggleCompleteTask(isChecked);
 
         if (isChecked) {
+            taskContainer.classList.add("completed");
             task.complete();
         } else {
+            taskContainer.classList.remove("completed");
             task.uncomplete();
         }
     });

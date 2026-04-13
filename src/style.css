@@ -280,6 +280,10 @@ body {
                     border-left: 3px solid var(--c-yellow);
                 }
 
+                &.completed {
+                    border-left: 3px solid var(--c-green);
+                }
+
                 .state {
                     margin: 3px 0 0 0.5rem;
 
