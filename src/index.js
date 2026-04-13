@@ -18,7 +18,6 @@ const tagsManager = document.getElementById("manageTagsDialog");
 const openCreateTagButton = document.querySelector(".create-tag-option");
 const createTagForm = document.getElementById("createTagForm");
 const createTagTitle = document.getElementById("createTagTitle");
-const createTagButton = document.getElementById("createTagButton");
 const cancelCreateTagButton = document.getElementById("cancelCreateTagButton");
 
 const tasksRoot = document.getElementById("tasksRoot");
