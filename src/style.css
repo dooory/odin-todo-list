@@ -53,7 +53,8 @@ body {
     border: none;
     border-radius: 1rem;
     width: min(80%, 400px);
-    min-height: min(80%, 300px);
+    scrollbar-gutter: stable both-edges;
+    padding: 1.5rem 1rem;
 
     &::backdrop {
         background-color: hsl(from var(--c-black) h s l / 0.5);
@@ -62,7 +63,7 @@ body {
 
     .container {
         h2 {
-            margin: 0.5rem 0;
+            margin: 0;
             color: var(--c-white)
         }
 
@@ -74,30 +75,69 @@ body {
             display: grid;
             gap: 1rem;
 
-            .create-tag-option {
-                cursor: pointer;
-            }
-
             .tag-option,
-            .create-tag-option {
+            .create-tag-option,
+            .create-tag-form {
                 color: var(--c-black);
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 gap: 0.5rem;
 
-                padding: 1rem 1rem;
+                padding: 1rem;
                 border-radius: 0.5rem;
                 background-color: var(--c-white);
                 white-space: nowrap;
 
-                .tag-title-input {
-                    display: none;
-
+                input,
+                span {
                     font-size: 1rem;
                     background-color: transparent;
                     color: var(--c-black);
-                    border: none;
+                }
+
+                input {
+                    border-color: var(--c-black);
+                    border-style: solid;
+                }
+
+                .option-buttons {
+                    display: flex;
+                    gap: 0.5rem;
+
+                    i {
+                        display: grid;
+                        font-size: 1.2rem;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .create-tag-option {
+                cursor: pointer;
+
+                &.activated {
+                    display: none;
+                }
+            }
+
+            #createTagForm {
+                display: none;
+
+                &.activated {
+                    display: flex;
+                }
+            }
+
+            .tag-option {
+                .tag-title-input {
+                    display: none;
+                }
+
+                .option-buttons {
+                    .save-tag-button {
+                        display: none;
+                    }
                 }
 
                 &.activated {
@@ -111,27 +151,12 @@ body {
 
                     .option-buttons {
                         .save-tag-button {
-                            display: block;
+                            display: grid;
                         }
 
                         .rename-tag-button {
                             display: none;
                         }
-                    }
-                }
-
-                .option-buttons {
-                    display: flex;
-                    gap: 0.5rem;
-
-                    .save-tag-button {
-                        display: none;
-                    }
-
-                    i {
-                        display: grid;
-                        font-size: 1.2rem;
-                        cursor: pointer;
                     }
                 }
             }

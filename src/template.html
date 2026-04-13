@@ -97,14 +97,23 @@
                 <input
                     type="text"
                     name="tag-title"
-                    value="My Tag"
+                    value="Example Tag"
                     class="tag-title-input"
                 />
-                <span class="tag-title-text">My Tag</span>
+                <span class="tag-title-text">Example Tag</span>
                 <div class="option-buttons">
-                    <i class="fi fi-rr-disk save-tag-button"></i>
-                    <i class="fi fi-rr-edit rename-tag-button"></i>
-                    <i class="fi fi-rr-cross-circle delete-tag-button"></i>
+                    <i
+                        class="fi fi-rr-disk save-tag-button"
+                        title="Save changes"
+                    ></i>
+                    <i
+                        class="fi fi-rr-edit rename-tag-button"
+                        title="Rename tag"
+                    ></i>
+                    <i
+                        class="fi fi-rr-cross-circle delete-tag-button"
+                        title="Delete tag"
+                    ></i>
                 </div>
             </div>
         </template>
@@ -112,7 +121,7 @@
         <dialog id="createTagDialog" closedby="any">
             <div class="dialog-container">
                 <h3>Create New Tag</h3>
-                <form id="createTagForm" name="new-tag-form">
+                <form id="_createTagForm" name="new-tag-form">
                     <div class="title-container">
                         <label for="newTagTitle">New Tag Title</label>
                         <input
@@ -150,21 +159,54 @@
                         />
                         <span class="tag-title-text">Example Tag</span>
                         <div class="option-buttons">
-                            <i class="fi fi-rr-disk save-tag-button"></i>
-                            <i class="fi fi-rr-edit rename-tag-button"></i>
+                            <i
+                                class="fi fi-rr-disk save-tag-button"
+                                title="Save changes"
+                            ></i>
+                            <i
+                                class="fi fi-rr-edit rename-tag-button"
+                                title="Rename tag"
+                            ></i>
                             <i
                                 class="fi fi-rr-cross-circle delete-tag-button"
+                                title="Delete tag"
                             ></i>
                         </div>
                     </div>
                     <div class="create-tag-option">
-                        Create Tag
+                        <span class="option-title">Create Tag</span>
                         <div class="option-buttons">
                             <i
                                 class="fi fi-rr-square-plus create-tag-button"
                             ></i>
                         </div>
                     </div>
+                    <form
+                        id="createTagForm"
+                        class="create-tag-form"
+                        method="post"
+                        name="create-tag-form"
+                    >
+                        <input
+                            type="text"
+                            name="tag-title"
+                            placeholder="Tag title..."
+                            id="createTagTitle"
+                            required
+                        />
+                        <div class="option-buttons">
+                            <i
+                                class="fi fi-rr-disk create-tag-button"
+                                title="Create tag"
+                                id="createTagButton"
+                            ></i>
+                            <i
+                                class="fi fi-rr-cross-circle cancel-create-tag-button"
+                                id="cancelCreateTagButton"
+                                title="Cancel creating tag"
+                            ></i>
+                        </div>
+                    </form>
                 </div>
             </div>
         </dialog>

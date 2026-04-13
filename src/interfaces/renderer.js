@@ -4,14 +4,16 @@ import { formatDate } from "date-fns";
 import { Dropdown } from "../components/dropdown";
 
 const allTasksContainer = document.getElementById("allTasks");
-const createTagDialog = document.getElementById("createTagDialog");
-const addTaskDialog = document.getElementById("addTaskDialog");
 const tagFilter = document.getElementById("searchTags");
 const searchBar = document.getElementById("searchTasks");
 
 const tagManager = document.getElementById("manageTagsDialog");
 const managerTagsList = tagManager.querySelector(".tags-list");
+
 const createTagOption = tagManager.querySelector(".create-tag-option");
+const createTagForm = document.getElementById("createTagForm");
+const createTagTitle = document.getElementById("createTagTitle");
+
 const tagOptionTemplate = document.getElementById("tagOptionTemplate");
 
 function deleteTaskElement(task) {
@@ -71,7 +73,14 @@ function createTaskElement(task) {
                 filterTaskElement(task, searchBar.value, tagFilter.value);
             },
 
-            onCreateEntryClick: () => createTagDialog.showModal(),
+            onCreateEntryClick: () => {
+                tagManager.showModal();
+
+                createTagForm.classList.add("activated");
+                createTagOption.classList.add("activated");
+
+                createTagTitle.select();
+            },
         },
 
         getEntryData: () => {
