@@ -76,10 +76,6 @@ openCreateTagButton.addEventListener("click", () =>
     toggleCreateTagOption(true),
 );
 
-createTagButton.addEventListener("click", () => {
-    createTagForm.requestSubmit();
-});
-
 cancelCreateTagButton.addEventListener("click", () => {
     toggleCreateTagOption(false);
 });

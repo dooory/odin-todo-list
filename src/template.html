@@ -102,18 +102,27 @@
                 />
                 <span class="tag-title-text">Example Tag</span>
                 <div class="option-buttons">
-                    <i
-                        class="fi fi-rr-disk save-tag-button"
+                    <button
+                        type="button"
+                        class="save-tag-button"
                         title="Save changes"
-                    ></i>
-                    <i
-                        class="fi fi-rr-edit rename-tag-button"
+                    >
+                        <i class="fi fi-rr-disk" title="Save changes"></i>
+                    </button>
+                    <button
+                        type="button"
+                        class="rename-tag-button"
                         title="Rename tag"
-                    ></i>
-                    <i
-                        class="fi fi-rr-cross-circle delete-tag-button"
+                    >
+                        <i class="fi fi-rr-edit" title="Rename tag"></i>
+                    </button>
+                    <button
                         title="Delete tag"
-                    ></i>
+                        type="button"
+                        class="delete-tag-button"
+                    >
+                        <i class="fi fi-rr-cross-circle"></i>
+                    </button>
                 </div>
             </div>
         </template>
@@ -126,37 +135,10 @@
                 <hr />
 
                 <div class="tags-list">
-                    <div class="tag-option">
-                        <input
-                            type="text"
-                            name="tag-title"
-                            value="Example Tag"
-                            class="tag-title-input"
-                        />
-                        <span class="tag-title-text">Example Tag</span>
-                        <div class="option-buttons">
-                            <i
-                                class="fi fi-rr-disk save-tag-button"
-                                title="Save changes"
-                            ></i>
-                            <i
-                                class="fi fi-rr-edit rename-tag-button"
-                                title="Rename tag"
-                            ></i>
-                            <i
-                                class="fi fi-rr-cross-circle delete-tag-button"
-                                title="Delete tag"
-                            ></i>
-                        </div>
-                    </div>
-                    <div class="create-tag-option">
+                    <button class="create-tag-option">
                         <span class="option-title">Create Tag</span>
-                        <div class="option-buttons">
-                            <i
-                                class="fi fi-rr-square-plus create-tag-button"
-                            ></i>
-                        </div>
-                    </div>
+                        <i class="fi fi-rr-square-plus create-tag-button"></i>
+                    </button>
                     <form
                         id="createTagForm"
                         class="create-tag-form"
@@ -171,16 +153,21 @@
                             required
                         />
                         <div class="option-buttons">
-                            <i
-                                class="fi fi-rr-disk create-tag-button"
-                                title="Create tag"
+                            <button
+                                class="create-tag-button"
                                 id="createTagButton"
-                            ></i>
-                            <i
-                                class="fi fi-rr-cross-circle cancel-create-tag-button"
+                                title="Create tag"
+                            >
+                                <i class="fi fi-rr-disk"></i>
+                            </button>
+                            <button
+                                type="button"
+                                class="cancel-create-tag-button"
                                 id="cancelCreateTagButton"
                                 title="Cancel creating tag"
-                            ></i>
+                            >
+                                <i class="fi fi-rr-cross-circle"></i>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -220,12 +207,11 @@
                             <option value="other">Other Tag</option>
                         </select>
                         <button
-                            type="button"
                             class="clear-search-button"
                             id="clearFilter"
                             title="Clear filter"
                         >
-                            X
+                            <i class="fi fi-rr-cross"></i>
                         </button>
                     </form>
                     <div class="header-options">

@@ -101,20 +101,26 @@ body {
                     border-style: solid;
                 }
 
+                button {
+                    border: none;
+                    padding: 0;
+                }
+
+                i {
+                    display: grid;
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                }
+
                 .option-buttons {
                     display: flex;
                     gap: 0.5rem;
-
-                    i {
-                        display: grid;
-                        font-size: 1.2rem;
-                        cursor: pointer;
-                    }
                 }
             }
 
             .create-tag-option {
                 cursor: pointer;
+                border: none;
 
                 &.activated {
                     display: none;
@@ -201,15 +207,11 @@ body {
             &:focus-visible {
                 outline: 2px solid var(--c-blue);
             }
-
-            &:hover {
-                outline: 2px solid var(--c-grey);
-            }
         }
 
         .search-form {
             display: flex;
-            gap: 0.4rem;
+            gap: 1rem;
 
             .search-tasks,
             .search-tags {
@@ -218,12 +220,19 @@ body {
             }
 
             .clear-search-button {
-                background-color: transparent;
+                background: none;
                 color: var(--c-black);
-                aspect-ratio: 1;
-                align-self: center;
-                height: 1rem;
-                width: 1rem;
+                padding: 0;
+
+                &:focus-visible {
+                    outline: none;
+
+                    i {
+                        display: grid;
+                        outline-offset: 0.25rem;
+                        outline: 2px solid var(--c-blue);
+                    }
+                }
             }
         }
 
@@ -429,7 +438,10 @@ body {
 
         #addTask {
             #addTaskButton {
-                border: 1px solid #ccc;
+                border: none;
+                background-color: var(--c-black);
+                color: var(--c-white);
+                border-radius: 0.5rem;
                 font-size: 1rem;
                 padding: 10px 20px;
 
